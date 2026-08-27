@@ -131,16 +131,31 @@ export function SearchPanel({
               </select>
             </Field>
             <Field label="Cabin">
-              <select
-                value={cabin}
-                onChange={(e) => setCabin(e.target.value as CabinCode)}
-                className="w-full bg-transparent"
-                style={{ ...inputStyle, color: CABINS[cabin].ink, fontWeight: 600 }}
-              >
-                {CABIN_ORDER.map((c) => (
-                  <option key={c} value={c}>{CABINS[c].longName}</option>
-                ))}
-              </select>
+              {/* The swatch carries the cabin colour reliably; option colours are
+                  set too, but browsers style native options inconsistently, so
+                  the swatch is what guarantees the colour reads. */}
+              <span className="flex items-center gap-2">
+                <span
+                  aria-hidden
+                  style={{
+                    width: 12, height: 12, flex: 'none', borderRadius: 3,
+                    background: CABINS[cabin].hue,
+                    transition: 'background 160ms ease-out',
+                  }}
+                />
+                <select
+                  value={cabin}
+                  onChange={(e) => setCabin(e.target.value as CabinCode)}
+                  className="w-full bg-transparent"
+                  style={{ ...inputStyle, color: CABINS[cabin].ink, fontWeight: 600 }}
+                >
+                  {CABIN_ORDER.map((c) => (
+                    <option key={c} value={c} style={{ color: CABINS[c].ink, fontWeight: 600 }}>
+                      {CABINS[c].longName}
+                    </option>
+                  ))}
+                </select>
+              </span>
             </Field>
           </div>
 

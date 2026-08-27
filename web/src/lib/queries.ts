@@ -374,14 +374,48 @@ export async function checkIn(pnr: string, email: string) {
   return { data: (data ?? null) as BoardingPassRow[] | null, error }
 }
 
-/** Departures from one airport on one weekday, for the status board. */
-export async function departuresFrom(origin: string, dow: number) {
-  return supabase
+const BOARD_COLUMNS =
+  'flight_id,flight_designator,origin_iata,destination_iata,departure_time,arrival_time,' +
+  'arrival_days_after_departure,duration_minutes,aircraft_model,departure_day_of_week,cabin_code'
+
+/**
+ * Departures from one airport on one weekday, starting at a wall-clock time.
+ *
+ * The cut has to happen on the server. SGN and DAD each run just over 400
+ * Economy departures a day, so a blind `limit(300)` ordered by time silently
+ * dropped everything after 18:15 and 17:00 respectively — the board then had
+ * no upcoming flights left to show for the rest of the evening.
+ */
+export async function departuresFrom(
+  origin: string, dow: number, fromTime?: string, limit = 60,
+) {
+  let q = supabase
     .from('v_bookable_departures')
-    .select('flight_id,flight_designator,origin_iata,destination_iata,departure_time,arrival_time,arrival_days_after_departure,duration_minutes,aircraft_model,departure_day_of_week,cabin_code')
+    .select(BOARD_COLUMNS)
     .eq('origin_iata', origin.toUpperCase())
     .eq('cabin_code', 'ECONOMY')
     .eq('departure_day_of_week', dow)
-    .order('departure_time')
-    .limit(300)
+  if (fromTime) q = q.gte('departure_time', fromTime)
+  return q.order('departure_time').limit(limit)
+}
+
+/**
+ * Arrivals into one airport on one weekday.
+ *
+ * A flight arriving today may have left yesterday, so both weekdays are asked
+ * for and the arrival day is worked out from arrival_days_after_departure. The
+ * over-fetch covers what that filter discards.
+ */
+export async function arrivalsAt(
+  destination: string, dow: number, fromTime?: string, limit = 60,
+) {
+  const previous = (dow + 6) % 7
+  let q = supabase
+    .from('v_bookable_departures')
+    .select(BOARD_COLUMNS)
+    .eq('destination_iata', destination.toUpperCase())
+    .eq('cabin_code', 'ECONOMY')
+    .in('departure_day_of_week', [dow, previous])
+  if (fromTime) q = q.gte('arrival_time', fromTime)
+  return q.order('arrival_time').limit(limit * 3)
 }

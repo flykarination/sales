@@ -56,7 +56,7 @@ export default function TravelInfo() {
         Everything you need between booking and boarding.
       </p>
 
-      <section className="mt-12">
+      <section id="baggage" className="mt-12 scroll-mt-32">
         <h2 className="font-display mb-4" style={{ fontSize: '1.7rem' }}>Baggage</h2>
         <div style={{ overflowX: 'auto' }}>
           <table className="w-full" style={{ minWidth: 480, borderCollapse: 'collapse' }}>
@@ -102,7 +102,7 @@ export default function TravelInfo() {
         </p>
       </section>
 
-      <section className="mt-14">
+      <section id="airport" className="mt-14 scroll-mt-32">
         <h2 className="font-display mb-4" style={{ fontSize: '1.7rem' }}>At the airport</h2>
         <ol style={{ borderTop: '2px solid var(--color-ink)' }}>
           {AIRPORT_STEPS.map(([title, detail], i) => (
@@ -119,7 +119,7 @@ export default function TravelInfo() {
         </ol>
       </section>
 
-      <section className="mt-14">
+      <section id="questions" className="mt-14 scroll-mt-32">
         <h2 className="font-display mb-4" style={{ fontSize: '1.7rem' }}>Questions</h2>
         <div style={{ borderTop: '2px solid var(--color-ink)' }}>
           {FAQ.map(([q, a]) => (

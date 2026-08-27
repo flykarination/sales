@@ -1,18 +1,85 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthContext'
 import { assetUrl } from '@/lib/assets'
 
-const NAV = [
-  { label: 'Book', href: '/' },
-  { label: 'Destinations', href: '/destinations' },
-  { label: 'Route map', href: '/network' },
-  { label: 'Check in', href: '/checkin' },
-  { label: 'Flight status', href: '/flight-status' },
-  { label: 'RainbowOne', href: '/rainbowone' },
+interface SubItem {
+  label: string
+  /** A route, or a '#anchor' within the section's own page. */
+  to: string
+}
+
+interface NavSection {
+  label: string
+  to: string
+  /** Every route that belongs to this section, so the sub-bar stays up. */
+  owns: string[]
+  children: SubItem[]
+}
+
+/**
+ * Top-level sections, each with the pages that sit under it. A section shows
+ * its children in a second bar rather than crowding the top row — the same
+ * shape an airline site uses when one tab covers several pages.
+ */
+const SECTIONS: NavSection[] = [
+  {
+    label: 'Book', to: '/', owns: ['/', '/search', '/passengers', '/payment', '/confirmation'],
+    children: [
+      { label: 'Search flights', to: '/' },
+      { label: 'Timetable', to: '/timetable' },
+      { label: 'Manage booking', to: '/manage' },
+    ],
+  },
+  {
+    label: 'Destinations', to: '/destinations', owns: ['/destinations', '/network', '/timetable'],
+    children: [
+      { label: 'All destinations', to: '/destinations' },
+      { label: 'Route map', to: '/network' },
+      { label: 'Timetable', to: '/timetable' },
+    ],
+  },
+  {
+    label: 'Travel information', to: '/travel-info',
+    owns: ['/travel-info', '/checkin', '/flight-status'],
+    children: [
+      { label: 'Baggage', to: '/travel-info#baggage' },
+      { label: 'At the airport', to: '/travel-info#airport' },
+      { label: 'Check in', to: '/checkin' },
+      { label: 'Flight status', to: '/flight-status' },
+      { label: 'Special assistance', to: '/travel-info#questions' },
+    ],
+  },
+  {
+    label: 'RainbowOne', to: '/rainbowone', owns: ['/rainbowone', '/join', '/signin', '/account'],
+    children: [
+      { label: 'The programme', to: '/rainbowone' },
+      { label: 'Join free', to: '/join' },
+      { label: 'Your account', to: '/account' },
+    ],
+  },
+  {
+    label: 'About', to: '/about', owns: ['/about', '/fleet', '/partners'],
+    children: [
+      { label: 'About us', to: '/about' },
+      { label: 'Our fleet', to: '/fleet' },
+      { label: 'Partners', to: '/partners' },
+    ],
+  },
 ]
+
+function sectionFor(pathname: string): NavSection | undefined {
+  // deepest match wins, so /destinations/HKG stays under Destinations
+  return (
+    SECTIONS.find((s) => s.owns.some((p) => p !== '/' && pathname.startsWith(p))) ??
+    SECTIONS.find((s) => s.owns.includes(pathname))
+  )
+}
 
 export function SiteHeader() {
   const { user } = useAuth()
+  const { pathname } = useLocation()
+  const active = sectionFor(pathname)
+
   return (
     <header
       className="sticky top-0 z-30"
@@ -24,30 +91,29 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex max-w-6xl items-center gap-6 px-5 py-3 md:px-8">
         <Link to="/" className="flex-none" aria-label="Karination, home">
-          <img
-            src={assetUrl('/brand/wordmark.png')}
-            alt="Karination"
-            style={{ height: 22, width: 'auto' }}
-          />
+          <img src={assetUrl('/brand/wordmark.png')} alt="Karination" style={{ height: 22, width: 'auto' }} />
         </Link>
 
         <nav aria-label="Main" className="ml-auto hidden md:block">
           <ul className="flex items-center gap-5 lg:gap-7">
-            {NAV.map((item) => (
-              <li key={item.label}>
-                <NavLink
-                  to={item.href}
-                  className="kx-navlink"
-                  style={({ isActive }) => ({
-                    fontSize: 'var(--text-small)',
-                    color: isActive ? 'var(--color-ink)' : 'var(--color-ink-mute)',
-                    fontWeight: isActive ? 600 : 400,
-                  })}
-                >
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
+            {SECTIONS.map((s) => {
+              const on = active?.label === s.label
+              return (
+                <li key={s.label}>
+                  <NavLink
+                    to={s.to}
+                    className="kx-navlink"
+                    style={{
+                      fontSize: 'var(--text-small)',
+                      color: on ? 'var(--color-ink)' : 'var(--color-ink-mute)',
+                      fontWeight: on ? 600 : 400,
+                    }}
+                  >
+                    {s.label}
+                  </NavLink>
+                </li>
+              )
+            })}
           </ul>
         </nav>
 
@@ -55,20 +121,44 @@ export function SiteHeader() {
           to={user ? '/account' : '/manage'}
           className="ml-auto md:ml-0"
           style={{
-            fontSize: 'var(--text-small)',
-            fontWeight: 600,
-            color: 'var(--color-ink)',
-            border: '1px solid var(--color-paper-edge)',
-            borderRadius: 'var(--radius-edge)',
-            padding: '9px 14px',
-            minHeight: 40,
-            display: 'inline-flex',
-            alignItems: 'center',
+            fontSize: 'var(--text-small)', fontWeight: 600, color: 'var(--color-ink)',
+            border: '1px solid var(--color-paper-edge)', borderRadius: 'var(--radius-edge)',
+            padding: '9px 14px', minHeight: 40, display: 'inline-flex', alignItems: 'center',
           }}
         >
           {user ? 'My account' : 'Manage booking'}
         </Link>
       </div>
+
+      {/* The section's own pages, fading in under the main bar. Keyed on the
+          section so it re-runs the fade when you move between sections. */}
+      {active && active.children.length > 1 && (
+        <div key={active.label} className="kx-subnav" style={{ borderTop: 'var(--rule)' }}>
+          <nav aria-label={`${active.label} pages`} className="mx-auto max-w-6xl px-5 md:px-8">
+            <ul className="flex gap-5 overflow-x-auto py-2" style={{ scrollbarWidth: 'none' }}>
+              {active.children.map((c) => {
+                const [path, hash] = c.to.split('#')
+                const here = pathname === path && !hash
+                return (
+                  <li key={c.to} className="flex-none">
+                    <Link
+                      to={c.to}
+                      className="kx-sublink"
+                      style={{
+                        fontSize: 'var(--text-small)',
+                        color: here ? 'var(--color-ink)' : 'var(--color-ink-mute)',
+                        fontWeight: here ? 600 : 400,
+                      }}
+                    >
+                      {c.label}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </nav>
+        </div>
+      )}
     </header>
   )
 }

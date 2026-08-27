@@ -35,15 +35,20 @@ const Ops = import.meta.env.DEV ? lazy(() => import('@/pages/Ops')) : null
 
 /** Focus and scroll must move on navigation, or the page silently changes. */
 function RouteChange() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   useEffect(() => {
+    // a #anchor link should land on its section, not the top of the page
+    if (hash) {
+      const el = document.querySelector(hash)
+      if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return }
+    }
     window.scrollTo(0, 0)
     const h = document.querySelector('h1')
     if (h) {
       h.setAttribute('tabindex', '-1')
       ;(h as HTMLElement).focus({ preventScroll: true })
     }
-  }, [pathname])
+  }, [pathname, hash])
   return null
 }
 
