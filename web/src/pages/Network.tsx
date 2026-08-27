@@ -3,12 +3,13 @@ import { geoNaturalEarth1, geoPath } from 'd3-geo'
 import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import {
-  getAirport, greatCirclePath, distanceKm, landFeatures,
+  getAirport, greatCirclePath, greatCircleSegments, distanceKm, landFeatures,
   regionOf, REGION_KEYS, REGION_LABELS, type RegionKey,
 } from '@/lib/geo'
-import { listRoutes, type RouteRow } from '@/lib/queries'
+import { listAllRoutes, type RouteRow } from '@/lib/queries'
 import { REGION_STYLE } from '@/lib/cabins'
 import { count, duration, price } from '@/lib/format'
+import { airportLabel } from '@/data/airports'
 
 const W = 1000
 const H = 520
@@ -33,11 +34,10 @@ const isDomestic = (a: string, b: string) =>
 type Rect = [number, number, number, number]
 const WORLD: Rect = [0, 0, W, H]
 
-function frameFor(points: Array<[number, number]>, maxZoom = 6): Rect {
+function frameFor(points: Array<[number, number]>, maxZoom = 6, pad = 34): Rect {
   if (points.length === 0) return WORLD
   const xs = points.map((p) => p[0])
   const ys = points.map((p) => p[1])
-  const pad = 34
   const x0 = Math.min(...xs) - pad, x1 = Math.max(...xs) + pad
   const y0 = Math.min(...ys) - pad, y1 = Math.max(...ys) + pad
 
@@ -51,6 +51,38 @@ function frameFor(points: Array<[number, number]>, maxZoom = 6): Rect {
   const cy = (y0 + y1) / 2
   return [cx - w / 2, cy - h / 2, w, h]
 }
+
+/**
+ * The tagline spectrum as a ramp, so a colour can be taken at any point
+ * along a route rather than only at six fixed stops.
+ *
+ * These mirror --color-spectrum-* in styles/theme.css. They are repeated as
+ * literals because interpolating between two colours needs their components,
+ * and a CSS custom property is an opaque string at this point.
+ */
+const SPECTRUM: Array<[number, [number, number, number]]> = [
+  [0.00, [0x3f, 0xbf, 0xa8]], // teal
+  [0.22, [0x9b, 0xd6, 0x4a]], // lime
+  [0.44, [0xf0, 0xa0, 0x20]], // amber
+  [0.66, [0xf0, 0x80, 0xa0]], // rose
+  [0.84, [0xf0, 0x40, 0xd0]], // magenta
+  [1.00, [0xa0, 0x60, 0xf0]], // violet
+]
+
+/** The spectrum colour at fraction `t` along a route, 0 at the origin. */
+function spectrumAt(t: number): string {
+  const x = Math.min(Math.max(t, 0), 1)
+  let i = 0
+  while (i < SPECTRUM.length - 2 && x > SPECTRUM[i + 1][0]) i += 1
+  const [t0, c0] = SPECTRUM[i]
+  const [t1, c1] = SPECTRUM[i + 1]
+  const k = t1 === t0 ? 0 : (x - t0) / (t1 - t0)
+  const mix = c0.map((v, j) => Math.round(v + (c1[j] - v) * k))
+  return `rgb(${mix[0]} ${mix[1]} ${mix[2]})`
+}
+
+/** The home hubs, in the order they are said aloud. */
+const HUB_ORDER = ['SGN', 'HAN', 'DAD', 'CXR', 'PQC'] as const
 
 /** Ease-out cubic: quick departure, soft landing, matching --ease-paint. */
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
@@ -67,7 +99,12 @@ export default function Network() {
 
   useEffect(() => {
     let live = true
-    listRoutes(900).then(({ data, error }) => {
+    // The whole network, paged. This used to ask for the 900 cheapest, which
+    // sounds generous until you notice v_routes is ordered by fare and holds
+    // 1,508 rows: every long-haul sat past the cut and the Americas filter
+    // drew an empty world. Raising the limit does not help — PostgREST caps
+    // any single request at 1,000 rows — so listAllRoutes() pages instead.
+    listAllRoutes().then(({ data, error }) => {
       if (!live) return
       if (error || !data) setFailed(true)
       else setRoutes(data)
@@ -127,9 +164,24 @@ export default function Network() {
     return [...set.entries()]
   }, [arcs, projection])
 
-  /** Where the map should be looking; the whole world when unfiltered. */
+  /**
+   * Where the map should be looking; the whole world when unfiltered.
+   *
+   * Vietnam is small enough that the general 6x ceiling framed it from
+   * somewhere over the South China Sea, so the domestic view gets its own,
+   * much closer limit and far tighter padding. It cannot fill the frame
+   * horizontally — the country is long and thin and the map is wide, so
+   * squeezing it sideways would mean cropping Hà Nội or Cà Mau off the ends —
+   * but it now fills the height, which is the dimension that carries it.
+   */
   const target = useMemo<Rect>(
-    () => (region === 'ALL' ? WORLD : frameFor(dots.map(([, p]) => p))),
+    () => {
+      if (region === 'ALL') return WORLD
+      const points = dots.map(([, p]) => p)
+      return region === 'DOMESTIC'
+        ? frameFor(points, 22, 6)
+        : frameFor(points)
+    },
     [region, dots],
   )
   const [view, setView] = useState<Rect>(WORLD)
@@ -157,9 +209,65 @@ export default function Network() {
   /** How much the map is magnified, so marks can hold their on-screen size. */
   const zoom = W / view[2]
 
-  const activeArc = active
-    ? greatCirclePath(active.origin_iata, active.destination_iata, projection)
-    : null
+  const activeSegments = useMemo(
+    () => (active ? greatCircleSegments(active.origin_iata, active.destination_iata, projection) : []),
+    [active, projection],
+  )
+
+  /** The two ends of the selected route, ready to label. */
+  const activeEnds = useMemo(() => {
+    if (!active) return []
+    const ends = [active.origin_iata, active.destination_iata]
+      .map((code) => {
+        const ap = getAirport(code)
+        const pt = ap ? projection([ap.lon, ap.lat]) : null
+        return pt ? { code, x: pt[0], y: pt[1] } : null
+      })
+      .filter(Boolean) as Array<{ code: string; x: number; y: number }>
+    if (ends.length < 2) return ends.map((e) => ({ ...e, anchor: 'start' as const }))
+    // push each label away from the other end, so they never collide
+    const [a, b] = ends
+    return [
+      { ...a, anchor: (a.x <= b.x ? 'end' : 'start') as 'start' | 'end' },
+      { ...b, anchor: (b.x < a.x ? 'end' : 'start') as 'start' | 'end' },
+    ]
+  }, [active, projection])
+
+  /**
+   * The route list, gathered under the hub each route is flown from.
+   *
+   * A flat list of 700 city pairs tells a reader nothing about how the
+   * airline is arranged. Grouped by hub it does: this is what Sài Gòn flies,
+   * this is what Đà Nẵng flies. Routes between two hubs are filed under the
+   * origin; the handful that touch no hub — the second leg of a stopover
+   * service — are gathered at the end rather than dropped.
+   */
+  const byHub = useMemo(() => {
+    const hubs = new Map<string, typeof arcs>()
+    const other: typeof arcs = []
+    for (const a of arcs) {
+      const o = a.route.origin_iata
+      const d = a.route.destination_iata
+      const hub = HUB_ORDER.includes(o as never) ? o : HUB_ORDER.includes(d as never) ? d : null
+      if (!hub) { other.push(a); continue }
+      const list = hubs.get(hub)
+      if (list) list.push(a)
+      else hubs.set(hub, [a])
+    }
+    const groups = HUB_ORDER
+      .filter((h) => hubs.has(h))
+      .map((h) => ({
+        hub: h as string,
+        city: airportLabel(h),
+        total: hubs.get(h)!.length,
+        arcs: hubs.get(h)!.slice(0, 24),
+      }))
+    if (other.length) {
+      groups.push({ hub: 'Onward', city: 'Stopover sectors', total: other.length, arcs: other.slice(0, 24) })
+    }
+    return groups
+  }, [arcs])
+
   const activeKm = active ? distanceKm(active.origin_iata, active.destination_iata) : NaN
 
   return (
@@ -228,30 +336,6 @@ export default function Network() {
               aria-label={`Route map showing ${arcs.length} city pairs`}
               style={{ width: '100%', minWidth: 640, height: 'auto', display: 'block' }}
             >
-              <defs>
-                {/* the spectrum runs along the arc, so it must be in user space */}
-                {active && (() => {
-                  const a = getAirport(active.origin_iata)
-                  const b = getAirport(active.destination_iata)
-                  const p1 = a ? projection([a.lon, a.lat]) : null
-                  const p2 = b ? projection([b.lon, b.lat]) : null
-                  if (!p1 || !p2) return null
-                  return (
-                    <linearGradient
-                      id="kx-spectrum" gradientUnits="userSpaceOnUse"
-                      x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]}
-                    >
-                      <stop offset="0%" stopColor="var(--color-spectrum-teal)" />
-                      <stop offset="22%" stopColor="var(--color-spectrum-lime)" />
-                      <stop offset="44%" stopColor="var(--color-spectrum-amber)" />
-                      <stop offset="66%" stopColor="var(--color-spectrum-rose)" />
-                      <stop offset="84%" stopColor="var(--color-spectrum-magenta)" />
-                      <stop offset="100%" stopColor="var(--color-spectrum-violet)" />
-                    </linearGradient>
-                  )
-                })()}
-              </defs>
-
               <path d={path({ type: 'Sphere' } as never) ?? ''} fill="#12123F" />
 
               {/* Everything geographic sits in one group so a single animated
@@ -281,13 +365,17 @@ export default function Network() {
                 ))}
               </g>
 
-              {/* the signature: the selected arc draws itself, once */}
-              {active && activeArc && (
+              {/* The signature: the selected route draws itself, once.
+                  Each piece carries its own colour, taken from how far along
+                  the great circle it sits, and they draw in order so the whole
+                  thing still reads as one stroke travelling to its
+                  destination. */}
+              {active && activeSegments.map((seg, i) => (
                 <motion.path
-                  key={`${active.origin_iata}-${active.destination_iata}`}
-                  d={activeArc}
+                  key={`${active.origin_iata}-${active.destination_iata}-${i}`}
+                  d={seg.d}
                   fill="none"
-                  stroke="url(#kx-spectrum)"
+                  stroke={spectrumAt(seg.t)}
                   strokeWidth={2.4}
                   vectorEffect="non-scaling-stroke"
                   strokeLinecap="round"
@@ -296,10 +384,39 @@ export default function Network() {
                   transition={
                     reduced
                       ? { duration: 0 }
-                      : { pathLength: { duration: 1.1, ease: [0.22, 1, 0.36, 1] }, opacity: { duration: 0.2 } }
+                      : {
+                          pathLength: { duration: 1.1 / activeSegments.length, ease: 'linear',
+                                        delay: (i * 1.1) / activeSegments.length },
+                          opacity: { duration: 0.12, delay: (i * 1.1) / activeSegments.length },
+                        }
                   }
                 />
-              )}
+              ))}
+
+              {/* Both ends, named. A selected route is a specific pair of
+                  cities, and an unlabelled dot on a world map is not one. */}
+              {active && activeEnds.map(({ code, x, y, anchor }) => (
+                <g key={code} style={{ pointerEvents: 'none' }}>
+                  <circle cx={x} cy={y} r={3.2 / zoom} fill="var(--color-paper)" />
+                  <text
+                    x={x + (anchor === 'end' ? -7 / zoom : 7 / zoom)}
+                    y={y - 7 / zoom}
+                    textAnchor={anchor}
+                    className="tnum font-mono"
+                    style={{
+                      fontSize: `${13 / zoom}px`,
+                      letterSpacing: `${0.08 * (13 / zoom)}px`,
+                      fill: 'var(--color-paper)',
+                      paintOrder: 'stroke',
+                      stroke: 'var(--color-ink)',
+                      strokeWidth: 4 / zoom,
+                      strokeLinejoin: 'round',
+                    }}
+                  >
+                    {code}
+                  </text>
+                </g>
+              ))}
             </svg>
           </div>
 
@@ -359,42 +476,56 @@ export default function Network() {
             <p style={{ color: '#8F8CB4' }} aria-busy="true">Loading the network…</p>
           )}
 
-          {arcs.length > 0 && (
-            <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-              {arcs.slice(0, 45).map((a) => {
-                const on = active === a.route
-                return (
-                  <li key={`${a.route.origin_iata}-${a.route.destination_iata}`}>
-                    <button
-                      onClick={() => setActive(on ? null : a.route)}
-                      aria-pressed={on}
-                      className="kx-route flex w-full items-baseline gap-3 py-3 text-left"
-                      style={{ borderBottom: '1px solid rgba(255,255,255,.12)', minHeight: 44 }}
-                    >
-                      <span aria-hidden style={{ width: 8, height: 8, borderRadius: 2, background: REGION_STYLE[a.region].hue, flex: 'none' }} />
-                      <span className="tnum font-mono" style={{ color: on ? 'var(--color-aqua)' : 'var(--color-paper)', fontSize: 'var(--text-small)' }}>
-                        {a.route.origin_iata}→{a.route.destination_iata}
-                      </span>
-                      <span className="min-w-0 truncate" style={{ color: '#8F8CB4', fontSize: 'var(--text-micro)' }}>
-                        {getAirport(a.route.destination_iata)?.city ?? ''}
-                      </span>
-                      {a.route.from_price_economy_usd && (
-                        <span className="tnum ml-auto font-mono" style={{ color: '#B9B6D8', fontSize: 'var(--text-small)' }}>
-                          {price(a.route.from_price_economy_usd)}
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
+          {byHub.map((group) => (
+            <section key={group.hub} className="mb-10">
+              <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1"
+                   style={{ borderBottom: '1px solid rgba(255,255,255,.22)', paddingBottom: 8 }}>
+                <h2 className="tnum font-mono" style={{ color: 'var(--color-aqua)', fontSize: 'var(--text-lead)' }}>
+                  {group.hub}
+                </h2>
+                <span style={{ color: 'var(--color-paper)', fontWeight: 500 }}>{group.city}</span>
+                <span className="tnum font-mono" style={{ color: '#8F8CB4', fontSize: 'var(--text-small)' }}>
+                  {count(group.total)} {group.total === 1 ? 'route' : 'routes'}
+                </span>
+              </div>
 
-          {arcs.length > 45 && (
-            <p className="mt-6" style={{ color: '#8F8CB4', fontSize: 'var(--text-small)' }}>
-              Showing 45 of {count(arcs.length)} routes in this region.
-            </p>
-          )}
+              <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
+                {group.arcs.map((a) => {
+                  const on = active === a.route
+                  const far = a.route.origin_iata === group.hub ? a.route.destination_iata : a.route.origin_iata
+                  return (
+                    <li key={`${a.route.origin_iata}-${a.route.destination_iata}`}>
+                      <button
+                        onClick={() => setActive(on ? null : a.route)}
+                        aria-pressed={on}
+                        className="kx-route flex w-full items-baseline gap-3 py-3 text-left"
+                        style={{ borderBottom: '1px solid rgba(255,255,255,.12)', minHeight: 44 }}
+                      >
+                        <span aria-hidden style={{ width: 8, height: 8, borderRadius: 2, background: REGION_STYLE[a.region].hue, flex: 'none' }} />
+                        <span className="tnum font-mono" style={{ color: on ? 'var(--color-aqua)' : 'var(--color-paper)', fontSize: 'var(--text-small)' }}>
+                          {far}
+                        </span>
+                        <span className="min-w-0 truncate" style={{ color: '#8F8CB4', fontSize: 'var(--text-micro)' }}>
+                          {airportLabel(far)}
+                        </span>
+                        {a.route.from_price_economy_usd && (
+                          <span className="tnum ml-auto font-mono" style={{ color: '#B9B6D8', fontSize: 'var(--text-small)' }}>
+                            {price(a.route.from_price_economy_usd)}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+
+              {group.total > group.arcs.length && (
+                <p className="mt-3" style={{ color: '#8F8CB4', fontSize: 'var(--text-micro)' }}>
+                  Showing {group.arcs.length} of {count(group.total)} from {group.hub}.
+                </p>
+              )}
+            </section>
+          ))}
         </div>
       </section>
     </div>

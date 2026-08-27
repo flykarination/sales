@@ -235,6 +235,38 @@ export async function listRoutes(limit = 200) {
     .returns<RouteRow[]>()
 }
 
+/**
+ * Every route in the network, for the map.
+ *
+ * listRoutes() cannot do this. PostgREST enforces a hard ceiling of 1,000
+ * rows per request — `.limit(2000)` is silently capped, and the response says
+ * so in `content-range: 0-999/1508`. Because v_routes comes back ordered by
+ * fare, the rows lost to that ceiling were precisely the long-haul ones, and
+ * the map's Americas filter drew an empty world.
+ *
+ * So this pages until the network is exhausted. Ordering is by airport code,
+ * not price, so a page boundary cannot correlate with distance.
+ */
+export async function listAllRoutes(): Promise<{ data: RouteRow[] | null; error: unknown }> {
+  const PAGE = 1000
+  const out: RouteRow[] = []
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from('v_routes')
+      .select('*')
+      .not('from_price_economy_usd', 'is', null)
+      .order('origin_iata', { ascending: true })
+      .order('destination_iata', { ascending: true })
+      .range(from, from + PAGE - 1)
+      .returns<RouteRow[]>()
+    if (error) return { data: out.length ? out : null, error }
+    if (!data || data.length === 0) break
+    out.push(...data)
+    if (data.length < PAGE) break
+  }
+  return { data: out, error: null }
+}
+
 /** Sell a reservation. Returns the PNR. */
 export async function createBooking(args: {
   contactEmail: string

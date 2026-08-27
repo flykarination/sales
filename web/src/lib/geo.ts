@@ -115,6 +115,60 @@ export function greatCirclePath(
 }
 
 /**
+ * The same great circle, cut into consecutive coloured-able pieces.
+ *
+ * Why this exists: a single path stroked with one `linearGradient` cannot
+ * colour a great circle correctly. The gradient axis is a straight line, and
+ * the arc is not — on a long route the arc bulges past the ends of the chord,
+ * so both tips clamp to a flat colour. Worse, a route crossing the
+ * antimeridian has its endpoints on opposite edges of the map, which makes
+ * the chord run backwards across the entire world and the spectrum land
+ * almost anywhere but on the route.
+ *
+ * Cutting the arc into pieces and giving each piece a colour taken from how
+ * far along the arc it sits removes the geometry from the problem entirely.
+ * Each piece is projected on its own, so the antimeridian cut is handled by
+ * the projection exactly as it is for the whole arc.
+ *
+ * Returns the pieces in order, each with `t` — the midpoint's fraction along
+ * the great circle, which is what the colour should be chosen from. Pieces
+ * clipped away by the projection are dropped.
+ */
+export function greatCircleSegments(
+  from: string,
+  to: string,
+  projection: GeoProjection,
+  pieces = 24,
+): Array<{ d: string; t: number }> {
+  const origin = getAirport(from)
+  const destination = getAirport(to)
+  if (!origin || !destination) return []
+
+  const interpolate = geoInterpolate(
+    [origin.lon, origin.lat],
+    [destination.lon, destination.lat],
+  )
+  const draw = pathFor(projection)
+
+  // A few samples inside each piece, so a piece is still a smooth curve and
+  // not a chord of its own.
+  const perPiece = Math.max(2, Math.round(ARC_SEGMENTS / pieces))
+  const out: Array<{ d: string; t: number }> = []
+
+  for (let i = 0; i < pieces; i += 1) {
+    const t0 = i / pieces
+    const t1 = (i + 1) / pieces
+    const coordinates: [number, number][] = []
+    for (let j = 0; j <= perPiece; j += 1) {
+      coordinates.push(interpolate(t0 + ((t1 - t0) * j) / perPiece))
+    }
+    const d = draw({ type: 'LineString', coordinates } as LineString)
+    if (d) out.push({ d, t: (t0 + t1) / 2 })
+  }
+  return out
+}
+
+/**
  * Great-circle distance between two airports in whole km, on a sphere of
  * radius 6371 km. This is `geoDistance` (radians) × 6371, which is exactly the
  * formula `src/data/network-stats.sql` uses, so a distance rendered on the map
