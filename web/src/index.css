@@ -386,6 +386,9 @@
     padding: 8px 0;
     text-align: left;
     color: var(--color-ink);
+    /* the same face as the airport fields beside it — the trigger reads as a
+       written-out date, not as data. The calendar's own numerals stay mono. */
+    font-family: var(--font-sans);
     font-size: var(--text-body);
     background: transparent;
     border: none;

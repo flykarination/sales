@@ -173,7 +173,7 @@ export function SearchPanel({
                       marginBottom: i < multi.length - 1 ? 16 : 0,
                     }}
                   >
-                    <div className="relative grid gap-4 sm:col-span-2 sm:grid-cols-2">
+                    <div className="relative grid gap-4 sm:col-span-2 sm:grid-cols-2 sm:gap-x-12">
                       <AirportField
                         label={`Flight ${i + 1} — from`}
                         value={leg.from}
@@ -245,7 +245,10 @@ export function SearchPanel({
               {/* From and To share a row so the swap control can sit between
                   them, which is the only place it means anything. */}
               <div className="relative sm:col-span-2">
-                <div className="grid gap-4 sm:grid-cols-2">
+                {/* a wider gutter than the rest of the form: the swap button is
+                    40px and sits centred on the seam, so a 16px gap would put
+                    it over the start of the To field */}
+                <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-12">
                   <AirportField
                     label="From" value={origin} onChange={setOrigin}
                     airports={airports} exclude={destination}

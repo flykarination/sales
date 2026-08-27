@@ -102,7 +102,7 @@ export function DatePicker({
         aria-expanded={open}
         aria-haspopup="dialog"
         aria-controls={open ? dialogId : undefined}
-        className="kx-datefield tnum font-mono"
+        className="kx-datefield"
       >
         <span>{value ? longDate(value) : 'Choose a date'}</span>
         <CalendarMark />
