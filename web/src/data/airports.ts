@@ -630,7 +630,12 @@ export function airportByCode(iata: string): Airport | undefined {
 }
 
 /** How an airport is named in running text: the city, falling back to the code. */
-export function airportLabel(iata: string): string {
+export function airportLabel(iata: string, fallback?: string | null): string {
   const code = iata.toUpperCase()
-  return VN_NAMES[code] ?? airportByCode(code)?.city ?? code
+  // `fallback` is for callers holding a live row from the database — the
+  // airport list here is generated from that database, so the two normally
+  // agree, but between loading a new carrier's airports and shipping a
+  // regenerated file they can drift. Showing a bare code is the one outcome
+  // worth guarding against.
+  return VN_NAMES[code] || airportByCode(code)?.city || fallback || code
 }

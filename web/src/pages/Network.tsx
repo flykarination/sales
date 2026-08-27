@@ -18,6 +18,9 @@ const H = 520
 /** ALL, one region, or every route flown wholly inside Vietnam. */
 type Filter = RegionKey | 'ALL' | 'DOMESTIC'
 
+/** Which carrier's routes are on the map. */
+type CarrierFilter = 'ALL' | 'KX' | 'Z4'
+
 const isDomestic = (a: string, b: string) =>
   getAirport(a)?.country === 'VN' && getAirport(b)?.country === 'VN'
 
@@ -128,6 +131,7 @@ export default function Network() {
   const [routes, setRoutes] = useState<RouteRow[] | null>(null)
   const [failed, setFailed] = useState(false)
   const [region, setRegion] = useState<Filter>('ALL')
+  const [carrier, setCarrier] = useState<CarrierFilter>('ALL')
   const [active, setActive] = useState<RouteRow | null>(null)
   const reduced = useReducedMotion()
   const liveRef = useRef<HTMLParagraphElement>(null)
@@ -161,15 +165,22 @@ export default function Network() {
   const shown = useMemo(() => {
     if (!routes) return []
     const seen = new Set<string>()
-    return routes.filter((r) => {
-      const key = [r.origin_iata, r.destination_iata].sort().join('-')
-      if (seen.has(key)) return false
-      seen.add(key)
-      if (region === 'ALL') return true
-      if (region === 'DOMESTIC') return isDomestic(r.origin_iata, r.destination_iata)
-      return regionOf(farEnd(r.origin_iata, r.destination_iata)) === region
-    })
-  }, [routes, region])
+    return routes
+      // The carrier test runs BEFORE the de-duplication, not inside it. Both
+      // airlines fly some of the same city pairs, and the key is
+      // direction-agnostic, so filtering afterwards would let a Karination row
+      // consume the key and make FORZA's own service disappear from its own
+      // filter.
+      .filter((r) => carrier === 'ALL' || r.airline_code === carrier)
+      .filter((r) => {
+        const key = [r.origin_iata, r.destination_iata].sort().join('-')
+        if (seen.has(key)) return false
+        seen.add(key)
+        if (region === 'ALL') return true
+        if (region === 'DOMESTIC') return isDomestic(r.origin_iata, r.destination_iata)
+        return regionOf(farEnd(r.origin_iata, r.destination_iata)) === region
+      })
+  }, [routes, region, carrier])
 
   const arcs = useMemo(
     () =>
@@ -328,13 +339,46 @@ export default function Network() {
           </h1>
           <p className="mt-5" style={{ color: '#B9B6D8', maxWidth: '52ch' }}>
             {routes ? count(shown.length) : '—'}{' '}
-            {region === 'DOMESTIC' ? 'routes within Vietnam' : 'city pairs from five Vietnamese hubs'}.
+            {region === 'DOMESTIC' ? 'routes within Vietnam' : 'city pairs'}
+            {carrier === 'KX' ? ' flown by Karination'
+              : carrier === 'Z4' ? ' flown by FORZA'
+              : ' across Karination and FORZA'}.
             Each arc is the real great-circle track; colour shows the region it
             reaches. Choose a region to fly the map to it, or select a route to draw it.
           </p>
 
+          {/* Airline first: it changes what the region counts even mean. */}
+          <div className="mt-7 flex flex-wrap gap-2" role="group" aria-label="Filter by airline">
+            {([
+              ['ALL', 'Both airlines', 'var(--color-aqua)'],
+              ['KX', 'Karination', KARINATION.accent],
+              ['Z4', 'FORZA', FORZA.accent],
+            ] as Array<[CarrierFilter, string, string]>).map(([key, label, hue]) => {
+              const on = carrier === key
+              return (
+                <button
+                  key={key}
+                  onClick={() => { setCarrier(key); setActive(null) }}
+                  aria-pressed={on}
+                  className="inline-flex items-center gap-2 font-mono uppercase"
+                  style={{
+                    fontSize: 'var(--text-micro)', letterSpacing: '0.12em',
+                    padding: '8px 14px', minHeight: 40, borderRadius: 'var(--radius-edge)',
+                    border: `1px solid ${on ? hue : 'rgba(255,255,255,.18)'}`,
+                    background: on ? 'rgba(255,255,255,.12)' : 'transparent',
+                    color: on ? 'var(--color-paper)' : '#B9B6D8',
+                    fontWeight: on ? 600 : 400,
+                  }}
+                >
+                  <span aria-hidden style={{ width: 8, height: 8, borderRadius: 2, background: hue }} />
+                  {label}
+                </button>
+              )
+            })}
+          </div>
+
           {/* region filter — colour is paired with a word, never alone */}
-          <div className="mt-7 flex flex-wrap gap-2" role="group" aria-label="Filter by region">
+          <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Filter by region">
             {(['ALL', 'DOMESTIC', ...REGION_KEYS] as const).map((key) => {
               const on = region === key
               const hue =
@@ -559,6 +603,17 @@ export default function Network() {
                         <span className="min-w-0 truncate" style={{ color: '#8F8CB4', fontSize: 'var(--text-micro)' }}>
                           {airportLabel(far)}
                         </span>
+                        {carrier === 'ALL' && a.route.airline_code === 'Z4' && (
+                          <span
+                            className="font-mono"
+                            style={{
+                              fontSize: 'var(--text-micro)', letterSpacing: '0.08em',
+                              color: FORZA.accent, flex: 'none',
+                            }}
+                          >
+                            Z4
+                          </span>
+                        )}
                         {a.route.from_price_economy_usd && (
                           <span className="tnum ml-auto font-mono" style={{ color: '#B9B6D8', fontSize: 'var(--text-small)' }}>
                             {price(a.route.from_price_economy_usd)}

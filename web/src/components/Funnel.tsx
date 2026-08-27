@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useBooking } from '@/booking/BookingContext'
 import { summarise } from '@/components/PassengerPicker'
 import { OperatedBy } from '@/components/OperatedBy'
+import { BaggageNotice } from '@/components/BaggageNotice'
 import type { TripType } from '@/booking/BookingContext'
 import { cabin } from '@/lib/cabins'
 import { duration, price, shortDate, time } from '@/lib/format'
@@ -112,6 +113,10 @@ export function ItinerarySummary({ sticky = true }: { sticky?: boolean }) {
           )}
         </div>
       ))}
+
+      {/* The whole booking, not one slice: a bag checked at the start has to
+          satisfy every airline that will carry it. */}
+      <BaggageNotice airlineCodes={legs.map((l) => l.airline_code)} cabinCode={draft.cabin} />
 
       <dl className="mt-5 pt-4" style={{ borderTop: '1px solid var(--color-ink)' }}>
         <div className="flex items-baseline justify-between">

@@ -112,3 +112,29 @@ export function operatedNoteFor(code: string | null | undefined): string | null 
   if (!carrier || carrier.code === 'KX') return null
   return carrier.operatedNote
 }
+
+/**
+ * Which carrier's baggage rules govern a journey.
+ *
+ * A KarinationGroup itinerary can mix carriers -- Munich to Hải Phòng is
+ * Karination as far as Phú Quốc and FORZA onward -- and a bag checked at the
+ * start has to satisfy every airline that will carry it. So the tightest
+ * allowance on the itinerary applies to the whole of it, which is the same
+ * most-restrictive-carrier rule every interline booking uses.
+ *
+ * Returns the governing carrier, and whether that is stricter than what the
+ * traveller would otherwise have had.
+ */
+export function governingCarrier(airlineCodes: Array<string | null | undefined>): {
+  carrier: GroupCarrier
+  mixed: boolean
+} {
+  const codes = new Set(
+    airlineCodes.map((c) => (c ?? '').toUpperCase()).filter(Boolean),
+  )
+  const carrier = codes.has('Z4') ? FORZA : KARINATION
+  // "mixed" means the rule is not simply the operating carrier's own: a
+  // Karination flight is in there too, so the allowance is a surprise worth
+  // stating rather than a given.
+  return { carrier, mixed: codes.has('Z4') && codes.has('KX') }
+}

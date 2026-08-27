@@ -412,7 +412,7 @@ function AirportField({
   // airportLabel, not the row's city_name: the backfilled data spells the
   // Vietnamese cities as English exonyms, and the field should say what the
   // rest of the site says.
-  const display = open ? query : selected ? `${airportLabel(selected.iata_code)} (${selected.iata_code})` : ''
+  const display = open ? query : selected ? `${airportLabel(selected.iata_code, selected.city_name)} (${selected.iata_code})` : ''
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -424,7 +424,7 @@ function AirportField({
       .filter((a) =>
         a.iata_code.toLowerCase().startsWith(q) ||
         norm(a.city_name).includes(norm(q)) ||
-        norm(airportLabel(a.iata_code)).includes(norm(q)) ||
+        norm(airportLabel(a.iata_code, a.city_name)).includes(norm(q)) ||
         norm(a.airport_name).includes(norm(q)))
       .sort((a, b) => Number(b.iata_code.toLowerCase().startsWith(q)) - Number(a.iata_code.toLowerCase().startsWith(q)))
       .slice(0, 8)
@@ -495,7 +495,7 @@ function AirportField({
                 <span className="tnum font-mono" style={{ color: 'var(--color-aqua-deep)', fontSize: 'var(--text-small)' }}>
                   {a.iata_code}
                 </span>
-                <span style={{ fontWeight: 500 }}>{airportLabel(a.iata_code)}</span>
+                <span style={{ fontWeight: 500 }}>{airportLabel(a.iata_code, a.city_name)}</span>
                 <span className="ml-auto" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
                   {a.country_code}
                 </span>

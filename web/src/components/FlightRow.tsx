@@ -6,6 +6,7 @@ import {
 import type { FlightResult } from '@/lib/queries'
 import { OperatedBy } from '@/components/OperatedBy'
 import { operatedNoteFor } from '@/data/carriers'
+import { BaggageNotice } from '@/components/BaggageNotice'
 
 /**
  * One result. A horizontal band, not a card: travellers scan a column of
@@ -83,7 +84,10 @@ export function FlightRow({
           </div>
 
           {operatedNoteFor(flight.airline_code) ? (
-            <OperatedBy airlineCode={flight.airline_code} size="micro" />
+            <>
+              <OperatedBy airlineCode={flight.airline_code} size="micro" />
+              <BaggageNotice airlineCodes={[flight.airline_code]} cabinCode={flight.cabin_code} />
+            </>
           ) : (
             flight.airline_name && (
               <p className="mt-1" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>

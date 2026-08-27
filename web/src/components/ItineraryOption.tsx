@@ -7,7 +7,8 @@ import {
 import { airportLabel } from '@/data/airports'
 import type { Itinerary } from '@/lib/queries'
 import { OperatedBy } from '@/components/OperatedBy'
-import { operatedNoteFor } from '@/data/carriers'
+import { governingCarrier, operatedNoteFor } from '@/data/carriers'
+import { BaggageNotice } from '@/components/BaggageNotice'
 
 /**
  * One connecting itinerary.
@@ -52,7 +53,9 @@ export function ItineraryOption({
     `${durationSpoken(itinerary.totalMinutes)} in total, ${stopsText}, ` +
     itinerary.waits.map((w, i) => `${durationSpoken(w)} in ${itinerary.via[i]}`).join(', ') +
     `. ${c.longName}, ${price(itinerary.totalPriceUsd)} per passenger.` +
-    operators.map((code) => ` ${operatedNoteFor(code)}`).join('')
+    operators.map((code) => ` ${operatedNoteFor(code)}`).join('') +
+    (governingCarrier(itinerary.legs.map((l) => l.airline_code)).carrier.code === 'Z4'
+      ? ' FORZA baggage rules apply to this journey.' : '')
 
   return (
     <li style={{ borderBottom: 'var(--rule)', borderLeft: `3px solid ${selected ? c.hue : 'transparent'}`, background: selected ? c.wash : 'transparent' }}>
@@ -94,6 +97,11 @@ export function ItineraryOption({
           {operators.map((code) => (
             <OperatedBy key={code} airlineCode={code} size="micro" />
           ))}
+
+          <BaggageNotice
+            airlineCodes={itinerary.legs.map((l) => l.airline_code)}
+            cabinCode={first.cabin_code}
+          />
 
           {/* the waits, said plainly */}
           <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
