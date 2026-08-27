@@ -4,6 +4,7 @@ import { listGroupCarriers, listHubs, type AirlineRow, type AirlineStatsRow, typ
 import { count } from '@/lib/format'
 import { CABIN_ORDER, CABINS } from '@/lib/cabins'
 import { assetUrl } from '@/lib/assets'
+import { carrierByCode } from '@/data/carriers'
 
 const HUB_CITY: Record<string, string> = {
   SGN: 'TP Hồ Chí Minh', HAN: 'Hà Nội', DAD: 'Đà Nẵng', CXR: 'Nha Trang', PQC: 'Phú Quốc',
@@ -54,7 +55,9 @@ export default function About() {
             Karination flies from five hubs along the length of Vietnam — TP Hồ Chí Minh,
             Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc — to{' '}
             {kxStats ? count(kxStats.num_routes) : '766'} routes across Asia, the
-            Middle East, Europe, Africa, Oceania and the Americas.
+            Middle East, Europe, Africa, Oceania and the Americas. It is the
+            largest of the KarinationGroup airlines, and the one this site is
+            about.
           </p>
         </div>
       </section>
@@ -123,18 +126,29 @@ export default function About() {
           <h2 className="font-display mb-2" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)' }}>
             KarinationGroup
           </h2>
-          <p className="mb-8" style={{ color: 'var(--color-ink-mute)', maxWidth: '54ch' }}>
-            Karination is one of three carriers in the group. Each keeps its own
-            fleet, hubs and alliance.
+          <p className="mb-8" style={{ color: 'var(--color-ink-mute)', maxWidth: '58ch' }}>
+            Karination is the airline you are booking with, and the one the rest
+            of this page is about. It is one of three carriers in the group, each
+            keeping its own fleet, hubs and alliance — and a Karination booking
+            can put you on a FORZA aeroplane, which is said plainly when it does.
           </p>
 
           <div className="grid gap-8 md:grid-cols-3">
             {carriers.map((c) => {
               const s = statFor(c.uid)
               const h = hubsFor(c.uid)
-              const flying = (s?.num_flights ?? 0) > 0
+              // Whether WE can sell it, which is not the same as whether it
+              // flies: Sonder has 28 aircraft in the group's own records, but
+              // its schedule is not published to this site.
+              const sellable = Boolean(carrierByCode(c.airline_code))
               return (
-                <article key={c.uid} style={{ borderTop: '2px solid var(--color-ink)', paddingTop: 16 }}>
+                <article
+                  key={c.uid}
+                  style={{
+                    borderTop: `3px solid ${carrierByCode(c.airline_code)?.accent ?? 'var(--color-ink)'}`,
+                    paddingTop: 16,
+                  }}
+                >
                   <div className="flex items-baseline gap-3">
                     <span className="font-mono" style={{ color: 'var(--color-aqua-deep)', fontWeight: 600 }}>
                       {c.airline_code}
@@ -145,6 +159,17 @@ export default function About() {
                     {c.airline_country === 'VN' ? 'Vietnam' : c.airline_country === 'KR' ? 'South Korea' : c.airline_country}
                     {c.alliance ? ` · ${c.alliance}` : ' · No alliance'}
                   </p>
+
+                  {carrierByCode(c.airline_code) && (
+                    <>
+                      <p className="mt-2" style={{ fontSize: 'var(--text-small)', fontWeight: 600, color: carrierByCode(c.airline_code)!.accentInk }}>
+                        {carrierByCode(c.airline_code)!.role}
+                      </p>
+                      <p className="mt-2" style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }}>
+                        {carrierByCode(c.airline_code)!.blurb}
+                      </p>
+                    </>
+                  )}
 
                   <dl className="tnum mt-4 font-mono" style={{ fontSize: 'var(--text-small)' }}>
                     <div className="flex justify-between py-1" style={{ borderBottom: 'var(--rule)' }}>
@@ -166,14 +191,38 @@ export default function About() {
                     {h.length > 6 ? ` +${h.length - 6} more` : ''}
                   </p>
 
-                  {!flying && (
+                  {!sellable && (
                     <p className="mt-3" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-warn)' }}>
-                      Schedule not yet published.
+                      Schedule not yet published here — not bookable.
                     </p>
                   )}
                 </article>
               )
             })}
+          </div>
+
+          {/* Sonder is on the group register — Korean, based at Incheon — with
+              no aircraft and no schedule, so it is announced rather than sold. */}
+          <div
+            className="mt-10"
+            style={{ borderLeft: '3px solid var(--color-spectrum-magenta)', paddingLeft: 16, maxWidth: '62ch' }}
+          >
+            <p
+              className="mb-1 font-mono uppercase"
+              style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: 'var(--color-spectrum-magenta-ink)' }}
+            >
+              In the works
+            </p>
+            <p style={{ fontSize: 'var(--text-lead)', color: 'var(--color-ink)' }}>
+              Coming in the next months, an all new Hallyu experience will be
+              flown the KarinationGroup way.
+            </p>
+            <p className="mt-2" style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }}>
+              Sonder is already on the group register — Korean, based at
+              Incheon, and flying in its own right. Its schedule is not
+              published to this site yet, so there is nothing here to book.
+              When there is, it will be here.
+            </p>
           </div>
         </div>
       </section>

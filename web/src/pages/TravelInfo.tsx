@@ -1,14 +1,8 @@
 import { Link } from 'react-router-dom'
 import { CABIN_ORDER, CABINS } from '@/lib/cabins'
+import { CARRIERS } from '@/data/carriers'
 import { TOPICS } from '@/data/travel-topics'
 
-/** Baggage allowance by cabin, and the questions a passenger actually asks. */
-const BAGGAGE: Record<string, { cabin: string; checked: string; hand: string }> = {
-  FIRST: { cabin: 'First', checked: '3 × 32 kg', hand: '2 pieces, 10 kg' },
-  BUSINESS: { cabin: 'Business', checked: '2 × 32 kg', hand: '2 pieces, 10 kg' },
-  PREMIUM_ECONOMY: { cabin: 'Premium Economy', checked: '2 × 23 kg', hand: '1 piece, 7 kg' },
-  ECONOMY: { cabin: 'Economy', checked: '1 × 23 kg', hand: '1 piece, 7 kg' },
-}
 
 const FAQ: Array<[string, string]> = [
   [
@@ -85,47 +79,76 @@ export default function TravelInfo() {
 
       <section id="baggage" className="mt-14 scroll-mt-32">
         <h2 className="font-display mb-4" style={{ fontSize: '1.7rem' }}>Baggage</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table className="w-full" style={{ minWidth: 480, borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '2px solid var(--color-ink)' }}>
-                {['Cabin', 'Checked', 'Hand baggage'].map((h) => (
-                  <th
-                    key={h}
-                    scope="col"
-                    className="py-2 text-left font-mono uppercase"
-                    style={{
-                      fontSize: 'var(--text-micro)', letterSpacing: '0.14em',
-                      color: 'var(--color-ink-mute)', fontWeight: 400,
-                    }}
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {CABIN_ORDER.map((code) => {
-                const c = CABINS[code]
-                const b = BAGGAGE[code]
-                return (
-                  <tr key={code} style={{ borderBottom: 'var(--rule)' }}>
-                    <td className="py-3">
-                      <span className="flex items-center gap-2">
-                        <span aria-hidden style={{ width: 10, height: 10, background: c.hue, borderRadius: 2 }} />
-                        <span style={{ fontWeight: 600, color: c.ink }}>{b.cabin}</span>
-                      </span>
-                    </td>
-                    <td className="tnum py-3 font-mono">{b.checked}</td>
-                    <td className="tnum py-3 font-mono" style={{ color: 'var(--color-ink-mute)' }}>{b.hand}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+        <p className="mb-5" style={{ color: 'var(--color-ink-mute)', maxWidth: '60ch' }}>
+          What is included in the fare. Karination and FORZA allow different
+          amounts, and a KarinationGroup booking can include flights on both —
+          the allowance that applies is the one for the airline operating that
+          flight, shown against it when you book.
+        </p>
+
+        <div className="grid gap-8 lg:grid-cols-2">
+          {CARRIERS.map((carrier) => (
+            <div key={carrier.code}>
+              <div className="mb-3 flex flex-wrap items-baseline gap-x-3"
+                   style={{ borderBottom: `2px solid ${carrier.accent}`, paddingBottom: 6 }}>
+                <h3 style={{ fontSize: 'var(--text-lead)', fontWeight: 600 }}>{carrier.name}</h3>
+                <span className="font-mono uppercase"
+                      style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.14em', color: 'var(--color-ink-faint)' }}>
+                  {carrier.code}
+                </span>
+              </div>
+
+              <div style={{ overflowX: 'auto' }}>
+                <table className="w-full" style={{ minWidth: 340, borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--color-ink)' }}>
+                      {['Cabin', 'Checked', 'Hand baggage'].map((h) => (
+                        <th
+                          key={h}
+                          scope="col"
+                          className="py-2 text-left font-mono uppercase"
+                          style={{
+                            fontSize: 'var(--text-micro)', letterSpacing: '0.14em',
+                            color: 'var(--color-ink-mute)', fontWeight: 400,
+                          }}
+                        >
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {CABIN_ORDER.map((code) => {
+                      const c = CABINS[code]
+                      const b = carrier.baggage[code]
+                      return (
+                        <tr key={code} style={{ borderBottom: 'var(--rule)' }}>
+                          <td className="py-3">
+                            <span className="flex items-center gap-2">
+                              <span aria-hidden style={{ width: 10, height: 10, background: c.hue, borderRadius: 2 }} />
+                              <span style={{ fontWeight: 600, color: c.ink }}>{c.longName}</span>
+                            </span>
+                          </td>
+                          <td className="tnum py-3 font-mono">{b.checked}</td>
+                          <td className="tnum py-3 font-mono" style={{ color: 'var(--color-ink-mute)' }}>{b.hand}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
         </div>
-        <p className="mt-4" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-faint)' }}>
-          RainbowOne Amber adds one checked bag; Amethyst and Ruby add two.
+
+        <p className="mt-5" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)', maxWidth: '62ch' }}>
+          RainbowOne Amber adds one checked bag; Amethyst and Ruby add two. Tier
+          allowances apply on both airlines.
+        </p>
+        <p className="mt-2" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-faint)', maxWidth: '62ch' }}>
+          FORZA carries less than we do, but every FORZA fare still includes a
+          checked bag — which is the line between a lower-cost airline and a
+          low-cost one.
         </p>
       </section>
 

@@ -4,6 +4,8 @@ import {
   price, time, timeSpoken,
 } from '@/lib/format'
 import type { FlightResult } from '@/lib/queries'
+import { OperatedBy } from '@/components/OperatedBy'
+import { operatedNoteFor } from '@/data/carriers'
 
 /**
  * One result. A horizontal band, not a card: travellers scan a column of
@@ -32,7 +34,8 @@ export function FlightRow({
     `from ${flight.origin_iata}, arrives ${timeSpoken(flight.arrival_time)} ` +
     `at ${flight.destination_iata}${dayOffsetSpoken(nights)}, ` +
     `${durationSpoken(flight.duration_minutes)}, ${c.longName}, ` +
-    `${price(flight.price_usd)} per passenger`
+    `${price(flight.price_usd)} per passenger` +
+    (operatedNoteFor(flight.airline_code) ? `. ${operatedNoteFor(flight.airline_code)}` : '')
 
   return (
     <li>
@@ -79,10 +82,14 @@ export function FlightRow({
             <span style={{ color: 'var(--color-ink-faint)' }}>{flight.aircraft_model}</span>
           </div>
 
-          {flight.airline_name && (
-            <p className="mt-1" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
-              Operated by {carrierName(flight.airline_name, flight.airline_code)}
-            </p>
+          {operatedNoteFor(flight.airline_code) ? (
+            <OperatedBy airlineCode={flight.airline_code} size="micro" />
+          ) : (
+            flight.airline_name && (
+              <p className="mt-1" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
+                Operated by {carrierName(flight.airline_name, flight.airline_code)}
+              </p>
+            )
           )}
         </div>
 

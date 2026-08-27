@@ -10,6 +10,7 @@ import { listAllRoutes, type RouteRow } from '@/lib/queries'
 import { REGION_STYLE } from '@/lib/cabins'
 import { count, duration, price } from '@/lib/format'
 import { airportLabel } from '@/data/airports'
+import { FORZA, KARINATION } from '@/data/carriers'
 
 const W = 1000
 const H = 520
@@ -105,8 +106,19 @@ function spectrumAt(t: number): string {
   return `rgb(${mix[0]} ${mix[1]} ${mix[2]})`
 }
 
-/** The home hubs, in the order they are said aloud. */
-const HUB_ORDER = ['SGN', 'HAN', 'DAD', 'CXR', 'PQC'] as const
+/**
+ * Every base in the group, Karination's five first and FORZA's thirteen
+ * after. Both carriers' routes are on this map because both are bookable
+ * here, so grouping by Karination's hubs alone filed a quarter of the
+ * network under "Onward".
+ */
+const HUB_ORDER: string[] = [...KARINATION.hubs, ...FORZA.hubs.filter((h) => !KARINATION.hubs.includes(h))]
+
+/** Which carrier bases at a hub, for the section heading. */
+const HUB_CARRIER = new Map<string, string>([
+  ...KARINATION.hubs.map((h) => [h, KARINATION.name] as [string, string]),
+  ...FORZA.hubs.filter((h) => !KARINATION.hubs.includes(h)).map((h) => [h, FORZA.name] as [string, string]),
+])
 
 /** Ease-out cubic: quick departure, soft landing, matching --ease-paint. */
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
@@ -272,7 +284,7 @@ export default function Network() {
     for (const a of arcs) {
       const o = a.route.origin_iata
       const d = a.route.destination_iata
-      const hub = HUB_ORDER.includes(o as never) ? o : HUB_ORDER.includes(d as never) ? d : null
+      const hub = HUB_ORDER.includes(o) ? o : HUB_ORDER.includes(d) ? d : null
       if (!hub) { other.push(a); continue }
       const list = hubs.get(hub)
       if (list) list.push(a)
@@ -281,13 +293,17 @@ export default function Network() {
     const groups = HUB_ORDER
       .filter((h) => hubs.has(h))
       .map((h) => ({
-        hub: h as string,
+        hub: h,
         city: airportLabel(h),
+        carrier: HUB_CARRIER.get(h) ?? '',
         total: hubs.get(h)!.length,
         arcs: hubs.get(h)!.slice(0, 24),
       }))
     if (other.length) {
-      groups.push({ hub: 'Onward', city: 'Stopover sectors', total: other.length, arcs: other.slice(0, 24) })
+      groups.push({
+        hub: 'Onward', city: 'Stopover sectors', carrier: '',
+        total: other.length, arcs: other.slice(0, 24),
+      })
     }
     return groups
   }, [arcs])
@@ -511,6 +527,17 @@ export default function Network() {
                 <span className="tnum font-mono" style={{ color: '#8F8CB4', fontSize: 'var(--text-small)' }}>
                   {count(group.total)} {group.total === 1 ? 'route' : 'routes'}
                 </span>
+                {group.carrier && group.carrier !== 'Karination' && (
+                  <span
+                    className="font-mono uppercase"
+                    style={{
+                      fontSize: 'var(--text-micro)', letterSpacing: '0.14em',
+                      color: 'var(--color-spectrum-amber)',
+                    }}
+                  >
+                    {group.carrier} base
+                  </span>
+                )}
               </div>
 
               <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,0 +1,50 @@
+[
+    {
+        "codeshareId": "c0091326-00a3-468d-8c9b-f1da5f0db683",
+        "operatingFlightId": "e730f10f-0b81-4e35-b66a-a78c16749d23",
+        "operatingUid": "6ed260cb-3328-4f66-98c2-a39df75f7d1a",
+        "marketingUid": "e3f48e70-92a1-40c3-9767-22a0b96d5c66",
+        "marketingOutboundFlightNumber": 5465,
+        "marketingInboundFlightNumber": 5466,
+        "operatingCarrierProfit": 151,
+        "marketingCarrierProfit": 302,
+        "originAirport": "ICN",
+        "destinationAirport": "BKK"
+    },
+    {
+        "codeshareId": "a3a234cc-a527-4f3b-bb21-3fdc9bfd7199",
+        "operatingFlightId": "8a910b83-890d-4d96-9e92-0c64d3481ce6",
+        "operatingUid": "6ed260cb-3328-4f66-98c2-a39df75f7d1a",
+        "marketingUid": "e3f48e70-92a1-40c3-9767-22a0b96d5c66",
+        "marketingOutboundFlightNumber": 5419,
+        "marketingInboundFlightNumber": 5420,
+        "operatingCarrierProfit": 272,
+        "marketingCarrierProfit": 544,
+        "originAirport": "ICN",
+        "destinationAirport": "SGN"
+    },
+    {
+        "codeshareId": "c3053d82-bcdb-4dab-84af-8fa5ea069c92",
+        "operatingFlightId": "e1468098-1915-43ef-b92d-6e0bdf698f5a",
+        "operatingUid": "6ed260cb-3328-4f66-98c2-a39df75f7d1a",
+        "marketingUid": "e3f48e70-92a1-40c3-9767-22a0b96d5c66",
+        "marketingOutboundFlightNumber": 9163,
+        "marketingInboundFlightNumber": 9164,
+        "operatingCarrierProfit": 417,
+        "marketingCarrierProfit": 834,
+        "originAirport": "ICN",
+        "destinationAirport": "HAN"
+    },
+    {
+        "codeshareId": "06b876a2-cba1-4232-a25b-621fd17b5c88",
+        "operatingFlightId": "784786d4-4d46-4440-b423-dd78348c547d",
+        "operatingUid": "6ed260cb-3328-4f66-98c2-a39df75f7d1a",
+        "marketingUid": "e3f48e70-92a1-40c3-9767-22a0b96d5c66",
+        "marketingOutboundFlightNumber": 8793,
+        "marketingInboundFlightNumber": 8794,
+        "operatingCarrierProfit": 416,
+        "marketingCarrierProfit": 832,
+        "originAirport": "ICN",
+        "destinationAirport": "HAN"
+    }
+]

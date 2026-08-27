@@ -9,7 +9,8 @@ in database/sql/01_schema.sql.
 Run from anywhere:          python database/scripts/build_database.py
 Re-run safely at any time:  it fully rewrites database/csv/*.csv.
 
-Adding a carrier: drop its four JSON files into <root>/<AirlineName>/ and re-run.
+Adding a carrier: drop its four JSON files into
+database/original_json/<AirlineName>/ and re-run.
 Empty or missing carrier folders are skipped with a warning.
 """
 
@@ -23,6 +24,7 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]          # the project folder
+SRC = ROOT / "database" / "original_json"           # the raw TAS exports
 OUT = ROOT / "database" / "csv"
 REPORTS = ROOT / "database" / "reports"
 
@@ -141,8 +143,8 @@ def main() -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     REPORTS.mkdir(parents=True, exist_ok=True)
 
-    group_info = load(ROOT / "kxgroup_info.json")
-    group_stats = load(ROOT / "kxgroup_stats.json") or []
+    group_info = load(SRC / "kxgroup_info.json")
+    group_stats = load(SRC / "kxgroup_stats.json") or []
     if not group_info:
         print("FATAL: kxgroup_info.json not found or empty", file=sys.stderr)
         return 1
@@ -201,7 +203,7 @@ def main() -> int:
     per_carrier: dict[str, Counter] = {}
 
     for uid, air in airlines.items():
-        folder = ROOT / (air["airline_name"] or "")
+        folder = SRC / (air["airline_name"] or "")
         label = "{} ({})".format(air["airline_name"], air["airline_code"])
         counts = per_carrier.setdefault(air["airline_name"], Counter())
         if not folder.is_dir():
@@ -398,7 +400,17 @@ def main() -> int:
 
     check_unique(list(airlines.values()), ["uid"], "airlines")
     check_unique(aircraft, ["aircraft_id"], "aircraft")
-    check_unique(aircraft, ["registration"], "aircraft(registration)")
+    # Registration is deliberately NOT checked for uniqueness. Two group
+    # carriers on the same national register reuse marks (VN-A104 is an
+    # A321XLR at Karination and a 777-300ER at FORZA), and FORZA carries two
+    # separate 787-10s both marked VN-A287. aircraft_id is the identity; the
+    # mark is a label. Repeats are reported below as a note, not an error.
+    _reg = Counter((a["airline_uid"], a["registration"]) for a in aircraft)
+    _shared = sum(v - 1 for v in _reg.values() if v > 1)
+    if _shared:
+        notes.append("{} aircraft share a registration with another airframe "
+                     "in the same fleet; aircraft_id remains unique."
+                     .format(_shared))
     check_unique(flights, ["flight_id"], "flights")
     check_unique(assignments, ["flight_id", "aircraft_id"], "flight_assignments")
     check_unique(assignment_days, ["flight_id", "aircraft_id", "day_of_week"],
@@ -430,9 +442,19 @@ def main() -> int:
             errors.append("assignment: unknown flight_id {}".format(r["flight_id"]))
         if r["aircraft_id"] not in air_ids:
             errors.append("assignment: unknown aircraft_id {}".format(r["aircraft_id"]))
+    # A codeshare can name a flight we do not hold: the group export contains
+    # only the group's own flights, and a member may market seats on an
+    # outside carrier. The codeshare is still real, so it is kept with a null
+    # operating flight rather than discarded.
+    external = 0
     for c in codeshares:
         if c["operating_flight_id"] not in flight_ids:
-            errors.append("codeshare {}: unknown operating_flight_id".format(c["codeshare_id"]))
+            c["operating_flight_id"] = ""
+            external += 1
+    if external:
+        notes.append("{} codeshare(s) are marketed on flights operated outside "
+                     "the group; kept with no operating flight linked."
+                     .format(external))
 
     # ------------------------------------------------------------ consistency
     used_aircraft = {r["aircraft_id"] for r in assignments}

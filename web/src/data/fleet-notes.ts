@@ -99,3 +99,83 @@ export const FLEET_NOTES: Record<string, FleetNote> = {
     signature: { route: '—', km: 0, minutes: 0 },
   },
 }
+
+/**
+ * The same, for FORZA.
+ *
+ * Kept separate rather than merged into FLEET_NOTES because five types are
+ * flown by both carriers and they do quite different work at each. A
+ * 777-300ER is Karination's hardest-worked widebody; at FORZA it is one of
+ * nine frames opening Belfast and Dublin from the Mekong Delta.
+ *
+ * Every figure is from the schedule: frames in service, cities reached, and
+ * the longest sector each type actually operates.
+ */
+export const FORZA_FLEET_NOTES: Record<string, FleetNote> = {
+  'Airbus A330-900': {
+    role: 'Long-haul, newest reach',
+    description:
+      'The furthest-flying aircraft FORZA owns, and the clearest sign of where the airline is going. Twenty frames turn nineteen cities from provincial bases that had no long-haul service at all three years ago — including a sector from Cần Thơ to San Francisco that is longer than anything Karination flies out of Nha Trang.',
+    signature: { route: 'Cần Thơ – San Francisco', km: 12727, minutes: 950 },
+  },
+  'Airbus A350-900': {
+    role: 'Long-haul backbone',
+    description:
+      'Ninety aircraft reaching sixty cities: the type most FORZA long-haul passengers will actually meet, and close to half the entire fleet. It carries the whole spread of the network, from a two-hour regional turn to a fifteen-hour crossing to Vancouver.',
+    signature: { route: 'Cần Thơ – Vancouver', km: 11885, minutes: 885 },
+  },
+  'Boeing 787-10 Dreamliner': {
+    role: 'Long-haul, high capacity',
+    description:
+      'Sixteen frames on the denser long-haul runs, where the A330-900 would leave money on the table. Hải Phòng to Cape Town is the longest of them — a route no Vietnamese carrier flew before FORZA opened it.',
+    signature: { route: 'Hải Phòng – Cape Town', km: 11116, minutes: 795 },
+  },
+  'Boeing 787-8 Dreamliner': {
+    role: 'Long-haul, thin routes',
+    description:
+      'Only two aircraft, used where the traffic is real but not yet deep enough for a larger frame. Five cities, and the pair of them are what keeps Shannon and Dublin on the map from the Delta.',
+    signature: { route: 'Cần Thơ – Shannon', km: 10706, minutes: 780 },
+  },
+  'Boeing 777-300ER': {
+    role: 'Long-haul, high density',
+    description:
+      'Nine aircraft doing the heavy lifting on fourteen cities. At Karination this type is a workhorse across fifty-four destinations; here it is a specialist, opening the routes that need the most seats at once — Belfast among them.',
+    signature: { route: 'Cần Thơ – Belfast', km: 10453, minutes: 760 },
+  },
+  'Airbus A350-1000': {
+    role: 'Delivered, not yet flying',
+    description:
+      'Forty aircraft on the register and not one of them rostered onto a route yet — the single clearest measure of how fast this airline is growing. When they enter service they will be the largest frames FORZA flies, sharing their cabin products with Karination’s A350-1000s.',
+    signature: { route: '', km: 0, minutes: 0 },
+  },
+  'Airbus A321neo': {
+    role: 'Long, thin, narrowbody',
+    description:
+      'Fifty aircraft flying sectors a narrowbody has no business flying — Đà Lạt to Yekaterinburg is eight hours and six and a half thousand kilometres. This is how FORZA opens a route before it can justify a widebody, and several of its long-haul destinations started here.',
+    signature: { route: 'Đà Lạt – Yekaterinburg', km: 6429, minutes: 480 },
+  },
+  'Airbus A220-100': {
+    role: 'Regional, medium haul',
+    description:
+      'Five aircraft covering the gap between the E-jets and the narrowbodies: fifteen cities on sectors of up to two and a half hours, including the Borneo runs that are too long for an Embraer and too thin for an A321.',
+    signature: { route: 'Balikpapan – Cần Thơ', km: 1768, minutes: 150 },
+  },
+  'Embraer E190-E2': {
+    role: 'The provincial network',
+    description:
+      'Twenty aircraft, fifty-two cities and a hundred and fifty-eight city pairs — more of the map than any other type FORZA flies, and the reason a passenger in Côn Đảo or Điện Biên Phủ has a flight at all. Nothing else in the group serves these airports.',
+    signature: { route: 'Côn Đảo – Điện Biên Phủ', km: 1461, minutes: 130 },
+  },
+  'Embraer E195': {
+    role: 'The provincial network, larger',
+    description:
+      'The E190-E2\u2019s bigger sister, twenty frames across twenty-four cities on the same provincial web where the loads justify the extra rows. Between the two Embraer types FORZA touches every airport in the country that has a runway long enough.',
+    signature: { route: 'Cà Mau – Điện Biên Phủ', km: 1378, minutes: 125 },
+  },
+  'De Havilland Canada Dash 8 Q100': {
+    role: 'The shortest sectors',
+    description:
+      'Three turboprops on the hops nothing else can make pay — nine airports, and a Đà Lạt to TP Hồ Chí Minh sector of forty-five minutes gate to gate. The smallest aircraft in the group, and the one doing the least glamorous and most necessary work.',
+    signature: { route: 'Đà Lạt – TP Hồ Chí Minh', km: 214, minutes: 45 },
+  },
+}

@@ -6,6 +6,8 @@ import {
 } from '@/lib/format'
 import { airportLabel } from '@/data/airports'
 import type { Itinerary } from '@/lib/queries'
+import { OperatedBy } from '@/components/OperatedBy'
+import { operatedNoteFor } from '@/data/carriers'
 
 /**
  * One connecting itinerary.
@@ -36,6 +38,11 @@ export function ItineraryOption({
 
   const nights = dayDiff(first.departure_date, last.arrival_date)
 
+  /** Carriers on this itinerary that warrant a note, each named once. */
+  const operators = [...new Set(
+    itinerary.legs.map((l) => l.airline_code).filter((c): c is string => !!operatedNoteFor(c)),
+  )]
+
   const stopsText =
     itinerary.stops === 1 ? `1 stop via ${itinerary.via[0]}` : `${itinerary.stops} stops via ${itinerary.via.join(' and ')}`
 
@@ -44,7 +51,8 @@ export function ItineraryOption({
     `arrive ${timeSpoken(last.arrival_time)} at ${last.destination_iata}${dayOffsetSpoken(nights)}. ` +
     `${durationSpoken(itinerary.totalMinutes)} in total, ${stopsText}, ` +
     itinerary.waits.map((w, i) => `${durationSpoken(w)} in ${itinerary.via[i]}`).join(', ') +
-    `. ${c.longName}, ${price(itinerary.totalPriceUsd)} per passenger.`
+    `. ${c.longName}, ${price(itinerary.totalPriceUsd)} per passenger.` +
+    operators.map((code) => ` ${operatedNoteFor(code)}`).join('')
 
   return (
     <li style={{ borderBottom: 'var(--rule)', borderLeft: `3px solid ${selected ? c.hue : 'transparent'}`, background: selected ? c.wash : 'transparent' }}>
@@ -80,6 +88,12 @@ export function ItineraryOption({
             <span className="tnum">{duration(itinerary.totalMinutes)}</span>
             <span style={{ color: 'var(--color-spectrum-amber-ink)', fontWeight: 600 }}>{stopsText}</span>
           </div>
+
+          {/* a connection can mix carriers, so name every one that is not
+              Karination rather than only the first */}
+          {operators.map((code) => (
+            <OperatedBy key={code} airlineCode={code} size="micro" />
+          ))}
 
           {/* the waits, said plainly */}
           <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
@@ -159,6 +173,7 @@ export function ItineraryOption({
                   {leg.flight_designator} · {leg.aircraft_model} · {shortDate(leg.departure_date)}
                   {leg.airline_name ? ` · ${carrierName(leg.airline_name, leg.airline_code)}` : ''}
                 </p>
+                <OperatedBy airlineCode={leg.airline_code} size="micro" />
 
                 {/* the wait sits between the legs it separates, where it belongs */}
                 {i < itinerary.waits.length && (

@@ -278,6 +278,53 @@
 }
 
 @layer components {
+  /* ---- a carrier section ---------------------------------------------
+     FORZA on the fleet page: a <details> that reads as a section header
+     rather than a disclosure widget, because it is a whole airline. */
+  .kx-carrier {
+    margin-top: 56px;
+    border-top: 3px solid var(--color-ink);
+  }
+  .kx-carrier-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 0;
+    cursor: pointer;
+    list-style: none;
+    min-height: 44px;
+  }
+  .kx-carrier-summary::-webkit-details-marker { display: none; }
+  .kx-carrier-mark { width: 12px; height: 28px; flex: none; border-radius: 2px; }
+  .kx-carrier-name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+    line-height: 1.1;
+    color: var(--color-ink);
+  }
+  .kx-carrier-role {
+    display: block;
+    font-size: var(--text-small);
+    color: var(--color-ink-mute);
+  }
+  .kx-carrier-count {
+    flex: none;
+    font-size: var(--text-small);
+    color: var(--color-ink-faint);
+  }
+  @media (max-width: 640px) { .kx-carrier-count { display: none; } }
+  .kx-carrier-chevron {
+    flex: none;
+    display: inline-flex;
+    color: var(--color-ink-mute);
+    transition: transform 200ms var(--ease-paint);
+  }
+  .kx-carrier[open] .kx-carrier-chevron { transform: rotate(180deg); }
+  @media (prefers-reduced-motion: reduce) {
+    .kx-carrier-chevron { transition: none; }
+  }
+
   /* ---- markdown posts -------------------------------------------------
      Travel updates are written as Markdown, so the body arrives as plain
      HTML with no classes to hang styles on. These rules give those bare

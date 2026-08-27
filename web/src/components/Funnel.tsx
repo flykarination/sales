@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useBooking } from '@/booking/BookingContext'
 import { summarise } from '@/components/PassengerPicker'
+import { OperatedBy } from '@/components/OperatedBy'
+import type { TripType } from '@/booking/BookingContext'
 import { cabin } from '@/lib/cabins'
 import { duration, price, shortDate, time } from '@/lib/format'
 
@@ -78,17 +80,36 @@ export function ItinerarySummary({ sticky = true }: { sticky?: boolean }) {
         Your trip
       </h2>
 
-      {legs.map((leg, i) => (
-        <div key={leg.flight_id + leg.direction} className={i > 0 ? 'mt-4 pt-4' : ''} style={i > 0 ? { borderTop: 'var(--rule)' } : undefined}>
+      {/* Grouped by slice, not flattened. "Outbound / Return" only describes a
+          two-slice trip with one flight each; a connection or a multi-city
+          needs the journey named and its flights listed beneath it. */}
+      {draft.slices.map((slice, si) => (
+        <div
+          key={`${slice.from}-${slice.to}-${slice.date}`}
+          className={si > 0 ? 'mt-4 pt-4' : ''}
+          style={si > 0 ? { borderTop: 'var(--rule)' } : undefined}
+        >
           <p style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
-            {i === 0 ? 'Outbound' : 'Return'} · {shortDate(leg.departure_date)}
+            {sliceHeading(draft.tripType, si, draft.slices.length)} · {shortDate(slice.date)}
           </p>
-          <p className="tnum mt-1 font-mono" style={{ fontSize: 'var(--text-lead)' }}>
-            {time(leg.departure_time)} — {time(leg.arrival_time)}
-          </p>
-          <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
-            {leg.origin_iata} → {leg.destination_iata} · {duration(leg.duration_minutes)} · {leg.flight_designator}
-          </p>
+
+          {(slice.flights ?? []).map((leg, li) => (
+            <div key={leg.flight_id + leg.direction} className={li > 0 ? 'mt-3' : ''}>
+              <p className="tnum mt-1 font-mono" style={{ fontSize: 'var(--text-lead)' }}>
+                {time(leg.departure_time)} — {time(leg.arrival_time)}
+              </p>
+              <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
+                {leg.origin_iata} → {leg.destination_iata} · {duration(leg.duration_minutes)} · {leg.flight_designator}
+              </p>
+              <OperatedBy airlineCode={leg.airline_code} size="micro" />
+            </div>
+          ))}
+
+          {(slice.flights?.length ?? 0) > 1 && (
+            <p className="mt-2" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
+              Changing at {(slice.flights ?? []).slice(0, -1).map((l) => l.destination_iata).join(' and ')}
+            </p>
+          )}
         </div>
       ))}
 
@@ -138,4 +159,11 @@ export function BackLink({ to, children }: { to: string; children: React.ReactNo
       ← {children}
     </Link>
   )
+}
+
+/** What to call one slice in the summary. */
+function sliceHeading(trip: TripType, index: number, total: number): string {
+  if (trip === 'return' && total === 2) return index === 0 ? 'Outbound' : 'Return'
+  if (total === 1) return 'Your flight'
+  return `Flight ${index + 1} of ${total}`
 }

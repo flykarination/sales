@@ -1,4 +1,5 @@
 aircraft_model,manufacturer
+Airbus A220-100,Airbus
 Airbus A318-100,Airbus
 Airbus A320neo,Airbus
 Airbus A321-200,Airbus
@@ -7,8 +8,13 @@ Airbus A321XLR,Airbus
 Airbus A321neo,Airbus
 Airbus A330-200,Airbus
 Airbus A330-300,Airbus
+Airbus A330-900,Airbus
 Airbus A350-1000,Airbus
 Airbus A350-900,Airbus
 Boeing 777-300ER,Boeing
 Boeing 777-9,Boeing
+Boeing 787-10 Dreamliner,Boeing
+Boeing 787-8 Dreamliner,Boeing
 De Havilland Canada Dash 8 Q100,De Havilland Canada
+Embraer E190-E2,Embraer
+Embraer E195,Embraer
