@@ -1,0 +1,62 @@
+[
+    {
+        "uid": "58b1650b-3ded-4974-b2e3-8e4861875d79",
+        "airlineId": "his-journey-bottom",
+        "airlineCode": "KX",
+        "airlineName": "Karination",
+        "hubAirports": [
+            "SGN",
+            "HAN",
+            "DAD",
+            "CXR",
+            "PQC"
+        ],
+        "versionString": "1.29.2",
+        "airlineCountry": "VN",
+        "claimProfitTime": "2026-08-22T21:34:26.843+00:00",
+        "flagshipAircraftModel": null,
+        "extraSpecialLiverySlot": 0,
+        "alliance": "Echo Aegis"
+    },
+    {
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "airlineName": "Sonder",
+        "airlineCode": "SD",
+        "airlineCountry": "KR",
+        "claimProfitTime": "2026-08-22T06:25:44.441+00:00",
+        "hubAirports": [
+            "ICN"
+        ],
+        "airlineId": "silk-you-music",
+        "extraSpecialLiverySlot": 0,
+        "versionString": "1.29.2",
+        "flagshipAircraftModel": null
+    },
+    {
+        "uid": "e3f48e70-92a1-40c3-9767-22a0b96d5c66",
+        "airlineName": "FORZA",
+        "airlineCode": "Z4",
+        "airlineCountry": "VN",
+        "claimProfitTime": "2026-08-26T14:07:07.49+00:00",
+        "hubAirports": [
+            "CXR",
+            "DLI",
+            "PQC",
+            "DIN",
+            "HUI",
+            "VCL",
+            "UIH",
+            "CAH",
+            "PXU",
+            "VCA",
+            "VCS",
+            "BMV",
+            "HPH"
+        ],
+        "airlineId": "bell-wealth-lost",
+        "extraSpecialLiverySlot": 0,
+        "versionString": "1.29.2",
+        "flagshipAircraftModel": null,
+        "alliance": "Echo Proxima"
+    }
+]

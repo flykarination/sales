@@ -1,0 +1,122 @@
+[
+  {
+    "iata": "SGN",
+    "city": "Ho Chi Minh City",
+    "file": "/destinations/sgn.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "Steffen Schmitz (more photos)",
+    "source": "https://commons.wikimedia.org/wiki/File:Ho_Chi_Minh_City,_City_Hall,_2020-01_CN-03.jpg",
+    "thumb": "/destinations/sgn-sm.jpg"
+  },
+  {
+    "iata": "HAN",
+    "city": "Hanoi",
+    "file": "/destinations/han.jpg",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "artist": "Quangnlnhe182394",
+    "source": "https://commons.wikimedia.org/wiki/File:Hanoi_skyline_with_Ba_Vi_Mountain.jpg",
+    "thumb": "/destinations/han-sm.jpg"
+  },
+  {
+    "iata": "CXR",
+    "city": "Nha Trang",
+    "file": "/destinations/cxr.jpg",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "artist": "Chris Lewis",
+    "source": "https://commons.wikimedia.org/wiki/File:Nha_Trang,_Kh%C3%A1nh_H%C3%B2a.png",
+    "thumb": "/destinations/cxr-sm.jpg"
+  },
+  {
+    "iata": "DAD",
+    "city": "Da Nang",
+    "file": "/destinations/dad.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "Somerset999",
+    "source": "https://commons.wikimedia.org/wiki/File:Dragon_Bridge,_Da_Nang_during_day_-_20230819_(cropped).jpg",
+    "thumb": "/destinations/dad-sm.jpg"
+  },
+  {
+    "iata": "PQC",
+    "city": "Phu Quoc",
+    "file": "/destinations/pqc.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "[//commons.wikimedia.org/wiki/User:Trantuonglam Trantuonglam]",
+    "source": "https://commons.wikimedia.org/wiki/File:Bai-sao-phu-quoc-tuonglamphotos.jpg",
+    "thumb": "/destinations/pqc-sm.jpg"
+  },
+  {
+    "iata": "SIN",
+    "city": "Singapore",
+    "file": "/destinations/sin.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "Basile Morin",
+    "source": "https://commons.wikimedia.org/wiki/File:ArtScience_Museum,_Marina_Bay_Sands,_Singapore.jpg",
+    "thumb": "/destinations/sin-sm.jpg"
+  },
+  {
+    "iata": "BKK",
+    "city": "Bangkok",
+    "file": "/destinations/bkk.jpg",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "artist": "Ninara from Helsinki, Finland",
+    "source": "https://commons.wikimedia.org/wiki/File:4Y1A1159_Bangkok_(33536795515).jpg",
+    "thumb": "/destinations/bkk-sm.jpg"
+  },
+  {
+    "iata": "TPE",
+    "city": "Taipei",
+    "file": "/destinations/tpe.jpg",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "artist": "毛貓大少爺",
+    "source": "https://commons.wikimedia.org/wiki/File:Taipei_Skyline_2022.06.29.jpg",
+    "thumb": "/destinations/tpe-sm.jpg"
+  },
+  {
+    "iata": "HND",
+    "city": "Tokyo",
+    "file": "/destinations/hnd.jpg",
+    "license": "CC BY-SA 3.0",
+    "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "artist": "Morio",
+    "source": "https://commons.wikimedia.org/wiki/File:Skyscrapers_of_Shinjuku_2009_January.jpg",
+    "thumb": "/destinations/hnd-sm.jpg"
+  },
+  {
+    "iata": "HKG",
+    "city": "Hong Kong",
+    "file": "/destinations/hkg.jpg",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "artist": "WiNG",
+    "source": "https://commons.wikimedia.org/wiki/File:Hong_Kong_Island_Skyline_2009.jpg",
+    "thumb": "/destinations/hkg-sm.jpg"
+  },
+  {
+    "iata": "MNL",
+    "city": "Manila",
+    "file": "/destinations/mnl.jpg",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "Bahnfrend",
+    "source": "https://commons.wikimedia.org/wiki/File:Cityscape_of_Manila,_2025_(01).jpg",
+    "thumb": "/destinations/mnl-sm.jpg"
+  },
+  {
+    "iata": "KUL",
+    "city": "Kuala Lumpur",
+    "file": "/destinations/kul.jpg",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "artist": "Renek78",
+    "source": "https://commons.wikimedia.org/wiki/File:Bukit_Bintang_junction_in_2024_2.jpg",
+    "thumb": "/destinations/kul-sm.jpg"
+  }
+]

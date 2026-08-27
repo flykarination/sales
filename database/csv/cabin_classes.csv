@@ -1,0 +1,5 @@
+cabin_code,cabin_name,sort_order,source_key_prefix
+FIRST,First,1,first
+BUSINESS,Business,2,biz
+PREMIUM_ECONOMY,Premium Economy,3,premEco
+ECONOMY,Economy,4,eco

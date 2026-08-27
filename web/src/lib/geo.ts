@@ -1,0 +1,330 @@
+/**
+ * Geography for the route map.
+ *
+ * Three rules run through all of this:
+ *
+ * 1. **Everything is looked up by IATA code.** The database keys every leg on
+ *    `origin_iata`/`destination_iata`, so this module takes codes, not
+ *    coordinates, and owns the code → coordinate step in one place.
+ * 2. **Arcs are rendered through `geoPath`, never plotted point by point.**
+ *    Projecting the samples yourself and joining them with `L` commands draws a
+ *    straight line back across the entire map the moment a route crosses the
+ *    antimeridian — which SGN → LAX, SGN → EZE and every Pacific route do. The
+ *    projection's own stream cuts the geometry at ±180° and emits two subpaths.
+ *    That cut is the whole reason `greatCirclePath` looks the way it does.
+ * 3. **Nothing here touches time.** Airport `offset` values are already baked
+ *    into the times the API returns; see `src/lib/format.ts`.
+ */
+
+import { geoDistance, geoInterpolate, geoPath } from 'd3-geo'
+import type { GeoPath, GeoProjection } from 'd3-geo'
+import { feature } from 'topojson-client'
+import type { GeometryCollection, Topology } from 'topojson-specification'
+import type { FeatureCollection, GeoJsonProperties, GeometryObject, LineString } from 'geojson'
+import landTopology from 'world-atlas/land-110m.json'
+import { AIRPORTS } from '@/data/airports'
+import type { Airport } from '@/data/airports'
+
+/** Mean Earth radius in km, the same value the About-page stats were computed with. */
+const EARTH_RADIUS_KM = 6371
+
+/**
+ * Segments per great-circle arc. 64 is enough that a half-circumference route
+ * stays visually smooth at full-screen scale while keeping the path string
+ * short — the network has 754 routes and they may all be on screen at once.
+ */
+const ARC_SEGMENTS = 64
+
+const DEG_TO_RAD = Math.PI / 180
+const RAD_TO_DEG = 180 / Math.PI
+
+/**
+ * Every network airport by IATA code. Exact-match: keys are the uppercase codes
+ * exactly as the database stores them. For lenient lookup use {@link getAirport}.
+ */
+export const airportByIata: Map<string, Airport> = new Map(
+  AIRPORTS.map((airport) => [airport.iata, airport]),
+)
+
+/**
+ * Look up one airport. Case-insensitive, so a code straight out of a URL
+ * segment (`/routes/sgn-lax`) works without normalising at the call site.
+ *
+ * Returns `undefined` for anything the network does not serve — including codes
+ * that are perfectly real airports elsewhere in the world.
+ */
+export function getAirport(iata: string): Airport | undefined {
+  if (!iata) return undefined
+  return airportByIata.get(iata.toUpperCase())
+}
+
+/** Cached path generators, one per projection instance. */
+const pathByProjection = new WeakMap<GeoProjection, GeoPath>()
+
+function pathFor(projection: GeoProjection): GeoPath {
+  let path = pathByProjection.get(projection)
+  if (!path) {
+    path = geoPath(projection)
+    pathByProjection.set(projection, path)
+  }
+  return path
+}
+
+/**
+ * The SVG `d` attribute for the great-circle route between two airports.
+ *
+ * The arc is built as a GeoJSON `LineString` of {@link ARC_SEGMENTS} + 1
+ * interpolated points and handed to `geoPath(projection)`, which streams it
+ * through the projection's clipping pipeline. That pipeline is what makes
+ * antimeridian-crossing routes correct: SGN → LAX comes back as two `M…`
+ * subpaths, one running off the right edge and one arriving at the left, rather
+ * than one line dragged back across Eurasia.
+ *
+ * Returns `null` if either code is unknown, and — because `geoPath` may reject
+ * geometry that falls entirely outside the projection's clip extent — it can
+ * also return `null` for a route that is simply not visible. Treat `null` as
+ * "draw nothing", never as an error.
+ *
+ * @param from - origin IATA code
+ * @param to - destination IATA code
+ * @param projection - any configured d3 projection; the generator is memoised
+ *   per projection object, so mutating it in place (`projection.scale(…)`)
+ *   stays correct and costs nothing.
+ */
+export function greatCirclePath(
+  from: string,
+  to: string,
+  projection: GeoProjection,
+): string | null {
+  const origin = getAirport(from)
+  const destination = getAirport(to)
+  if (!origin || !destination) return null
+
+  const interpolate = geoInterpolate(
+    [origin.lon, origin.lat],
+    [destination.lon, destination.lat],
+  )
+
+  const coordinates: [number, number][] = []
+  for (let i = 0; i <= ARC_SEGMENTS; i += 1) {
+    coordinates.push(interpolate(i / ARC_SEGMENTS))
+  }
+
+  const arc: LineString = { type: 'LineString', coordinates }
+  return pathFor(projection)(arc)
+}
+
+/**
+ * Great-circle distance between two airports in whole km, on a sphere of
+ * radius 6371 km. This is `geoDistance` (radians) × 6371, which is exactly the
+ * formula `src/data/network-stats.sql` uses, so a distance rendered on the map
+ * always agrees with the one on the About page.
+ *
+ * Returns `NaN` if either code is unknown — `0` would be indistinguishable from
+ * a genuine same-airport pair. Guard with `Number.isFinite` before formatting.
+ */
+export function distanceKm(from: string, to: string): number {
+  const origin = getAirport(from)
+  const destination = getAirport(to)
+  if (!origin || !destination) return Number.NaN
+
+  const radians = geoDistance(
+    [origin.lon, origin.lat],
+    [destination.lon, destination.lat],
+  )
+  return Math.round(radians * EARTH_RADIUS_KM)
+}
+
+/**
+ * Initial great-circle bearing from one airport to another, in degrees
+ * clockwise from true north, normalised to `[0, 360)`.
+ *
+ * This is the *initial* bearing: on a long route it is not the bearing you
+ * would read at the far end, and it is not the angle of the straight line
+ * between the two projected screen points. Use it to orient an aircraft glyph
+ * sitting at the origin, not to rotate a label along the drawn arc.
+ *
+ * Returns `NaN` if either code is unknown. Not rounded.
+ */
+export function bearingDeg(from: string, to: string): number {
+  const origin = getAirport(from)
+  const destination = getAirport(to)
+  if (!origin || !destination) return Number.NaN
+
+  const lat1 = origin.lat * DEG_TO_RAD
+  const lat2 = destination.lat * DEG_TO_RAD
+  const dLon = (destination.lon - origin.lon) * DEG_TO_RAD
+
+  const y = Math.sin(dLon) * Math.cos(lat2)
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon)
+
+  return (Math.atan2(y, x) * RAD_TO_DEG + 360) % 360
+}
+
+/** The shape of `world-atlas/land-110m.json`: one `land` GeometryCollection. */
+type LandTopology = Topology<{ land: GeometryCollection<GeoJsonProperties> }>
+
+let landCache: FeatureCollection<GeometryObject, GeoJsonProperties> | null = null
+
+/**
+ * World land masses as a GeoJSON `FeatureCollection`, decoded from
+ * `world-atlas/land-110m.json` (Natural Earth 1:110m, ~56 kB of TopoJSON).
+ *
+ * The decode is memoised because `feature()` walks and delta-decodes every arc
+ * in the topology — cheap once, wasteful on every render. The returned object
+ * is shared: treat it as frozen and never mutate it in place.
+ *
+ * 110m is the right resolution for a whole-world route map. If a regional view
+ * ever needs coastline detail, import `land-50m.json` in that view rather than
+ * upgrading this one — the finer files are several times larger and this module
+ * is imported by anything that draws an arc.
+ */
+export function landFeatures(): FeatureCollection<GeometryObject, GeoJsonProperties> {
+  if (!landCache) {
+    const topology = landTopology as unknown as LandTopology
+    landCache = feature(topology, topology.objects.land)
+  }
+  return landCache
+}
+
+/**
+ * The eight buckets the route map and the destination filters group by.
+ *
+ * They are marketing regions, not continents: they exist so the network reads
+ * sensibly to a passenger, and a few countries sit where an atlas would not put
+ * them. See {@link REGION_BY_COUNTRY} for the specific calls.
+ */
+export type RegionKey =
+  | 'SEA'
+  | 'EASTASIA'
+  | 'SOUTHASIA'
+  | 'MIDEAST'
+  | 'EUROPE'
+  | 'AFRICA'
+  | 'OCEANIA'
+  | 'AMERICAS'
+
+/**
+ * Regions in the order they should be listed: home region first, then outward.
+ * Alphabetical order would put Africa above South East Asia, which is wrong for
+ * a carrier whose entire network radiates from Vietnam.
+ */
+export const REGION_KEYS: RegionKey[] = [
+  'SEA',
+  'EASTASIA',
+  'SOUTHASIA',
+  'MIDEAST',
+  'EUROPE',
+  'AFRICA',
+  'OCEANIA',
+  'AMERICAS',
+]
+
+/** Display names for {@link RegionKey}. */
+export const REGION_LABELS: Record<RegionKey, string> = {
+  SEA: 'South East Asia',
+  EASTASIA: 'East Asia',
+  SOUTHASIA: 'South Asia',
+  MIDEAST: 'Middle East & Central Asia',
+  EUROPE: 'Europe',
+  AFRICA: 'Africa',
+  OCEANIA: 'Oceania',
+  AMERICAS: 'Americas',
+}
+
+/**
+ * Country code → region. Covers all 112 country codes present in
+ * `public.airports`, plus the near neighbours most likely to be added next.
+ *
+ * Three judgement calls worth knowing about before you colour a map with this:
+ *
+ * - **Central Asia has no bucket of its own**, so KZ, UZ, TM, TJ and KG sit in
+ *   `MIDEAST`, which is why that region is labelled "Middle East & Central
+ *   Asia". This is the common airline grouping; an atlas would disagree.
+ * - **Russia and Turkey are wholly `EUROPE`**, following IATA's region
+ *   definitions. Geographically that misplaces Vladivostok, Khabarovsk and
+ *   Irkutsk, which are further east than Beijing. If the map ever needs them in
+ *   `EASTASIA`, override those three by IATA code at the call site rather than
+ *   splitting RU here — the region is a country-level fact everywhere else.
+ * - **Egypt is `AFRICA`**, not `MIDEAST`. IATA puts it in the Middle East;
+ *   passengers looking at a map do not. The Caucasus (GE, AM, AZ) is `EUROPE`
+ *   on the same reasoning.
+ *
+ * `KS` is not an ISO 3166-1 code — the database uses it for Kosovo, where the
+ * user-assigned code is normally `XK`. Both are mapped.
+ */
+export const REGION_BY_COUNTRY: Record<string, RegionKey> = {
+  // South East Asia
+  BN: 'SEA', ID: 'SEA', KH: 'SEA', LA: 'SEA', MM: 'SEA',
+  MY: 'SEA', PH: 'SEA', SG: 'SEA', TH: 'SEA', VN: 'SEA',
+  TL: 'SEA',
+
+  // East Asia
+  CN: 'EASTASIA', HK: 'EASTASIA', JP: 'EASTASIA', KR: 'EASTASIA',
+  MN: 'EASTASIA', MO: 'EASTASIA', TW: 'EASTASIA', KP: 'EASTASIA',
+
+  // South Asia
+  AF: 'SOUTHASIA', BD: 'SOUTHASIA', IN: 'SOUTHASIA', LK: 'SOUTHASIA',
+  MV: 'SOUTHASIA', PK: 'SOUTHASIA', BT: 'SOUTHASIA', NP: 'SOUTHASIA',
+
+  // Middle East, and Central Asia with it
+  AE: 'MIDEAST', BH: 'MIDEAST', IQ: 'MIDEAST', IR: 'MIDEAST', JO: 'MIDEAST',
+  KW: 'MIDEAST', OM: 'MIDEAST', QA: 'MIDEAST', SA: 'MIDEAST', SY: 'MIDEAST',
+  KG: 'MIDEAST', KZ: 'MIDEAST', TJ: 'MIDEAST', TM: 'MIDEAST', UZ: 'MIDEAST',
+  IL: 'MIDEAST', LB: 'MIDEAST', PS: 'MIDEAST', YE: 'MIDEAST',
+
+  // Europe, including Turkey, Russia and the Caucasus
+  AL: 'EUROPE', AM: 'EUROPE', AT: 'EUROPE', AZ: 'EUROPE', BA: 'EUROPE',
+  BE: 'EUROPE', BG: 'EUROPE', BY: 'EUROPE', CH: 'EUROPE', CY: 'EUROPE',
+  CZ: 'EUROPE', DE: 'EUROPE', DK: 'EUROPE', EE: 'EUROPE', FI: 'EUROPE',
+  FR: 'EUROPE', GB: 'EUROPE', GE: 'EUROPE', GR: 'EUROPE', HR: 'EUROPE',
+  HU: 'EUROPE', IT: 'EUROPE', KS: 'EUROPE', LT: 'EUROPE', LU: 'EUROPE',
+  LV: 'EUROPE', ME: 'EUROPE', MK: 'EUROPE', MT: 'EUROPE', NL: 'EUROPE',
+  NO: 'EUROPE', PL: 'EUROPE', PT: 'EUROPE', RO: 'EUROPE', RS: 'EUROPE',
+  RU: 'EUROPE', SE: 'EUROPE', SI: 'EUROPE', SK: 'EUROPE', TR: 'EUROPE',
+  UA: 'EUROPE',
+  ES: 'EUROPE', IE: 'EUROPE', IS: 'EUROPE', MD: 'EUROPE', XK: 'EUROPE',
+
+  // Africa
+  BI: 'AFRICA', BW: 'AFRICA', CD: 'AFRICA', DJ: 'AFRICA', DZ: 'AFRICA',
+  EG: 'AFRICA', ET: 'AFRICA', KE: 'AFRICA', KM: 'AFRICA', LY: 'AFRICA',
+  MG: 'AFRICA', MZ: 'AFRICA', NG: 'AFRICA', RW: 'AFRICA', SC: 'AFRICA',
+  SS: 'AFRICA', TN: 'AFRICA', TZ: 'AFRICA', UG: 'AFRICA', ZA: 'AFRICA',
+  ZM: 'AFRICA', ZW: 'AFRICA',
+  AO: 'AFRICA', CI: 'AFRICA', CM: 'AFRICA', GH: 'AFRICA', MA: 'AFRICA',
+  NA: 'AFRICA', SD: 'AFRICA', SN: 'AFRICA',
+
+  // Oceania
+  AU: 'OCEANIA', FJ: 'OCEANIA', GU: 'OCEANIA', KI: 'OCEANIA', NC: 'OCEANIA',
+  NZ: 'OCEANIA', PG: 'OCEANIA', SB: 'OCEANIA', VU: 'OCEANIA',
+  PF: 'OCEANIA', TO: 'OCEANIA', WS: 'OCEANIA',
+
+  // Americas
+  AR: 'AMERICAS', US: 'AMERICAS',
+  BR: 'AMERICAS', CA: 'AMERICAS', CL: 'AMERICAS', CO: 'AMERICAS',
+  MX: 'AMERICAS', PE: 'AMERICAS',
+}
+
+/**
+ * Fallback for a country code that is not in {@link REGION_BY_COUNTRY}.
+ *
+ * The network is Vietnamese and every unmapped code today would be a new
+ * destination somewhere near it, so an unknown lands in the home region rather
+ * than being dropped from the map. If a legend ever shows a suspiciously large
+ * South East Asia, an unmapped country is the first thing to check.
+ */
+const DEFAULT_REGION: RegionKey = 'SEA'
+
+/**
+ * The region an airport belongs to, resolved through its country code.
+ *
+ * Unknown IATA codes and unmapped countries both return {@link DEFAULT_REGION}
+ * rather than throwing, so this is safe to call while rendering. If you need to
+ * distinguish "not in the network" from "in the network, region unknown", check
+ * {@link getAirport} first.
+ */
+export function regionOf(iata: string): RegionKey {
+  const airport = getAirport(iata)
+  if (!airport) return DEFAULT_REGION
+  return REGION_BY_COUNTRY[airport.country] ?? DEFAULT_REGION
+}

@@ -1,0 +1,382 @@
+{
+    "hubs": [
+        {
+            "city": "Ho Chi Minh City",
+            "iata": "SGN",
+            "airline": "KX",
+            "country": "VN",
+            "isMajor": true,
+            "airlineName": "Karination",
+            "weeklyDepartures": 2828
+        },
+        {
+            "city": "Nha Trang",
+            "iata": "CXR",
+            "airline": "KX",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "Karination",
+            "weeklyDepartures": 324
+        },
+        {
+            "city": "Da Nang",
+            "iata": "DAD",
+            "airline": "KX",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "Karination",
+            "weeklyDepartures": 2811
+        },
+        {
+            "city": "Hanoi",
+            "iata": "HAN",
+            "airline": "KX",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "Karination",
+            "weeklyDepartures": 2441
+        },
+        {
+            "city": "Duong Dong",
+            "iata": "PQC",
+            "airline": "KX",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "Karination",
+            "weeklyDepartures": 361
+        },
+        {
+            "city": "Seoul",
+            "iata": "ICN",
+            "airline": "SD",
+            "country": "KR",
+            "isMajor": true,
+            "airlineName": "Sonder",
+            "weeklyDepartures": 151
+        },
+        {
+            "city": "Can Tho",
+            "iata": "VCA",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": true,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 22
+        },
+        {
+            "city": "Buon Ma Thuot",
+            "iata": "BMV",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 27
+        },
+        {
+            "city": "Ca Mau City",
+            "iata": "CAH",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 0
+        },
+        {
+            "city": "Nha Trang",
+            "iata": "CXR",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 324
+        },
+        {
+            "city": "Dien Bien Phu",
+            "iata": "DIN",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 28
+        },
+        {
+            "city": "Dalat",
+            "iata": "DLI",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 49
+        },
+        {
+            "city": "Haiphong",
+            "iata": "HPH",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 42
+        },
+        {
+            "city": "Hue",
+            "iata": "HUI",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 48
+        },
+        {
+            "city": "Duong Dong",
+            "iata": "PQC",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 361
+        },
+        {
+            "city": "Pleiku",
+            "iata": "PXU",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 21
+        },
+        {
+            "city": "Quy Nohn",
+            "iata": "UIH",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 48
+        },
+        {
+            "city": "Dung Quat Bay",
+            "iata": "VCL",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 28
+        },
+        {
+            "city": "Con Ong",
+            "iata": "VCS",
+            "airline": "Z4",
+            "country": "VN",
+            "isMajor": false,
+            "airlineName": "FORZA",
+            "weeklyDepartures": 35
+        }
+    ],
+    "notes": [
+        "destinationsServed counts airports with scheduled service. airportsInDataset is one higher because CAH is a declared FORZA hub with no flights yet.",
+        "routes counts unordered airport pairs; directionalRoutes counts ordered ones. They differ by one because exactly one pair is filed in both directions.",
+        "A flights row is a round-trip pair, so flightPairs is not a departure count. weeklyDepartures is, and it counts both ends of every pair.",
+        "aircraftByModel.manufacturer is printed exactly as stored. The Dash 8 row really does say \"De\" in aircraft_models.manufacturer - do not silently expand it, and do not display it without checking that first.",
+        "FORZA (Z4) and Sonder (SD) have hubs but no flights. Their hub departure counts are network-wide traffic at those airports, all of it flown by KX."
+    ],
+    "routes": 754,
+    "source": "KarinationGroup Supabase (project fqxiskkyvbkhrpejxtol, eu-west-1). Every figure is a live count from public.flights, public.airports, public.aircraft, public.flight_fares, public.flight_assignments, public.airline_hubs and public.codeshares. Distances are great-circle km (R = 6371) from stored airport coordinates. Departure counts are per week and count both ends of each round-trip pair. Regenerate with src/data/network-stats.sql.",
+    "airlines": 3,
+    "fleetSize": 717,
+    "codeshares": {
+        "routes": 40,
+        "partners": 5,
+        "agreements": 63
+    },
+    "flightPairs": 1302,
+    "generatedAt": "2026-08-27T08:51:39Z",
+    "topAirports": [
+        {
+            "city": "Ho Chi Minh City",
+            "iata": "SGN",
+            "country": "VN",
+            "weeklyDepartures": 2828
+        },
+        {
+            "city": "Da Nang",
+            "iata": "DAD",
+            "country": "VN",
+            "weeklyDepartures": 2811
+        },
+        {
+            "city": "Hanoi",
+            "iata": "HAN",
+            "country": "VN",
+            "weeklyDepartures": 2441
+        },
+        {
+            "city": "Duong Dong",
+            "iata": "PQC",
+            "country": "VN",
+            "weeklyDepartures": 361
+        },
+        {
+            "city": "Nha Trang",
+            "iata": "CXR",
+            "country": "VN",
+            "weeklyDepartures": 324
+        },
+        {
+            "city": "Seoul",
+            "iata": "ICN",
+            "country": "KR",
+            "weeklyDepartures": 151
+        },
+        {
+            "city": "Singapore",
+            "iata": "SIN",
+            "country": "SG",
+            "weeklyDepartures": 103
+        },
+        {
+            "city": "Bangkok",
+            "iata": "BKK",
+            "country": "TH",
+            "weeklyDepartures": 84
+        },
+        {
+            "city": "Vinh",
+            "iata": "VII",
+            "country": "VN",
+            "weeklyDepartures": 77
+        },
+        {
+            "city": "Tokyo",
+            "iata": "HND",
+            "country": "JP",
+            "weeklyDepartures": 63
+        }
+    ],
+    "longestRoute": {
+        "origin": "PQC",
+        "distanceKm": 15296,
+        "originCity": "Duong Dong",
+        "destination": "MSY",
+        "originCountry": "VN",
+        "destinationCity": "New Orleans",
+        "durationMinutes": 1020,
+        "destinationCountry": "US"
+    },
+    "aircraftTypes": 13,
+    "shortestRoute": {
+        "origin": "DAD",
+        "distanceKm": 66,
+        "originCity": "Da Nang",
+        "destination": "HUI",
+        "originCountry": "VN",
+        "destinationCity": "Hue",
+        "durationMinutes": 35,
+        "destinationCountry": "VN"
+    },
+    "busiestAirport": {
+        "city": "Ho Chi Minh City",
+        "iata": "SGN",
+        "country": "VN",
+        "weeklyDepartures": 2828
+    },
+    "aircraftByModel": [
+        {
+            "count": 5,
+            "model": "Airbus A318-100",
+            "assigned": 0,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": null
+        },
+        {
+            "count": 21,
+            "model": "Airbus A320neo",
+            "assigned": 21,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 159
+        },
+        {
+            "count": 19,
+            "model": "Airbus A321-200",
+            "assigned": 19,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 196
+        },
+        {
+            "count": 100,
+            "model": "Airbus A321LR",
+            "assigned": 100,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 199
+        },
+        {
+            "count": 145,
+            "model": "Airbus A321neo",
+            "assigned": 145,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 203
+        },
+        {
+            "count": 201,
+            "model": "Airbus A321XLR",
+            "assigned": 201,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 194
+        },
+        {
+            "count": 30,
+            "model": "Airbus A330-200",
+            "assigned": 30,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 342
+        },
+        {
+            "count": 20,
+            "model": "Airbus A330-300",
+            "assigned": 20,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 345
+        },
+        {
+            "count": 26,
+            "model": "Airbus A350-1000",
+            "assigned": 26,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 364
+        },
+        {
+            "count": 21,
+            "model": "Airbus A350-900",
+            "assigned": 21,
+            "manufacturer": "Airbus",
+            "avgSeatsPerDeparture": 322
+        },
+        {
+            "count": 50,
+            "model": "Boeing 777-300ER",
+            "assigned": 50,
+            "manufacturer": "Boeing",
+            "avgSeatsPerDeparture": 397
+        },
+        {
+            "count": 78,
+            "model": "Boeing 777-9",
+            "assigned": 78,
+            "manufacturer": "Boeing",
+            "avgSeatsPerDeparture": 402
+        },
+        {
+            "count": 1,
+            "model": "De Havilland Canada Dash 8 Q100",
+            "assigned": 1,
+            "manufacturer": "De",
+            "avgSeatsPerDeparture": 38
+        }
+    ],
+    "countriesServed": 112,
+    "stopoverServices": 43,
+    "weeklyDepartures": 17590,
+    "aircraftInService": 712,
+    "airportsInDataset": 481,
+    "directionalRoutes": 755,
+    "destinationsServed": 480
+}

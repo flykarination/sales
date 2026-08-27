@@ -1,0 +1,133 @@
+/* =====================================================================
+   Karination design tokens
+
+   Every colour here is sampled from the real brand assets in
+   /web-assets, not invented: the indigo is the tail field, the
+   turquoise is the engine cowling, the rainbow is lifted hue by hue
+   from the "Colour Your Dreams" brush lettering.
+
+   The rule the palette enforces: indigo and turquoise are the
+   interface, and the rainbow is never decoration -- a hue always
+   encodes something (which cabin, which region).
+   ===================================================================== */
+
+@theme {
+  /* ---- ground -------------------------------------------------- */
+  /* fuselage white, warmed slightly; a pure #FFF reads clinical next
+     to the indigo and makes the paint look like a sticker */
+  --color-paper:        #FBFAF7;
+  --color-paper-sunk:   #F2F0EA;
+  --color-paper-edge:   #E4E1D8;
+
+  /* ---- ink: sampled from the livery ---------------------------- */
+  --color-ink:          #171850;  /* tail field, deepest */
+  --color-ink-2:        #262464;  /* between tail and wordmark */
+  --color-ink-3:        #383167;  /* the wordmark itself */
+  --color-ink-mute:     #6B6790;  /* secondary text on paper */
+  --color-ink-faint:    #9A97B4;
+
+  /* ---- turquoise: the engine cowling --------------------------- */
+  /* the bright one is only legible ON indigo; it fails 4.5:1 on paper,
+     so light surfaces use the deep variant for anything text-sized */
+  --color-aqua:         #78F5FB;  /* on dark only */
+  --color-aqua-mid:     #35C6D2;
+  --color-aqua-deep:    #0B6E78;  /* text-safe on paper */
+
+  /* ---- the rainbow, as a working scale ------------------------- */
+  /* each hue sampled from the tagline lettering; -ink variants are
+     darkened to clear 4.5:1 on paper without shifting hue */
+  --color-spectrum-teal:      #3FBFA8;
+  --color-spectrum-teal-ink:  #14675A;
+  --color-spectrum-lime:      #9BD64A;
+  --color-spectrum-lime-ink:  #4A6B14;
+  --color-spectrum-amber:     #F0A020;
+  --color-spectrum-amber-ink:  #7A4E00;
+  --color-spectrum-rose:      #F080A0;
+  --color-spectrum-rose-ink:  #9B2247;
+  --color-spectrum-magenta:   #F040D0;
+  --color-spectrum-magenta-ink: #8E1279;
+  --color-spectrum-violet:    #A060F0;
+  --color-spectrum-violet-ink: #5B1DA8;
+
+  /* ---- cabin = hue. the whole point of the system --------------- */
+  --color-cabin-first:     var(--color-spectrum-magenta);
+  --color-cabin-first-ink: var(--color-spectrum-magenta-ink);
+  --color-cabin-business:     var(--color-spectrum-violet);
+  --color-cabin-business-ink: var(--color-spectrum-violet-ink);
+  --color-cabin-premium:      var(--color-spectrum-amber);
+  --color-cabin-premium-ink:  var(--color-spectrum-amber-ink);
+  --color-cabin-economy:      var(--color-spectrum-teal);
+  --color-cabin-economy-ink:  var(--color-spectrum-teal-ink);
+
+  /* ---- alliance ------------------------------------------------- */
+  --color-echo-aegis:   #7030F0;
+
+  /* ---- state ---------------------------------------------------- */
+  --color-warn:         #B45309;
+  --color-danger:       #B4232F;
+  --color-ok:           #14675A;
+
+  /* ---- type ----------------------------------------------------- */
+  /* Playfair: its thick/thin modulation is the closest thing in a text
+     face to the brush strokes in the tagline. Display sizes only.
+     Be Vietnam Pro: drawn for Vietnamese, so Sài Gòn and Đà Nẵng set
+     properly rather than falling back mid-word.
+     Geist Mono: every time, price and flight number, so columns lock.
+     JetBrains Mono backs it up for the diacritics Geist lacks. */
+  --font-display: 'Playfair Display', 'Be Vietnam Pro', Georgia, serif;
+  --font-sans:    'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+  --font-mono:    'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* ---- scale: a timetable wants few sizes, used strictly -------- */
+  --text-micro:    0.6875rem;   /* 11px  eyebrows, IATA sub-labels */
+  --text-small:    0.8125rem;   /* 13px  secondary data */
+  --text-body:     0.9375rem;   /* 15px  UI default */
+  --text-lead:     1.125rem;
+  --text-time:     1.75rem;     /* the departure time; largest thing in a row */
+  --text-display:  clamp(2.5rem, 7vw, 5.5rem);
+  --text-hero:     clamp(3rem, 11vw, 9rem);
+
+  /* ---- structure ------------------------------------------------ */
+  /* near-square. an airline's world is rules and ruled lines, not
+     pill-shaped cards -- but 2px keeps it from feeling brutalist */
+  --radius-edge:   2px;
+  --radius-soft:   6px;
+  --radius-round:  999px;
+
+  --rule:          1px solid var(--color-paper-edge);
+  --rule-ink:      1px solid color-mix(in oklab, var(--color-ink) 14%, transparent);
+
+  --ease-paint:    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------- */
+/* Paint: the one place gradients are allowed. Soft-edged, bleeding  */
+/* like ink into paper, never a hard linear-gradient button fill.    */
+/* ---------------------------------------------------------------- */
+@layer base {
+  :root {
+    --paint-spectrum: linear-gradient(
+      95deg,
+      var(--color-spectrum-teal) 0%,
+      var(--color-spectrum-lime) 17%,
+      var(--color-spectrum-amber) 34%,
+      var(--color-spectrum-rose) 55%,
+      var(--color-spectrum-magenta) 76%,
+      var(--color-spectrum-violet) 100%
+    );
+  }
+
+  .paint-text {
+    background: var(--paint-spectrum);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* tabular figures everywhere a number is a fact, so columns align
+     down the page and digits do not jitter as availability ticks */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+}

@@ -1,0 +1,183 @@
+@import 'tailwindcss';
+@import './styles/fonts.css';
+@import './styles/theme.css';
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* the quality floor: focus is always visible and always turquoise */
+  :focus-visible {
+    outline: 2px solid var(--color-aqua-deep);
+    outline-offset: 2px;
+    border-radius: var(--radius-edge);
+  }
+  .on-ink :focus-visible { outline-color: var(--color-aqua); }
+
+  ::selection { background: var(--color-aqua); color: var(--color-ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* nav + route links: the spectrum underline is the only flourish */
+  .kx-navlink {
+    position: relative;
+    padding-block: 4px;
+    transition: color 120ms ease-out;
+  }
+  .kx-navlink::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 2px;
+    background: var(--paint-spectrum);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 180ms var(--ease-paint);
+  }
+  .kx-navlink:hover { color: var(--color-ink); }
+  .kx-navlink:hover::after,
+  .kx-navlink:focus-visible::after { transform: scaleX(1); }
+
+  /* transform, not padding: animating padding forces a layout pass on every
+     frame, which stutters a 45-row route list */
+  .kx-route { transition: transform 160ms var(--ease-paint); }
+  .kx-route:hover,
+  .kx-route:focus-visible { transform: translateX(5px); }
+}
+
+@layer components {
+  .kx-label {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-mute);
+  }
+  .kx-input {
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-paper-edge);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    color: var(--color-ink);
+    outline: none;
+    border-radius: 0;
+  }
+  .kx-input:focus-visible {
+    border-bottom-color: var(--color-aqua-deep);
+    outline: none;
+    box-shadow: 0 1px 0 0 var(--color-aqua-deep);
+  }
+  .kx-row { transition: background 120ms ease-out, border-color 120ms ease-out; }
+  .kx-row:hover { background: var(--color-paper-sunk); }
+
+  .kx-skip {
+    position: absolute;
+    left: -9999px;
+    z-index: 60;
+    padding: 12px 18px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .kx-skip:focus { left: 12px; top: 12px; }
+}
+
+@layer components {
+  .kx-cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 52px;
+    padding: 14px 22px;
+    border-radius: var(--radius-edge);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+  .kx-cta::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--paint-spectrum);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 240ms var(--ease-paint);
+  }
+  .kx-cta:hover::after,
+  .kx-cta:focus-visible::after { transform: scaleX(1); }
+  .on-ink .kx-cta { background: var(--color-aqua); color: var(--color-ink); font-weight: 600; }
+}
+
+@layer components {
+  /* Destination cards: the image lifts inside a fixed frame, so the grid
+     never reflows on hover. Transform and opacity only. */
+  .kx-card-frame { position: relative; }
+  .kx-card-frame img {
+    transition: transform 420ms var(--ease-paint), filter 260ms ease-out;
+    will-change: transform;
+  }
+  .kx-card:hover .kx-card-frame img,
+  .kx-card:focus-visible .kx-card-frame img { transform: scale(1.045); }
+  .kx-card-frame::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--paint-spectrum);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 300ms var(--ease-paint);
+  }
+  .kx-card:hover .kx-card-frame::after,
+  .kx-card:focus-visible .kx-card-frame::after { transform: scaleX(1); }
+
+  /* FAQ disclosure: the marker rotates, the panel is not height-animated
+     (animating height on <details> forces layout on every frame). */
+  .kx-faq summary::-webkit-details-marker { display: none; }
+  .kx-faq .kx-faq-mark {
+    transition: transform 200ms var(--ease-paint);
+    font-family: var(--font-mono);
+  }
+  .kx-faq[open] .kx-faq-mark { transform: rotate(45deg); }
+  .kx-faq[open] > p { animation: kx-fade-in 220ms var(--ease-paint) both; }
+
+  @keyframes kx-fade-in {
+    from { opacity: 0; transform: translateY(-3px); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kx-card:hover .kx-card-frame img { transform: none; }
+  .kx-faq[open] > p { animation: none; }
+}

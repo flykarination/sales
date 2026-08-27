@@ -1,0 +1,4 @@
+airline_uid,num_aircraft,num_routes,num_flights,flagship_aircraft_model,major_hub_iata,last_online_time
+13fc8eed-3dfd-4e22-927e-00bd28cc61f4,28,16,29,Airbus A350-1000,ICN,2026-08-26T14:39:05.622+00:00
+58b1650b-3ded-4974-b2e3-8e4861875d79,712,766,1302,Airbus A321XLR,SGN,2026-08-26T14:14:30.49+00:00
+e3f48e70-92a1-40c3-9767-22a0b96d5c66,275,295,504,Airbus A350-900,VCA,2026-08-26T14:12:04.49+00:00
