@@ -279,7 +279,7 @@ export const TOPICS: Topic[] = [
     slug: 'disruption',
     title: 'Delays and cancellations',
     standfirst:
-      'What we do when a flight does not go as planned, and what you are entitled to ask for.',
+      'What we do when a flight does not go as planned, what you are entitled to ask for, and where EU261 and UK261 give you more.',
     hue: '--color-spectrum-magenta',
     sections: [
       {
@@ -304,6 +304,35 @@ export const TOPICS: Topic[] = [
           title: 'Stopover services are one booking',
           body:
             'Our one-stop flights carry a single flight number end to end. If the first leg is late, the connection is our responsibility, not yours.',
+        },
+      },
+      {
+        heading: 'Flights to and from Europe and the United Kingdom',
+        body:
+          'Flights departing an airport in the European Union, Iceland, Norway or Switzerland are covered by EU Regulation 261/2004, and flights departing a United Kingdom airport are covered by its retained UK equivalent, UK261. These give you rights over and above the ones described above, and we apply them as written.',
+        points: [
+          'They apply to every departure from those airports, whichever airline is flying — including ours.',
+          'They do not apply in the other direction. Karination is a Vietnamese carrier, so a flight into Europe or the United Kingdom from outside it falls under our own conditions of carriage instead, which is what the rest of this page sets out.',
+          'Care — meals, refreshments and a hotel where a night is unavoidable — is owed whatever the cause of the delay, including weather.',
+          'Cash compensation is separate from care, and is not owed where the cause was outside our control: weather, air traffic control, security or a strike we are not party to.',
+        ],
+      },
+      {
+        heading: 'What EU261 and UK261 pay',
+        body:
+          'Payable when you arrive three hours or more late, when a flight is cancelled with less than fourteen days’ notice, or when you are denied boarding on an overbooked flight. The amount depends on the distance of the flight, not on what you paid for it. Halved where we get you there on a re-route within a short window of your original arrival.',
+        table: {
+          columns: ['Flight distance', 'EU261', 'UK261'],
+          rows: [
+            ['Up to 1,500 km', '€250', '£220'],
+            ['1,500–3,500 km, and any flight within the EU over 1,500 km', '€400', '£350'],
+            ['Over 3,500 km', '€600', '£520'],
+          ],
+        },
+        callout: {
+          title: 'How to claim',
+          body:
+            'Nothing to fill in. Where a departure from Europe or the United Kingdom qualifies, we pay it to the original payment method with the refund, and the amount appears against the flight in your booking history.',
         },
       },
       {

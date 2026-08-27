@@ -24,6 +24,7 @@ const CheckIn = lazy(() => import('@/pages/CheckIn'))
 const FlightStatus = lazy(() => import('@/pages/FlightStatus'))
 const DestinationGuide = lazy(() => import('@/pages/DestinationGuide'))
 const TravelInfo = lazy(() => import('@/pages/TravelInfo'))
+const Updates = lazy(() => import('@/pages/Updates'))
 const Partners = lazy(() => import('@/pages/Partners'))
 const SpecialAssistance = lazy(() => import('@/pages/SpecialAssistance'))
 const TravelTopic = lazy(() => import('@/pages/TravelTopic'))
@@ -81,6 +82,8 @@ export default function App() {
               <Route path="/checkin" element={<CheckIn />} />
               <Route path="/flight-status" element={<FlightStatus />} />
               <Route path="/travel-info" element={<TravelInfo />} />
+              <Route path="/updates" element={<Updates />} />
+              <Route path="/updates/:slug" element={<Updates />} />
               <Route path="/special-assistance" element={<SpecialAssistance />} />
               <Route path="/travel-info/:slug" element={<TravelTopic />} />
               <Route path="/partners" element={<Partners />} />

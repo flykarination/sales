@@ -18,6 +18,26 @@ export default function Confirmation() {
   }, [])
 
   if (!draft.pnr) return null
+  /**
+   * Where they are actually going.
+   *
+   * Not legs[0].destination — on a connecting itinerary that is the airport
+   * they change at, so a Sài Gòn connection on the way to Auckland read
+   * "You're going to SGN". The slice is what carries the intent: its `to` is
+   * the city they asked for, whatever route gets them there. A multi-city
+   * trip names each stop, dropping a final leg that only brings them home.
+   */
+  const destinationLine = (() => {
+    const slices = draft.slices
+    if (slices.length === 0) return legs[legs.length - 1]?.destination_iata ?? ''
+    const stops = slices.map((s) => s.to)
+    if (stops.length > 1 && stops[stops.length - 1] === slices[0].from) stops.pop()
+    const named = [...new Set(stops)]
+    if (named.length <= 1) return named[0] ?? ''
+    return `${named.slice(0, -1).join(', ')} and ${named[named.length - 1]}`
+  })()
+
+
   const c = cabin(draft.cabin)
 
   return (
@@ -30,7 +50,7 @@ export default function Confirmation() {
         className="font-display"
         style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', lineHeight: 1.05, outline: 'none' }}
       >
-        You're going to {legs[0]?.destination_iata}.
+        You're going to {destinationLine}.
       </h1>
       <p className="mt-3" style={{ color: 'var(--color-ink-mute)', maxWidth: '48ch' }}>
         Your booking is confirmed. We've sent the details to{' '}

@@ -27,6 +27,7 @@ const ROUTES = [
   'about', 'fleet', 'cabins', 'network', 'destinations', 'timetable',
   'rainbowone', 'join', 'signin', 'account',
   'checkin', 'flight-status', 'travel-info', 'partners', 'special-assistance',
+  'updates',
   // travel information topics
   'travel-info/travel-documents', 'travel-info/children-and-infants',
   'travel-info/restricted-items', 'travel-info/pets', 'travel-info/health',
