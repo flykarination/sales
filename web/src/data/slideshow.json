@@ -1,0 +1,51 @@
+[
+  {
+    "src": "/slideshow/kx-01.jpg",
+    "small": "/slideshow/kx-01-1376.jpg",
+    "width": 2752,
+    "height": 1536,
+    "caption": "An A321neo lifts off over the rice paddies"
+  },
+  {
+    "src": "/slideshow/kx-02.jpg",
+    "small": "/slideshow/kx-02-1376.jpg",
+    "width": 2752,
+    "height": 1536,
+    "caption": "An A321XLR climbing away at sunset"
+  },
+  {
+    "src": "/slideshow/kx-03.jpg",
+    "small": "/slideshow/kx-03-1376.jpg",
+    "width": 2752,
+    "height": 1536,
+    "caption": "Departure over the delta"
+  },
+  {
+    "src": "/slideshow/kx-04.jpg",
+    "small": "/slideshow/kx-04-1376.jpg",
+    "width": 2752,
+    "height": 1536,
+    "caption": "An organ transfer met on the apron"
+  },
+  {
+    "src": "/slideshow/kx-05.jpg",
+    "small": "/slideshow/kx-05-1376.jpg",
+    "width": 2752,
+    "height": 1536,
+    "caption": "Receiving an A321XLR at delivery"
+  },
+  {
+    "src": "/slideshow/kx-06.jpg",
+    "small": "/slideshow/kx-06-1376.jpg",
+    "width": 2752,
+    "height": 1536,
+    "caption": "A Boeing 777-300ER at the gate"
+  },
+  {
+    "src": "/slideshow/kx-07.jpg",
+    "small": "/slideshow/kx-07-1376.jpg",
+    "width": 2752,
+    "height": 1536,
+    "caption": "Opening Phú Quốc"
+  }
+]

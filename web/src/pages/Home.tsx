@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { SearchPanel, type SearchValues } from '@/components/SearchPanel'
+import { Slideshow } from '@/components/Slideshow'
 import { listRoutes, type RouteRow } from '@/lib/queries'
 import { Link } from 'react-router-dom'
 import photos from '@/data/destination-photos.json'
@@ -47,9 +48,12 @@ function Booking() {
   }
 
   return (
-    <section id="book" className="px-5 pb-14 pt-8 md:px-8 md:pt-12">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-8">
+    <section id="book" className="kx-hero px-5 py-10 md:px-8 md:py-14">
+      {/* photographs fill the band under the header and frame the panel */}
+      <Slideshow />
+
+      <div className="relative mx-auto max-w-5xl" style={{ zIndex: 1 }}>
+        <div className="kx-hero-card">
           {/* The tagline artwork itself, on paper, exactly as painted — it is
               the loudest thing on the page and everything else stays quiet. */}
           <img
@@ -72,14 +76,17 @@ function Booking() {
             Fly to <strong style={{ fontWeight: 600, color: 'var(--color-ink)' }}>481 destinations</strong> from
             Sài Gòn, Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc.
           </h1>
-        </div>
 
-        <SearchPanel onSearch={go} initialOrigin={fromParam} initialDestination={toParam} />
+          <SearchPanel onSearch={go} initialOrigin={fromParam} initialDestination={toParam} />
+        </div>
 
         {/* the network, as a ruled rail rather than three floating numbers */}
         <dl
-          className="mt-6 grid grid-cols-2 sm:grid-cols-4"
-          style={{ borderTop: '1px solid var(--color-paper-edge)' }}
+          className="mt-8 grid grid-cols-2 sm:grid-cols-4"
+          style={{
+            borderTop: '1px solid rgba(255,255,255,.22)',
+            background: 'transparent',
+          }}
         >
           {[
             ['766', 'routes', 'var(--color-spectrum-teal)'],
@@ -89,10 +96,11 @@ function Booking() {
           ].map(([n, l, hue]) => (
             <div key={l} className="pt-4" style={{ paddingRight: 24 }}>
               <span aria-hidden className="mb-3 block" style={{ width: 24, height: 2, background: hue }} />
-              <dd className="tnum font-mono" style={{ fontSize: '1.6rem', fontWeight: 500, lineHeight: 1 }}>{n}</dd>
+              <dd className="tnum font-mono"
+                  style={{ fontSize: '1.6rem', fontWeight: 500, lineHeight: 1, color: 'var(--color-paper)' }}>{n}</dd>
               <dt
                 className="mt-1 font-mono uppercase"
-                style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.16em', color: 'var(--color-ink-faint)' }}
+                style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.16em', color: '#B9B6D8' }}
               >
                 {l}
               </dt>

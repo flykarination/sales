@@ -23,6 +23,12 @@
   }
   .on-ink :focus-visible { outline-color: var(--color-aqua); }
 
+  /* Headings are given tabindex="-1" and focused after a route change so a
+     screen reader announces the new page. They are not controls, so they must
+     not draw a focus ring — real interactive elements still get theirs. */
+  [tabindex='-1']:focus,
+  [tabindex='-1']:focus-visible { outline: none; }
+
   ::selection { background: var(--color-aqua); color: var(--color-ink); }
 
   @media (prefers-reduced-motion: reduce) {
@@ -269,4 +275,102 @@
 @media (prefers-reduced-motion: reduce) {
   .kx-menu { transition: opacity 1ms, visibility 1ms; }
   .kx-menulink::before { transition: none; }
+}
+
+@layer components {
+  /* ---- fleet hero band ------------------------------------------------
+     A 1077px-wide panorama, so it is bled but not blown up beyond what it can
+     carry: the band's height is capped and the photo cropped to fit rather
+     than stretched. The veil fades its top edge into the hero above. */
+  .kx-fleet-band { position: relative; isolation: isolate; line-height: 0; }
+  .kx-fleet-band-img {
+    display: block; width: 100%;
+    height: clamp(190px, 26vw, 360px);
+    object-fit: cover; object-position: center 40%;
+  }
+  .kx-fleet-band-veil {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--color-ink) 0%,
+      color-mix(in oklab, var(--color-ink) 55%, transparent) 26%,
+      transparent 62%);
+  }
+
+  /* ---- home hero slideshow -------------------------------------------
+     The photographs fill the band under the header and everything around
+     the booking panel. Only opacity animates; the panel over the top never
+     moves, which is what keeps the type readable. */
+  .kx-hero { position: relative; isolation: isolate; background: var(--color-ink); }
+
+  .kx-slideshow { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
+
+  .kx-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 1200ms var(--ease-paint);
+    will-change: opacity;
+  }
+
+  .kx-slideshow-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom,
+        color-mix(in oklab, var(--color-ink) 62%, transparent) 0%,
+        color-mix(in oklab, var(--color-ink) 34%, transparent) 45%,
+        color-mix(in oklab, var(--color-ink) 78%, transparent) 100%);
+  }
+
+  .kx-slideshow-dots {
+    position: absolute;
+    right: 20px;
+    bottom: 16px;
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+  }
+  .kx-dot {
+    width: 26px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.34);
+    transition: background 200ms ease-out, transform 200ms var(--ease-paint);
+  }
+  .kx-dot[data-on] { background: var(--color-aqua); transform: scaleY(1.8); }
+  .kx-dot:hover { background: rgba(255, 255, 255, 0.6); }
+  /* the visible bar is thin, so give the pointer a real target */
+  .kx-dot::before { content: ''; position: absolute; inset: -14px -4px; }
+  .kx-slideshow-dots { position: absolute; }
+  .kx-dot { position: relative; }
+
+  .kx-slideshow-caption {
+    position: absolute;
+    left: 20px;
+    bottom: 14px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  /* the panel the photographs frame */
+  .kx-hero-card {
+    position: relative;
+    z-index: 1;
+    background: var(--color-paper);
+    border-radius: var(--radius-soft);
+    box-shadow: 0 30px 70px -30px rgba(9, 10, 40, 0.7);
+    padding: clamp(20px, 3vw, 34px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kx-slide { transition: none; }
+  .kx-dot { transition: none; }
 }

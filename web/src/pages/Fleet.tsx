@@ -67,7 +67,7 @@ export default function Fleet() {
 
   return (
     <div>
-      <section className="on-ink px-5 py-14 md:px-8 md:py-20" style={{ background: 'var(--color-ink)' }}>
+      <section className="on-ink px-5 pt-14 pb-8 md:px-8 md:pt-20 md:pb-10" style={{ background: 'var(--color-ink)' }}>
         <div className="mx-auto max-w-6xl">
           <p
             className="mb-5 font-mono uppercase"
@@ -85,14 +85,24 @@ export default function Fleet() {
             Every airframe below is a real aircraft in our operation, with the
             cabin it actually flies. Seat pitch is in inches.
           </p>
-          <img
-            src={assetUrl('/brand/tail.png')}
-            alt=""
-            className="mt-8"
-            style={{ height: 96, width: 'auto', opacity: 0.9 }}
-          />
         </div>
       </section>
+
+      {/* The line at the delivery centre, bled to both edges and faded up into
+          the indigo so the join reads as one surface rather than a pasted-in
+          picture. Decorative on its own, but it is the fleet, so it carries an
+          alt text. */}
+      <div className="kx-fleet-band" style={{ background: 'var(--color-ink)' }}>
+        <img
+          src={assetUrl('/brand/777x-lineup.jpg')}
+          alt="Karination 777-9s lined up nose-to-tail at the delivery centre"
+          width={1077}
+          height={252}
+          loading="eager"
+          className="kx-fleet-band-img"
+        />
+        <span aria-hidden className="kx-fleet-band-veil" />
+      </div>
 
       <section className="px-5 py-14 md:px-8">
         <div className="mx-auto max-w-6xl">
