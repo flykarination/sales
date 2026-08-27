@@ -21,16 +21,30 @@ export interface SearchValues {
   adults: number
 }
 
-export function SearchPanel({ onSearch }: { onSearch?: (v: SearchValues) => void }) {
+export function SearchPanel({
+  onSearch, initialOrigin, initialDestination, initialCabin,
+}: {
+  onSearch?: (v: SearchValues) => void
+  /** Prefilled when arriving from a route link, e.g. the route map. */
+  initialOrigin?: string
+  initialDestination?: string
+  initialCabin?: CabinCode
+}) {
   const [airports, setAirports] = useState<AirportRow[]>(HUBS)
-  const [origin, setOrigin] = useState('SGN')
-  const [destination, setDestination] = useState('')
+  const [origin, setOrigin] = useState(initialOrigin?.toUpperCase() || 'SGN')
+  const [destination, setDestination] = useState(initialDestination?.toUpperCase() || '')
   const today = toIsoDate(new Date())
   const [depart, setDepart] = useState(addDays(today, 7))
   const [ret, setRet] = useState(addDays(today, 14))
   const [isReturn, setIsReturn] = useState(true)
-  const [cabin, setCabin] = useState<CabinCode>('ECONOMY')
+  const [cabin, setCabin] = useState<CabinCode>(initialCabin ?? 'ECONOMY')
   const [adults, setAdults] = useState(1)
+
+  useEffect(() => {
+    if (initialOrigin) setOrigin(initialOrigin.toUpperCase())
+    if (initialDestination) setDestination(initialDestination.toUpperCase())
+    if (initialCabin) setCabin(initialCabin)
+  }, [initialOrigin, initialDestination, initialCabin])
 
   useEffect(() => {
     let live = true

@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { SearchPanel, type SearchValues } from '@/components/SearchPanel'
 import { listRoutes, type RouteRow } from '@/lib/queries'
+import { Link } from 'react-router-dom'
+import photos from '@/data/destination-photos.json'
+import { hasGuide } from '@/data/destinations'
+import { assetUrl } from '@/lib/assets'
 import { CABINS } from '@/lib/cabins'
 import { duration, price } from '@/lib/format'
-import { assetUrl } from '@/lib/assets'
 
 export default function Home() {
   return (
@@ -22,6 +25,17 @@ export default function Home() {
 /* ------------------------------------------------------------------ */
 function Booking() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const fromParam = params.get('from') ?? undefined
+  const toParam = params.get('to') ?? undefined
+
+  // Arriving from a route link: bring the search panel into view rather than
+  // leaving the traveller to spot that two fields quietly changed.
+  useEffect(() => {
+    if (!fromParam && !toParam) return
+    const el = document.querySelector('form[aria-label="Search flights"]')
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [fromParam, toParam])
 
   function go(v: SearchValues) {
     const q = new URLSearchParams({
@@ -60,7 +74,7 @@ function Booking() {
           </h1>
         </div>
 
-        <SearchPanel onSearch={go} />
+        <SearchPanel onSearch={go} initialOrigin={fromParam} initialDestination={toParam} />
 
         {/* the network, as a ruled rail rather than three floating numbers */}
         <dl
@@ -111,13 +125,44 @@ function Destinations() {
 
   useEffect(() => {
     let live = true
-    listRoutes(60).then(({ data, error }) => {
+    listRoutes(900).then(({ data, error }) => {
       if (!live) return
       if (error || !data) setFailed(true)
-      else setRoutes(data.filter((r) => r.from_price_economy_usd).slice(0, 12))
+      else setRoutes(data.filter((r) => r.from_price_economy_usd))
     })
     return () => { live = false }
   }, [])
+
+  /**
+   * A postcard per photographed city, priced from the cheapest real route to
+   * it. Only cities we actually hold a photograph for appear here — a card
+   * with a missing image is worse than no card.
+   */
+  const postcards = useMemo(() => {
+    if (!routes) return []
+    const best = new Map<string, RouteRow>()
+    for (const r of routes) {
+      const cur = best.get(r.destination_iata)
+      if (!cur || (r.from_price_economy_usd ?? 9e9) < (cur.from_price_economy_usd ?? 9e9)) {
+        best.set(r.destination_iata, r)
+      }
+    }
+    return (photos as Array<{ iata: string; city: string; thumb: string }>)
+      .map((ph) => {
+        const r = best.get(ph.iata)
+        if (!r?.from_price_economy_usd) return null
+        return {
+          iata: ph.iata, city: ph.city, thumb: ph.thumb,
+          fare: r.from_price_economy_usd, from: r.origin_iata,
+          minutes: r.fastest_minutes, weekly: r.days_served_per_week,
+        }
+      })
+      .filter(Boolean)
+      .sort((a, b) => a!.fare - b!.fare) as Array<{
+        iata: string; city: string; thumb: string; fare: number
+        from: string; minutes: number | null; weekly: number
+      }>
+  }, [routes])
 
   return (
     <section
@@ -173,33 +218,68 @@ function Destinations() {
         )}
 
         {!routes && !failed && (
-          <ul className="grid gap-px sm:grid-cols-2 lg:grid-cols-3" aria-busy="true">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <li key={i} style={{ height: 92, background: 'rgba(255,255,255,.04)', borderRadius: 'var(--radius-edge)' }} />
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" aria-busy="true">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <li key={i}>
+                <div style={{ aspectRatio: '16/9', background: 'rgba(255,255,255,.05)', borderRadius: 'var(--radius-soft)' }} />
+                <div className="mt-3" style={{ height: 14, width: '60%', background: 'rgba(255,255,255,.05)' }} />
+                <div className="mt-2" style={{ height: 20, width: '38%', background: 'rgba(255,255,255,.05)' }} />
+              </li>
             ))}
           </ul>
         )}
 
         {routes && routes.length > 0 && (
-          <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-            {routes.map((r) => (
-              <li key={`${r.origin_iata}-${r.destination_iata}`}>
-                <a
-                  href="#book"
-                  className="kx-route flex items-baseline gap-3 py-4"
-                  style={{ borderBottom: '1px solid rgba(255,255,255,.12)' }}
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {postcards.map((card) => (
+              <li key={card.iata} className="min-w-0">
+                <Link
+                  to={hasGuide(card.iata) ? `/destinations/${card.iata}` : `/?to=${card.iata}`}
+                  className="kx-card block"
+                  aria-label={`${card.city}, from ${price(card.fare)} one way`}
                 >
-                  <span className="tnum font-mono" style={{ color: 'var(--color-aqua)', fontSize: 'var(--text-small)' }}>
-                    {r.origin_iata}<span style={{ opacity: .5 }}>→</span>{r.destination_iata}
+                  <span
+                    className="kx-card-frame block"
+                    style={{ borderRadius: 'var(--radius-soft)', overflow: 'hidden' }}
+                  >
+                    <img
+                      src={assetUrl(card.thumb)}
+                      alt=""
+                      loading="lazy"
+                      width={640}
+                      height={360}
+                      style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }}
+                    />
                   </span>
-                  <span className="tnum ml-auto font-mono" style={{ color: 'var(--color-paper)', fontSize: 'var(--text-lead)' }}>
-                    {price(r.from_price_economy_usd)}
+                  <span className="mt-3 flex items-baseline gap-2">
+                    <span
+                      className="tnum font-mono"
+                      style={{ color: 'var(--color-aqua)', fontSize: 'var(--text-micro)' }}
+                    >
+                      {card.iata}
+                    </span>
+                    <span
+                      className="min-w-0 truncate"
+                      style={{ color: 'var(--color-paper)', fontWeight: 600 }}
+                    >
+                      {card.city}
+                    </span>
                   </span>
-                </a>
-                <p style={{ fontSize: 'var(--text-micro)', color: '#8F8CB4', paddingBottom: 10 }}>
-                  {duration(r.fastest_minutes)} · {r.days_served_per_week}× weekly
-                  {r.has_stopover_service ? ' · via one stop' : ''}
-                </p>
+                  <span className="mt-1 flex items-baseline gap-2">
+                    <span
+                      className="tnum font-mono"
+                      style={{ color: 'var(--color-paper)', fontSize: '1.35rem', fontWeight: 500 }}
+                    >
+                      {price(card.fare)}
+                    </span>
+                    <span style={{ color: '#8F8CB4', fontSize: 'var(--text-micro)' }}>
+                      one way from {card.from}
+                    </span>
+                  </span>
+                  <span className="mt-0.5 block" style={{ color: '#6B6790', fontSize: 'var(--text-micro)' }}>
+                    {duration(card.minutes)} · {card.weekly}× weekly
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>

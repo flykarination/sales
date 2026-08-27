@@ -13,13 +13,57 @@ import { count, duration, price } from '@/lib/format'
 const W = 1000
 const H = 520
 
+/** ALL, one region, or every route flown wholly inside Vietnam. */
+type Filter = RegionKey | 'ALL' | 'DOMESTIC'
+
+const isDomestic = (a: string, b: string) =>
+  getAirport(a)?.country === 'VN' && getAirport(b)?.country === 'VN'
+
+/**
+ * The viewBox rectangle that frames a set of projected points.
+ *
+ * Zooming by animating the viewBox rather than transforming a group: CSS
+ * transforms on an SVG <g> are computed away to identity here, and the
+ * viewBox is the one mechanism every engine honours. It also keeps the
+ * projection itself untouched, so the great-circle geometry never re-projects.
+ *
+ * The rect is widened to the viewport's aspect so nothing is squashed, and the
+ * zoom is capped so a single short hop cannot magnify the map into abstraction.
+ */
+type Rect = [number, number, number, number]
+const WORLD: Rect = [0, 0, W, H]
+
+function frameFor(points: Array<[number, number]>, maxZoom = 6): Rect {
+  if (points.length === 0) return WORLD
+  const xs = points.map((p) => p[0])
+  const ys = points.map((p) => p[1])
+  const pad = 34
+  const x0 = Math.min(...xs) - pad, x1 = Math.max(...xs) + pad
+  const y0 = Math.min(...ys) - pad, y1 = Math.max(...ys) + pad
+
+  let w = Math.max(x1 - x0, W / maxZoom)
+  let h = Math.max(y1 - y0, H / maxZoom)
+  const aspect = W / H
+  if (w / h > aspect) h = w / aspect
+  else w = h * aspect
+
+  const cx = (x0 + x1) / 2
+  const cy = (y0 + y1) / 2
+  return [cx - w / 2, cy - h / 2, w, h]
+}
+
+/** Ease-out cubic: quick departure, soft landing, matching --ease-paint. */
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
+
+
 export default function Network() {
   const [routes, setRoutes] = useState<RouteRow[] | null>(null)
   const [failed, setFailed] = useState(false)
-  const [region, setRegion] = useState<RegionKey | 'ALL'>('ALL')
+  const [region, setRegion] = useState<Filter>('ALL')
   const [active, setActive] = useState<RouteRow | null>(null)
   const reduced = useReducedMotion()
   const liveRef = useRef<HTMLParagraphElement>(null)
+  const viewRef = useRef<Rect>(WORLD)
 
   useEffect(() => {
     let live = true
@@ -48,7 +92,9 @@ export default function Network() {
       const key = [r.origin_iata, r.destination_iata].sort().join('-')
       if (seen.has(key)) return false
       seen.add(key)
-      return region === 'ALL' || regionOf(r.destination_iata) === region
+      if (region === 'ALL') return true
+      if (region === 'DOMESTIC') return isDomestic(r.origin_iata, r.destination_iata)
+      return regionOf(r.destination_iata) === region
     })
   }, [routes, region])
 
@@ -81,6 +127,36 @@ export default function Network() {
     return [...set.entries()]
   }, [arcs, projection])
 
+  /** Where the map should be looking; the whole world when unfiltered. */
+  const target = useMemo<Rect>(
+    () => (region === 'ALL' ? WORLD : frameFor(dots.map(([, p]) => p))),
+    [region, dots],
+  )
+  const [view, setView] = useState<Rect>(WORLD)
+
+  // Tween the viewBox to the target. Reduced motion jumps straight there —
+  // the framing is the information, the flight to it is the flourish.
+  useEffect(() => {
+    const from = viewRef.current
+    if (reduced) { viewRef.current = target; setView(target); return }
+    if (from.every((v, i) => Math.abs(v - target[i]) < 0.5)) return
+    let raf = 0
+    const t0 = performance.now()
+    const step = (now: number) => {
+      const t = Math.min((now - t0) / 850, 1)
+      const e = easeOut(t)
+      const next = from.map((v, i) => v + (target[i] - v) * e) as Rect
+      viewRef.current = next
+      setView(next)
+      if (t < 1) raf = requestAnimationFrame(step)
+    }
+    raf = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(raf)
+  }, [target, reduced])
+
+  /** How much the map is magnified, so marks can hold their on-screen size. */
+  const zoom = W / view[2]
+
   const activeArc = active
     ? greatCirclePath(active.origin_iata, active.destination_iata, projection)
     : null
@@ -103,16 +179,20 @@ export default function Network() {
             Every route we fly.
           </h1>
           <p className="mt-5" style={{ color: '#B9B6D8', maxWidth: '52ch' }}>
-            {routes ? count(shown.length) : '—'} city pairs from five Vietnamese
-            hubs. Each arc is the real great-circle track; colour shows the region
-            it reaches. Select one to draw it.
+            {routes ? count(shown.length) : '—'}{' '}
+            {region === 'DOMESTIC' ? 'routes within Vietnam' : 'city pairs from five Vietnamese hubs'}.
+            Each arc is the real great-circle track; colour shows the region it
+            reaches. Choose a region to fly the map to it, or select a route to draw it.
           </p>
 
           {/* region filter — colour is paired with a word, never alone */}
           <div className="mt-7 flex flex-wrap gap-2" role="group" aria-label="Filter by region">
-            {(['ALL', ...REGION_KEYS] as const).map((key) => {
+            {(['ALL', 'DOMESTIC', ...REGION_KEYS] as const).map((key) => {
               const on = region === key
-              const hue = key === 'ALL' ? 'var(--color-aqua)' : REGION_STYLE[key as RegionKey].hue
+              const hue =
+                key === 'ALL' ? 'var(--color-aqua)'
+                : key === 'DOMESTIC' ? 'var(--color-spectrum-lime)'
+                : REGION_STYLE[key as RegionKey].hue
               return (
                 <button
                   key={key}
@@ -128,7 +208,9 @@ export default function Network() {
                   }}
                 >
                   <span aria-hidden style={{ width: 8, height: 8, borderRadius: 2, background: hue }} />
-                  {key === 'ALL' ? 'All regions' : (REGION_LABELS[key as RegionKey] ?? key)}
+                  {key === 'ALL' ? 'All regions'
+                    : key === 'DOMESTIC' ? 'Domestic · Việt Nam'
+                    : (REGION_LABELS[key as RegionKey] ?? key)}
                 </button>
               )
             })}
@@ -141,7 +223,7 @@ export default function Network() {
         <div className="mx-auto max-w-6xl">
           <div style={{ overflowX: 'auto' }}>
             <svg
-              viewBox={`0 0 ${W} ${H}`}
+              viewBox={view.join(' ')}
               role="img"
               aria-label={`Route map showing ${arcs.length} city pairs`}
               style={{ width: '100%', minWidth: 640, height: 'auto', display: 'block' }}
@@ -171,10 +253,16 @@ export default function Network() {
               </defs>
 
               <path d={path({ type: 'Sphere' } as never) ?? ''} fill="#12123F" />
-              <path d={land} fill="#1E1F5C" stroke="#2A2B72" strokeWidth={0.5} />
+
+              {/* Everything geographic sits in one group so a single animated
+                  transform can fly the map to a region. transform-origin is
+                  pinned to the viewBox origin so translate-then-scale composes
+                  exactly like the maths in focusOn(). */}
+              <path d={land} fill="#1E1F5C" stroke="#2A2B72" strokeWidth={0.5}
+                    vectorEffect="non-scaling-stroke" />
 
               {/* every route, static */}
-              <g fill="none" strokeWidth={0.7} strokeLinecap="round">
+              <g fill="none" strokeWidth={0.7} strokeLinecap="round" vectorEffect="non-scaling-stroke">
                 {arcs.map((a) => (
                   <path
                     key={`${a.route.origin_iata}-${a.route.destination_iata}`}
@@ -188,7 +276,8 @@ export default function Network() {
               {/* airports */}
               <g>
                 {dots.map(([code, [x, y]]) => (
-                  <circle key={code} cx={x} cy={y} r={1.5} fill="#78F5FB" opacity={active ? 0.3 : 0.6} />
+                  <circle key={code} cx={x} cy={y} r={1.5 / zoom} fill="#78F5FB"
+                          opacity={active ? 0.3 : 0.6} />
                 ))}
               </g>
 
@@ -200,6 +289,7 @@ export default function Network() {
                   fill="none"
                   stroke="url(#kx-spectrum)"
                   strokeWidth={2.4}
+                  vectorEffect="non-scaling-stroke"
                   strokeLinecap="round"
                   initial={reduced ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
                   animate={{ pathLength: 1, opacity: 1 }}
@@ -255,7 +345,11 @@ export default function Network() {
                   from {price(active.from_price_economy_usd)}
                 </span>
               )}
-              <Link to="/" className="ml-auto" style={{ color: 'var(--color-aqua)', fontSize: 'var(--text-small)' }}>
+              <Link
+                to={`/?from=${active.origin_iata}&to=${active.destination_iata}`}
+                className="ml-auto"
+                style={{ color: 'var(--color-aqua)', fontSize: 'var(--text-small)' }}
+              >
                 Search this route →
               </Link>
             </div>
