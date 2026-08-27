@@ -6,7 +6,7 @@ import { CABIN_ORDER, CABINS } from '@/lib/cabins'
 import { assetUrl } from '@/lib/assets'
 
 const HUB_CITY: Record<string, string> = {
-  SGN: 'Sài Gòn', HAN: 'Hà Nội', DAD: 'Đà Nẵng', CXR: 'Nha Trang', PQC: 'Phú Quốc',
+  SGN: 'TP Hồ Chí Minh', HAN: 'Hà Nội', DAD: 'Đà Nẵng', CXR: 'Nha Trang', PQC: 'Phú Quốc',
   ICN: 'Seoul', VCA: 'Cần Thơ', DLI: 'Đà Lạt', HPH: 'Hải Phòng', HUI: 'Huế',
   UIH: 'Quy Nhơn', VCL: 'Chu Lai', DIN: 'Điện Biên', CAH: 'Cà Mau', PXU: 'Pleiku',
   VCS: 'Côn Đảo', BMV: 'Buôn Ma Thuột',
@@ -51,7 +51,7 @@ export default function About() {
             A Vietnamese airline with a colour for every cabin.
           </h1>
           <p className="mt-6" style={{ color: '#B9B6D8', fontSize: 'var(--text-lead)', maxWidth: '58ch' }}>
-            Karination flies from five hubs along the length of Vietnam — Sài Gòn,
+            Karination flies from five hubs along the length of Vietnam — TP Hồ Chí Minh,
             Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc — to{' '}
             {kxStats ? count(kxStats.num_routes) : '766'} routes across Asia, the
             Middle East, Europe, Africa, Oceania and the Americas.

@@ -4,10 +4,11 @@ import { CABIN_ORDER, CABINS, type CabinCode } from '@/lib/cabins'
 import { addDays, toIsoDate } from '@/lib/format'
 import type { Slice, TripType } from '@/booking/BookingContext'
 import type { SearchQuery } from '@/booking/slices'
+import { airportLabel } from '@/data/airports'
 
 /** The five Vietnamese hubs, so the field is useful before the network loads. */
 const HUBS: AirportRow[] = [
-  { iata_code: 'SGN', city_name: 'Sài Gòn', airport_name: 'Tân Sơn Nhất', country_code: 'VN', utc_offset_minutes: 420, latitude: null, longitude: null },
+  { iata_code: 'SGN', city_name: 'TP Hồ Chí Minh', airport_name: 'Tân Sơn Nhất', country_code: 'VN', utc_offset_minutes: 420, latitude: null, longitude: null },
   { iata_code: 'HAN', city_name: 'Hà Nội', airport_name: 'Nội Bài', country_code: 'VN', utc_offset_minutes: 420, latitude: null, longitude: null },
   { iata_code: 'DAD', city_name: 'Đà Nẵng', airport_name: 'Đà Nẵng', country_code: 'VN', utc_offset_minutes: 420, latitude: null, longitude: null },
   { iata_code: 'CXR', city_name: 'Nha Trang', airport_name: 'Cam Ranh', country_code: 'VN', utc_offset_minutes: 420, latitude: null, longitude: null },
@@ -384,7 +385,10 @@ function AirportField({
   const listId = useId()
 
   const selected = airports.find((a) => a.iata_code === value)
-  const display = open ? query : selected ? `${selected.city_name ?? selected.iata_code} (${selected.iata_code})` : ''
+  // airportLabel, not the row's city_name: the backfilled data spells the
+  // Vietnamese cities as English exonyms, and the field should say what the
+  // rest of the site says.
+  const display = open ? query : selected ? `${airportLabel(selected.iata_code)} (${selected.iata_code})` : ''
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -396,6 +400,7 @@ function AirportField({
       .filter((a) =>
         a.iata_code.toLowerCase().startsWith(q) ||
         norm(a.city_name).includes(norm(q)) ||
+        norm(airportLabel(a.iata_code)).includes(norm(q)) ||
         norm(a.airport_name).includes(norm(q)))
       .sort((a, b) => Number(b.iata_code.toLowerCase().startsWith(q)) - Number(a.iata_code.toLowerCase().startsWith(q)))
       .slice(0, 8)
@@ -466,7 +471,7 @@ function AirportField({
                 <span className="tnum font-mono" style={{ color: 'var(--color-aqua-deep)', fontSize: 'var(--text-small)' }}>
                   {a.iata_code}
                 </span>
-                <span style={{ fontWeight: 500 }}>{a.city_name ?? a.airport_name}</span>
+                <span style={{ fontWeight: 500 }}>{airportLabel(a.iata_code)}</span>
                 <span className="ml-auto" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
                   {a.country_code}
                 </span>

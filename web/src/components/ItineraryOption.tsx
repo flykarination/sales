@@ -91,7 +91,8 @@ export function ItineraryOption({
               >
                 <span aria-hidden style={{ width: 6, height: 6, borderRadius: 3, background: waitHue(w), flex: 'none' }} />
                 <span className="tnum">{duration(w)}</span>
-                <span>in {airportLabel(itinerary.via[i])}</span>
+                {/* keep the city whole; on a phone it was breaking mid-name */}
+                <span style={{ whiteSpace: 'nowrap' }}>in {airportLabel(itinerary.via[i])}</span>
                 {w >= 600 && (
                   <span style={{ color: 'var(--color-spectrum-rose-ink)', fontWeight: 600 }}>· overnight</span>
                 )}

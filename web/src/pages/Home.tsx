@@ -70,7 +70,7 @@ function Booking() {
             }}
           >
             Fly to <strong style={{ fontWeight: 600, color: 'var(--color-ink)' }}>481 destinations</strong> from
-            Sài Gòn, Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc.
+            TP Hồ Chí Minh, Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc.
           </h1>
 
           <SearchPanel onSearch={go} initialOrigin={fromParam} initialDestination={toParam} />
@@ -116,7 +116,7 @@ function Booking() {
 /* ------------------------------------------------------------------ */
 /** True even when the network is unreachable, so the band is never empty. */
 const HUBS_FALLBACK = [
-  { code: 'SGN', city: 'Sài Gòn', note: 'Tân Sơn Nhất · main hub' },
+  { code: 'SGN', city: 'TP Hồ Chí Minh', note: 'Tân Sơn Nhất · main hub' },
   { code: 'HAN', city: 'Hà Nội', note: 'Nội Bài' },
   { code: 'DAD', city: 'Đà Nẵng', note: 'Đà Nẵng' },
   { code: 'CXR', city: 'Nha Trang', note: 'Cam Ranh' },

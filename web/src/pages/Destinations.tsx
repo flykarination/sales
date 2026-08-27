@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { listRoutes, type RouteRow } from '@/lib/queries'
+import { airportLabel } from '@/data/airports'
 import { getAirport, regionOf, REGION_KEYS, REGION_LABELS, type RegionKey } from '@/lib/geo'
 import { REGION_STYLE } from '@/lib/cabins'
 import { count, duration, price } from '@/lib/format'
@@ -41,14 +42,14 @@ export default function Destinations() {
     for (const r of best.values()) {
       const ap = getAirport(r.destination_iata)
       if (needle && !(norm(r.destination_iata).includes(needle) ||
-                      norm(ap?.city ?? '').includes(needle) ||
+                      norm(airportLabel(r.destination_iata)).includes(needle) ||
                       norm(ap?.country ?? '').includes(needle))) continue
       const key = regionOf(r.destination_iata)
       if (!groups.has(key)) groups.set(key, [])
       groups.get(key)!.push(r)
     }
     for (const list of groups.values()) {
-      list.sort((a, b) => (getAirport(a.destination_iata)?.city ?? '').localeCompare(getAirport(b.destination_iata)?.city ?? ''))
+      list.sort((a, b) => airportLabel(a.destination_iata).localeCompare(airportLabel(b.destination_iata)))
     }
     return groups
   }, [routes, q])
@@ -127,7 +128,6 @@ export default function Destinations() {
               </h2>
               <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3" style={{ borderTop: '2px solid var(--color-ink)' }}>
                 {byRegion.get(key)!.map((r) => {
-                  const ap = getAirport(r.destination_iata)
                   return (
                     <li key={r.destination_iata} className="min-w-0">
                       <Link to={hasGuide(r.destination_iata) ? `/destinations/${r.destination_iata}` : `/timetable?from=${r.origin_iata}&to=${r.destination_iata}`}
@@ -136,7 +136,7 @@ export default function Destinations() {
                         <span className="tnum font-mono" style={{ color: 'var(--color-aqua-deep)', fontSize: 'var(--text-small)', flex: 'none' }}>
                           {r.destination_iata}
                         </span>
-                        <span className="min-w-0 truncate" style={{ fontWeight: 500 }}>{ap?.city ?? r.destination_iata}</span>
+                        <span className="min-w-0 truncate" style={{ fontWeight: 500 }}>{airportLabel(r.destination_iata)}</span>
                         {hasGuide(r.destination_iata) && (
                           <span aria-label="has a destination guide" title="Destination guide"
                                 style={{ width: 6, height: 6, borderRadius: 3, background: 'var(--color-spectrum-amber)', flex: 'none' }} />

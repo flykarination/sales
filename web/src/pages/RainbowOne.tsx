@@ -159,7 +159,7 @@ export default function RainbowOne() {
           </ul>
 
           <p className="mt-6" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-faint)', maxWidth: '58ch' }}>
-            Example based on Sài Gòn to Kaliningrad, 8,774 km. Earning begins the
+            Example based on TP Hồ Chí Minh to Kaliningrad, 8,774 km. Earning begins the
             day you join — flights taken before then are not credited.
           </p>
         </div>

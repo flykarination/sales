@@ -30,7 +30,7 @@ export const FLEET_NOTES: Record<string, FleetNote> = {
     role: 'Long-haul backbone',
     description:
       'Seventy-eight aircraft reaching eighty-six destinations — more of the world than any other type in the fleet, and the aeroplane most long-haul passengers will actually meet. Private suites up front on the newest frames, open suites on the rest, and the largest Economy cabin we operate at 414 seats.',
-    signature: { route: 'Sài Gòn – Ontario, California', km: 13181, minutes: 850 },
+    signature: { route: 'TP Hồ Chí Minh – Ontario, California', km: 13181, minutes: 850 },
   },
   'Boeing 777-300ER': {
     role: 'Long-haul, high density',
@@ -48,19 +48,19 @@ export const FLEET_NOTES: Record<string, FleetNote> = {
     role: 'Long-haul, dense cabins',
     description:
       'A small fleet of twenty on nineteen long sectors, configured for volume rather than range. The densest widebody Economy we fly, and the aircraft most likely to be carrying you to Southern Africa.',
-    signature: { route: 'Sài Gòn – Johannesburg', km: 9404, minutes: 670 },
+    signature: { route: 'TP Hồ Chí Minh – Johannesburg', km: 9404, minutes: 670 },
   },
   'Airbus A330-200': {
     role: 'Medium and long haul',
     description:
       'Thirty aircraft covering thirty-nine cities, sitting between the narrowbodies and the big twins. Open and premium suites in First at 79 inches, and the type that opened our Iberian and Southern African flying.',
-    signature: { route: 'Sài Gòn – Porto', km: 11240, minutes: 855 },
+    signature: { route: 'TP Hồ Chí Minh – Porto', km: 11240, minutes: 855 },
   },
   'Airbus A321XLR': {
     role: 'The long thin workhorse',
     description:
       'Our largest fleet at 201 aircraft, and the reason a narrowbody appears on a nine-hour sector. It reaches 110 destinations that could never fill a widebody — the smaller European and Central Asian cities most carriers only serve seasonally. Full-flat beds in Business on every frame.',
-    signature: { route: 'Sài Gòn – Thessaloniki', km: 8698, minutes: 630 },
+    signature: { route: 'TP Hồ Chí Minh – Thessaloniki', km: 8698, minutes: 630 },
   },
   'Airbus A321LR': {
     role: 'Medium haul',
@@ -72,13 +72,13 @@ export const FLEET_NOTES: Record<string, FleetNote> = {
     role: 'The network connector',
     description:
       'A hundred and forty-five aircraft reaching 162 destinations — more cities than any other type we operate. If Karination serves somewhere small, this is almost certainly what flies there. Cabins vary across the fleet: some frames carry full-flat Business, others a regional recliner.',
-    signature: { route: 'Sài Gòn – Aktau', km: 6444, minutes: 480 },
+    signature: { route: 'TP Hồ Chí Minh – Aktau', km: 6444, minutes: 480 },
   },
   'Airbus A320neo': {
     role: 'Regional',
     description:
       'Twenty-one aircraft on thirty-eight short and medium routes across Southeast Asia and southern China. Two hours is a long day for this type, and 160 seats is the whole aeroplane.',
-    signature: { route: 'Sài Gòn – Chabahar', km: 5123, minutes: 385 },
+    signature: { route: 'TP Hồ Chí Minh – Chabahar', km: 5123, minutes: 385 },
   },
   'Airbus A321-200': {
     role: 'Short haul',

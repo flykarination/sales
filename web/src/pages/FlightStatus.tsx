@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { arrivalsAt, departuresFrom } from '@/lib/queries'
-import { getAirport } from '@/lib/geo'
+import { airportLabel } from '@/data/airports'
 import { dayOffset, duration, time, toGameDow, DOW_LONG } from '@/lib/format'
 
 const HUBS = [
-  ['SGN', 'Sài Gòn'], ['HAN', 'Hà Nội'], ['DAD', 'Đà Nẵng'],
+  ['SGN', 'TP Hồ Chí Minh'], ['HAN', 'Hà Nội'], ['DAD', 'Đà Nẵng'],
   ['CXR', 'Nha Trang'], ['PQC', 'Phú Quốc'],
 ] as const
 
@@ -205,7 +205,7 @@ export default function FlightStatus() {
                       <td style={{ color: 'var(--color-paper)' }}>
                         {other}
                         <span style={{ color: '#8F8CB4', fontSize: 'var(--text-micro)' }}>
-                          {' '}{getAirport(other)?.city ?? ''}
+                          {' '}{airportLabel(other)}
                         </span>
                       </td>
                       <td style={{ color: '#B9B6D8' }}>

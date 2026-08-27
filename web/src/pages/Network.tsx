@@ -447,7 +447,7 @@ export default function Network() {
                 {active.origin_iata} → {active.destination_iata}
               </span>
               <span style={{ color: '#B9B6D8', fontSize: 'var(--text-small)' }}>
-                {getAirport(active.destination_iata)?.city || active.destination_iata}
+                {airportLabel(active.destination_iata)}
               </span>
               {Number.isFinite(activeKm) && (
                 <span className="tnum font-mono" style={{ color: '#8F8CB4', fontSize: 'var(--text-small)' }}>

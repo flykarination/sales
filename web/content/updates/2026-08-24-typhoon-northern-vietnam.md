@@ -16,7 +16,7 @@ Nội Bài, Cát Bi and Vân Đồn remain open, but arrival rates are reduced w
 the system passes. Expect delays of one to three hours on northern sectors,
 and occasional consolidation of two departures into one.
 
-Southern and central operations — Sài Gòn, Đà Nẵng, Nha Trang, Phú Quốc —
+Southern and central operations — TP Hồ Chí Minh, Đà Nẵng, Nha Trang, Phú Quốc —
 are not affected.
 
 ## If you are booked

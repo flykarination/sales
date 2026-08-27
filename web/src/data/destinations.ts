@@ -21,7 +21,7 @@ export interface Guide {
 
 export const GUIDES: Guide[] = [
   {
-    iata: 'SGN', city: 'Ho Chi Minh City', localName: 'Sài Gòn', country: 'Vietnam',
+    iata: 'SGN', city: 'Ho Chi Minh City', localName: 'TP Hồ Chí Minh', country: 'Vietnam',
     blurb:
       'Karination’s home and Vietnam’s largest city — a dense, fast, endlessly hungry place where French colonial boulevards run into motorbike-thick side streets and rooftop bars look down on all of it.',
     bestTime: 'December to April is the dry season, warm and clear. May to November brings short, heavy afternoon downpours.',
