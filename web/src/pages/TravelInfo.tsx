@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom'
 import { CABIN_ORDER, CABINS } from '@/lib/cabins'
+import { TOPICS } from '@/data/travel-topics'
 
 /** Baggage allowance by cabin, and the questions a passenger actually asks. */
 const BAGGAGE: Record<string, { cabin: string; checked: string; hand: string }> = {
@@ -56,7 +58,32 @@ export default function TravelInfo() {
         Everything you need between booking and boarding.
       </p>
 
-      <section id="baggage" className="mt-12 scroll-mt-32">
+      <section className="mt-10">
+        <h2 className="font-display mb-4" style={{ fontSize: '1.7rem' }}>Before you fly</h2>
+        <ul className="grid gap-x-8 sm:grid-cols-2" style={{ borderTop: '2px solid var(--color-ink)' }}>
+          {TOPICS.map((t) => (
+            <li key={t.slug} className="min-w-0">
+              <Link
+                to={`/travel-info/${t.slug}`}
+                className="kx-row flex min-w-0 items-baseline gap-3 py-3"
+                style={{ borderBottom: 'var(--rule)', minHeight: 44 }}
+              >
+                <span aria-hidden style={{ width: 8, height: 8, borderRadius: 2, background: `var(${t.hue})`, flex: 'none' }} />
+                <span className="min-w-0 truncate" style={{ fontWeight: 500 }}>{t.title}</span>
+              </Link>
+            </li>
+          ))}
+          <li className="min-w-0">
+            <Link to="/special-assistance" className="kx-row flex min-w-0 items-baseline gap-3 py-3"
+                  style={{ borderBottom: 'var(--rule)', minHeight: 44 }}>
+              <span aria-hidden style={{ width: 8, height: 8, borderRadius: 2, background: 'var(--color-spectrum-teal)', flex: 'none' }} />
+              <span className="min-w-0 truncate" style={{ fontWeight: 500 }}>Special assistance</span>
+            </Link>
+          </li>
+        </ul>
+      </section>
+
+      <section id="baggage" className="mt-14 scroll-mt-32">
         <h2 className="font-display mb-4" style={{ fontSize: '1.7rem' }}>Baggage</h2>
         <div style={{ overflowX: 'auto' }}>
           <table className="w-full" style={{ minWidth: 480, borderCollapse: 'collapse' }}>

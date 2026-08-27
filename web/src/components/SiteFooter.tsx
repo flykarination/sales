@@ -8,7 +8,7 @@ export function SiteFooter() {
         <img src={assetUrl('/brand/wordmark-light.png')} alt="Karination" style={{ height: 20, width: 'auto' }} />
         <nav aria-label="Footer">
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
-            {[['/about', 'About us'], ['/fleet', 'Our fleet'], ['/destinations', 'Destinations'], ['/network', 'Route map'], ['/timetable', 'Timetable'], ['/travel-info', 'Travel information'], ['/special-assistance', 'Special assistance'], ['/partners', 'Partners'], ['/rainbowone', 'RainbowOne'], ['/checkin', 'Check in'], ['/manage', 'Manage booking']].map(
+            {[['/about', 'About us'], ['/cabins', 'On board'], ['/fleet', 'Our fleet'], ['/destinations', 'Destinations'], ['/network', 'Route map'], ['/timetable', 'Timetable'], ['/travel-info', 'Travel information'], ['/special-assistance', 'Special assistance'], ['/partners', 'Partners'], ['/rainbowone', 'RainbowOne'], ['/checkin', 'Check in'], ['/manage', 'Manage booking']].map(
               ([to, label]) => (
                 <li key={to}>
                   <Link to={to} style={{ color: '#B9B6D8', fontSize: 'var(--text-small)' }}>{label}</Link>

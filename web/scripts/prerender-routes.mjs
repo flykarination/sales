@@ -24,9 +24,13 @@ const source = join(dist, 'index.html')
 /** Static routes. Parameterised ones still fall through to 404.html. */
 const ROUTES = [
   'search', 'passengers', 'payment', 'confirmation', 'manage',
-  'about', 'fleet', 'network', 'destinations', 'timetable',
+  'about', 'fleet', 'cabins', 'network', 'destinations', 'timetable',
   'rainbowone', 'join', 'signin', 'account',
   'checkin', 'flight-status', 'travel-info', 'partners', 'special-assistance',
+  // travel information topics
+  'travel-info/travel-documents', 'travel-info/children-and-infants',
+  'travel-info/restricted-items', 'travel-info/pets', 'travel-info/health',
+  'travel-info/disruption', 'travel-info/baggage-claim',
 ]
 
 if (!existsSync(source)) {

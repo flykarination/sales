@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { listFleet, type FleetRow } from '@/lib/queries'
-import { count } from '@/lib/format'
+import { count, duration } from '@/lib/format'
 import { CABINS } from '@/lib/cabins'
+import { FLEET_NOTES } from '@/data/fleet-notes'
 import { assetUrl } from '@/lib/assets'
 
 /** The game's product codes, said the way a passenger would say them. */
@@ -115,6 +116,7 @@ export default function Fleet() {
               <ul style={{ borderTop: '2px solid var(--color-ink)' }}>
                 {types.map((t) => {
                   const s = t.sample
+                  const note = FLEET_NOTES[t.model]
                   const hubList = Object.entries(t.hubs).sort((a, b) => b[1] - a[1])
                   return (
                     <li key={t.model} className="py-6" style={{ borderBottom: 'var(--rule)' }}>
@@ -128,7 +130,37 @@ export default function Fleet() {
                             >
                               {t.airframes.length} in fleet
                             </span>
+                            {note && (
+                              <span
+                                className="font-mono uppercase"
+                                style={{
+                                  fontSize: 'var(--text-micro)', letterSpacing: '0.14em',
+                                  color: 'var(--color-ink-faint)',
+                                }}
+                              >
+                                {note.role}
+                              </span>
+                            )}
                           </div>
+
+                          {note && (
+                            <>
+                              <p className="mt-2" style={{ color: 'var(--color-ink-mute)', maxWidth: '64ch' }}>
+                                {note.description}
+                              </p>
+                              {note.signature.km > 0 && (
+                                <p className="tnum mt-2 font-mono" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
+                                  Longest sector · {note.signature.route} ·{' '}
+                                  {count(note.signature.km)} km · {duration(note.signature.minutes)}
+                                </p>
+                              )}
+                              {note.configuration && (
+                                <p className="mt-1" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
+                                  {note.configuration}
+                                </p>
+                              )}
+                            </>
+                          )}
 
                           <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
                             {([

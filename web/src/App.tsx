@@ -26,6 +26,8 @@ const DestinationGuide = lazy(() => import('@/pages/DestinationGuide'))
 const TravelInfo = lazy(() => import('@/pages/TravelInfo'))
 const Partners = lazy(() => import('@/pages/Partners'))
 const SpecialAssistance = lazy(() => import('@/pages/SpecialAssistance'))
+const TravelTopic = lazy(() => import('@/pages/TravelTopic'))
+const Cabins = lazy(() => import('@/pages/Cabins'))
 
 /**
  * The operator dashboard is compiled out of production builds entirely.
@@ -72,6 +74,7 @@ export default function App() {
               <Route path="/manage" element={<Manage />} />
               <Route path="/about" element={<About />} />
               <Route path="/fleet" element={<Fleet />} />
+              <Route path="/cabins" element={<Cabins />} />
               <Route path="/network" element={<Network />} />
               <Route path="/destinations" element={<Destinations />} />
               <Route path="/destinations/:iata" element={<DestinationGuide />} />
@@ -79,6 +82,7 @@ export default function App() {
               <Route path="/flight-status" element={<FlightStatus />} />
               <Route path="/travel-info" element={<TravelInfo />} />
               <Route path="/special-assistance" element={<SpecialAssistance />} />
+              <Route path="/travel-info/:slug" element={<TravelTopic />} />
               <Route path="/partners" element={<Partners />} />
               <Route path="/timetable" element={<Timetable />} />
               <Route path="/rainbowone" element={<RainbowOne />} />

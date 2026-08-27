@@ -419,3 +419,66 @@ export async function arrivalsAt(
   if (fromTime) q = q.gte('arrival_time', fromTime)
   return q.order('arrival_time').limit(limit * 3)
 }
+
+/* ---- changing, cancelling and spending miles -------------------------- */
+
+export interface ChangeResult { ok: boolean; message: string; new_date: string | null }
+export interface CancelResult { pnr: string; status: string; refunded_usd: number; seats_released: number }
+export interface UpgradeResult { ok: boolean; message: string; miles_spent: number; balance_miles: number }
+export interface BookingEvent {
+  event_id: string; event_type: string; detail: string; occurred_at: string
+}
+
+/** Move one segment to another date on the same route and cabin. */
+export async function changeSegmentDate(pnr: string, email: string, segmentId: string, date: string) {
+  const { data, error } = await supabase.rpc('change_segment_date', {
+    p_pnr: pnr.trim().toUpperCase(), p_email: email.trim(),
+    p_segment_id: segmentId, p_new_date: date,
+  })
+  return { data: (Array.isArray(data) ? data[0] : data) as ChangeResult | null, error }
+}
+
+/** Cancel the whole booking: seats released, tickets voided, miles reversed. */
+export async function cancelBooking(pnr: string, email: string) {
+  const { data, error } = await supabase.rpc('cancel_booking', {
+    p_pnr: pnr.trim().toUpperCase(), p_email: email.trim(),
+  })
+  return { data: (Array.isArray(data) ? data[0] : data) as CancelResult | null, error }
+}
+
+/** Spend miles to move a booked segment up a cabin. */
+export async function redeemUpgrade(pnr: string, email: string, segmentId: string, toCabin: string) {
+  const { data, error } = await supabase.rpc('redeem_upgrade', {
+    p_pnr: pnr.trim().toUpperCase(), p_email: email.trim(),
+    p_segment_id: segmentId, p_to_cabin: toCabin,
+  })
+  return { data: (Array.isArray(data) ? data[0] : data) as UpgradeResult | null, error }
+}
+
+export async function bookingHistory(pnr: string, email: string) {
+  const { data, error } = await supabase.rpc('booking_history', {
+    p_pnr: pnr.trim().toUpperCase(), p_email: email.trim(),
+  })
+  return { data: (data ?? []) as BookingEvent[], error }
+}
+
+export interface RewardCategory {
+  category_code: string; category_name: string; description: string | null
+  sort_order: number; is_live: boolean
+}
+
+export async function listRewardCategories() {
+  return supabase.from('reward_categories').select('*').order('sort_order').returns<RewardCategory[]>()
+}
+
+export interface MilesPaymentResult {
+  ok: boolean; message: string; miles_spent: number; balance_miles: number
+}
+
+/** Convert a confirmed cash booking into an award, paid in RainbowOne miles. */
+export async function payWithMiles(pnr: string, email: string) {
+  const { data, error } = await supabase.rpc('pay_with_miles', {
+    p_pnr: pnr.trim().toUpperCase(), p_email: email.trim(),
+  })
+  return { data: (Array.isArray(data) ? data[0] : data) as MilesPaymentResult | null, error }
+}

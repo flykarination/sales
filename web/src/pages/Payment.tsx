@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BackLink, FunnelPage } from '@/components/Funnel'
 import { useBooking } from '@/booking/BookingContext'
-import { createBooking } from '@/lib/queries'
+import { createBooking, payWithMiles } from '@/lib/queries'
+import { count } from '@/lib/format'
 import { price } from '@/lib/format'
 
 /**
@@ -18,6 +19,7 @@ export default function Payment() {
   const { draft, legs, total, set } = useBooking()
   const navigate = useNavigate()
   const [state, setState] = useState<'idle' | 'paying' | 'failed'>('idle')
+  const [milesNotice, setMilesNotice] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -54,6 +56,46 @@ export default function Payment() {
     }
 
     set({ pnr: String(data) })
+    navigate('/confirmation')
+  }
+
+  /**
+   * Pay the same booking in miles instead. The reservation is created exactly
+   * as it would be for cash and then converted, so there is one selling flow
+   * and one set of seat checks rather than a separate award path.
+   */
+  async function payMiles() {
+    setState('paying')
+    setError(null)
+    setMilesNotice(null)
+
+    const segments = legs.map((l) => ({
+      flight_id: l.flight_id, aircraft_id: l.aircraft_id, direction: l.direction,
+      cabin_code: l.cabin_code, travel_date: l.departure_date,
+    }))
+    const made = await createBooking({
+      contactEmail: draft.contactEmail, contactName: draft.contactName,
+      passengers: draft.passengers, segments,
+    })
+    if (made.error || !made.data) {
+      setState('failed')
+      setError(made.error?.message ?? 'The booking could not be completed.')
+      return
+    }
+    const pnr = String(made.data)
+
+    const paid = await payWithMiles(pnr, draft.contactEmail)
+    if (paid.error || !paid.data?.ok) {
+      // the seats are held under a cash booking; say so rather than stranding them
+      setState('idle')
+      setMilesNotice(
+        (paid.data?.message ?? 'Miles payment failed.') +
+          ` Your booking ${pnr} is held and can be paid by card instead — find it under manage booking.`,
+      )
+      return
+    }
+
+    set({ pnr })
     navigate('/confirmation')
   }
 
@@ -142,8 +184,38 @@ export default function Payment() {
           >
             {state === 'paying' ? 'Issuing your booking…' : `Pay ${price(total)} and book`}
           </button>
+          <button
+            type="button"
+            onClick={payMiles}
+            disabled={state === 'paying'}
+            className="font-mono uppercase"
+            style={{
+              border: '1px solid var(--color-spectrum-violet)',
+              color: 'var(--color-spectrum-violet-ink)',
+              padding: '14px 22px', minHeight: 52, letterSpacing: '0.16em',
+              fontSize: 'var(--text-small)', borderRadius: 'var(--radius-edge)',
+              fontWeight: 600,
+            }}
+          >
+            Pay {count(Math.round(total * 100))} miles
+          </button>
           {state !== 'paying' && <BackLink to="/passengers">Back to passengers</BackLink>}
         </div>
+
+        {milesNotice && (
+          <p
+            className="mt-5"
+            role="alert"
+            style={{ color: 'var(--color-warn)', borderLeft: '2px solid var(--color-warn)', paddingLeft: 12 }}
+          >
+            {milesNotice}
+          </p>
+        )}
+
+        <p className="mt-4" style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
+          RainbowOne members can pay in miles at 100 miles to the dollar. The
+          booking must be made with your member email address.
+        </p>
       </form>
     </FunnelPage>
   )

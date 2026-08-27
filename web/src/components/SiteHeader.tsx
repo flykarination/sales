@@ -47,10 +47,15 @@ const SECTIONS: NavSection[] = [
     owns: ['/travel-info', '/flight-status', '/special-assistance'],
     children: [
       { label: 'Baggage', to: '/travel-info#baggage' },
-      { label: 'At the airport', to: '/travel-info#airport' },
-      { label: 'Flight status', to: '/flight-status' },
+      { label: 'Travel documents', to: '/travel-info/travel-documents' },
+      { label: 'Children and infants', to: '/travel-info/children-and-infants' },
+      { label: 'What you cannot pack', to: '/travel-info/restricted-items' },
+      { label: 'Travelling with animals', to: '/travel-info/pets' },
+      { label: 'Health and fitness to fly', to: '/travel-info/health' },
+      { label: 'Delays and cancellations', to: '/travel-info/disruption' },
+      { label: 'Baggage claim', to: '/travel-info/baggage-claim' },
       { label: 'Special assistance', to: '/special-assistance' },
-      { label: 'Questions', to: '/travel-info#questions' },
+      { label: 'Flight status', to: '/flight-status' },
     ],
   },
   {
@@ -62,9 +67,10 @@ const SECTIONS: NavSection[] = [
     ],
   },
   {
-    label: 'About', to: '/about', owns: ['/about', '/fleet', '/partners'],
+    label: 'About', to: '/about', owns: ['/about', '/fleet', '/partners', '/cabins'],
     children: [
       { label: 'About us', to: '/about' },
+      { label: 'On board', to: '/cabins' },
       { label: 'Our fleet', to: '/fleet' },
       { label: 'Partners', to: '/partners' },
     ],
