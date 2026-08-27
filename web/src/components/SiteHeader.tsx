@@ -98,11 +98,13 @@ export function SiteHeader() {
           <ul className="flex items-center gap-5 lg:gap-7">
             {SECTIONS.map((s) => {
               const on = active?.label === s.label
+              const hasMenu = s.children.length > 1
               return (
-                <li key={s.label}>
+                <li key={s.label} className={hasMenu ? 'kx-navitem' : undefined}>
                   <NavLink
                     to={s.to}
                     className="kx-navlink"
+                    aria-haspopup={hasMenu || undefined}
                     style={{
                       fontSize: 'var(--text-small)',
                       color: on ? 'var(--color-ink)' : 'var(--color-ink-mute)',
@@ -111,6 +113,35 @@ export function SiteHeader() {
                   >
                     {s.label}
                   </NavLink>
+
+                  {/* Opens under its own item on hover or keyboard focus, and
+                      closes when focus leaves — no second bar taking up the
+                      page. The pad above the panel bridges the gap so the
+                      pointer can travel into it without it collapsing. */}
+                  {hasMenu && (
+                    <div className="kx-menu" aria-label={`${s.label} pages`}>
+                      <ul className="kx-menu-panel">
+                        {s.children.map((c) => {
+                          const [path, hash] = c.to.split('#')
+                          const here = pathname === path && !hash
+                          return (
+                            <li key={c.to}>
+                              <Link
+                                to={c.to}
+                                className="kx-menulink"
+                                style={{
+                                  color: here ? 'var(--color-ink)' : 'var(--color-ink-mute)',
+                                  fontWeight: here ? 600 : 400,
+                                }}
+                              >
+                                {c.label}
+                              </Link>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                  )}
                 </li>
               )
             })}
@@ -130,35 +161,6 @@ export function SiteHeader() {
         </Link>
       </div>
 
-      {/* The section's own pages, fading in under the main bar. Keyed on the
-          section so it re-runs the fade when you move between sections. */}
-      {active && active.children.length > 1 && (
-        <div key={active.label} className="kx-subnav" style={{ borderTop: 'var(--rule)' }}>
-          <nav aria-label={`${active.label} pages`} className="mx-auto max-w-6xl px-5 md:px-8">
-            <ul className="flex gap-5 overflow-x-auto py-2" style={{ scrollbarWidth: 'none' }}>
-              {active.children.map((c) => {
-                const [path, hash] = c.to.split('#')
-                const here = pathname === path && !hash
-                return (
-                  <li key={c.to} className="flex-none">
-                    <Link
-                      to={c.to}
-                      className="kx-sublink"
-                      style={{
-                        fontSize: 'var(--text-small)',
-                        color: here ? 'var(--color-ink)' : 'var(--color-ink-mute)',
-                        fontWeight: here ? 600 : 400,
-                      }}
-                    >
-                      {c.label}
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </nav>
-        </div>
-      )}
     </header>
   )
 }
