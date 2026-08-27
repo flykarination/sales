@@ -9,15 +9,32 @@ export interface Passenger {
   date_of_birth?: string
 }
 
+export type TripType = 'return' | 'oneway' | 'multi'
+
+/**
+ * A slice is one journey the traveller asked for -- "Sài Gòn to Bangkok on
+ * the 10th". What fills it may be a single flight or a connection of two or
+ * three, which is why `flights` is an array.
+ *
+ * This is the airline model (slice / segment) rather than outbound-and-
+ * inbound, and it is the same shape for all three trip types: a one-way is
+ * one slice, a return is two, a multi-city is however many were asked for.
+ * Connections then need no separate concept at all -- they are simply a
+ * slice whose `flights` has more than one entry.
+ */
+export interface Slice {
+  from: string
+  to: string
+  date: string
+  /** What the traveller chose for this slice. Empty until they pick. */
+  flights?: FlightResult[]
+}
+
 export interface Draft {
-  origin: string
-  destination: string
-  depart: string
-  ret: string | null
+  tripType: TripType
+  slices: Slice[]
   cabin: CabinCode
   adults: number
-  outbound?: FlightResult
-  inbound?: FlightResult
   passengers: Passenger[]
   contactEmail: string
   contactName: string
@@ -25,8 +42,13 @@ export interface Draft {
 }
 
 const EMPTY: Draft = {
-  origin: '', destination: '', depart: '', ret: null,
-  cabin: 'ECONOMY', adults: 1, passengers: [], contactEmail: '', contactName: '',
+  tripType: 'return',
+  slices: [],
+  cabin: 'ECONOMY',
+  adults: 1,
+  passengers: [],
+  contactEmail: '',
+  contactName: '',
 }
 
 const KEY = 'kx.draft'
@@ -35,10 +57,14 @@ interface Ctx {
   draft: Draft
   set: (patch: Partial<Draft>) => void
   reset: () => void
+  /** Replace what is booked for one slice. */
+  setSliceFlights: (index: number, flights: FlightResult[] | undefined) => void
   /** Total for everything selected so far, per the fares actually returned. */
   total: number
-  /** How many legs the traveller is buying. */
+  /** Every flight being bought, in travel order. What the funnel sells. */
   legs: FlightResult[]
+  /** True once every slice has something in it. */
+  complete: boolean
 }
 
 const BookingCtx = createContext<Ctx | null>(null)
@@ -47,7 +73,13 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
   const [draft, setDraft] = useState<Draft>(() => {
     try {
       const raw = sessionStorage.getItem(KEY)
-      return raw ? { ...EMPTY, ...JSON.parse(raw) } : EMPTY
+      if (!raw) return EMPTY
+      const saved = JSON.parse(raw) as Partial<Draft>
+      // Guard against a draft written by an older build, where the shape was
+      // outbound/inbound: without this the funnel would restore a draft with
+      // no slices and quietly send the traveller back to the start.
+      if (!Array.isArray(saved.slices)) return EMPTY
+      return { ...EMPTY, ...saved }
     } catch {
       return EMPTY
     }
@@ -67,14 +99,26 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     setDraft((d) => ({ ...d, ...patch }))
   }, [])
 
+  const setSliceFlights = useCallback((index: number, flights: FlightResult[] | undefined) => {
+    setDraft((d) => {
+      const slices = d.slices.map((s, i) => (i === index ? { ...s, flights } : s))
+      return { ...d, slices }
+    })
+  }, [])
+
   const reset = useCallback(() => {
     setDraft(EMPTY)
     try { sessionStorage.removeItem(KEY) } catch { /* ignore */ }
   }, [])
 
   const legs = useMemo(
-    () => [draft.outbound, draft.inbound].filter(Boolean) as FlightResult[],
-    [draft.outbound, draft.inbound],
+    () => draft.slices.flatMap((s) => s.flights ?? []),
+    [draft.slices],
+  )
+
+  const complete = useMemo(
+    () => draft.slices.length > 0 && draft.slices.every((s) => (s.flights?.length ?? 0) > 0),
+    [draft.slices],
   )
 
   const total = useMemo(
@@ -83,7 +127,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
   )
 
   return (
-    <BookingCtx.Provider value={{ draft, set, reset, total, legs }}>
+    <BookingCtx.Provider value={{ draft, set, reset, setSliceFlights, total, legs, complete }}>
       {children}
     </BookingCtx.Provider>
   )

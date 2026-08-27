@@ -544,3 +544,61 @@ export const AIRPORTS: Airport[] = [
   { iata: 'ZHA', name: 'Zhanjiang Airport', city: 'Zhanjiang', country: 'CN', lat: 21.2144, lon: 110.358, tz: 'Asia/Shanghai', offset: 480 },
   { iata: 'ZYL', name: 'Osmany International Airport', city: 'Sylhet', country: 'BD', lat: 24.9632, lon: 91.8668, tz: 'Asia/Dhaka', offset: 360 },
 ]
+
+/* ------------------------------------------------------------------ */
+
+/**
+ * Code → airport, built once.
+ *
+ * This lives here rather than in lib/geo.ts on purpose: geo.ts pulls in
+ * d3-geo, topojson and the whole world atlas, which the booking funnel has
+ * no use for. Anything that only needs to turn a code into a name should
+ * come here.
+ */
+const BY_IATA: Map<string, Airport> = new Map(AIRPORTS.map((a) => [a.iata, a]))
+
+/**
+ * Vietnamese place names, written properly.
+ *
+ * The airport backfill came from real-world sources, which spell these
+ * without diacritics and in the English exonym — "Ho Chi Minh City",
+ * "Hanoi", "Da Nang". The site's convention is an English interface with
+ * Vietnamese place names, so those are corrected here in one place rather
+ * than in each component that happens to print a city.
+ *
+ * Only the home network is overridden; everywhere else keeps the name the
+ * data supplied.
+ */
+const VN_NAMES: Record<string, string> = {
+  SGN: 'TP Hồ Chí Minh',
+  HAN: 'Hà Nội',
+  DAD: 'Đà Nẵng',
+  CXR: 'Nha Trang',
+  PQC: 'Phú Quốc',
+  HUI: 'Huế',
+  HPH: 'Hải Phòng',
+  VCA: 'Cần Thơ',
+  DLI: 'Đà Lạt',
+  BMV: 'Buôn Ma Thuột',
+  PXU: 'Pleiku',
+  UIH: 'Quy Nhơn',
+  VII: 'Vinh',
+  VDH: 'Đồng Hới',
+  THD: 'Thanh Hóa',
+  DIN: 'Điện Biên Phủ',
+  VDO: 'Vân Đồn',
+  VCS: 'Côn Đảo',
+  VCL: 'Chu Lai',
+  TBB: 'Tuy Hòa',
+  CAH: 'Cà Mau',
+}
+
+export function airportByCode(iata: string): Airport | undefined {
+  return BY_IATA.get(iata.toUpperCase())
+}
+
+/** How an airport is named in running text: the city, falling back to the code. */
+export function airportLabel(iata: string): string {
+  const code = iata.toUpperCase()
+  return VN_NAMES[code] ?? airportByCode(code)?.city ?? code
+}

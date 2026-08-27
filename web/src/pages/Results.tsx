@@ -1,108 +1,179 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { FunnelPage } from '@/components/Funnel'
 import { FlightRow } from '@/components/FlightRow'
-import { searchFlights, type FlightResult } from '@/lib/queries'
+import { ItineraryOption } from '@/components/ItineraryOption'
+import {
+  groupItineraries, searchConnections, searchDoubleConnections, searchFlights,
+  type FlightResult, type Itinerary,
+} from '@/lib/queries'
 import { useBooking } from '@/booking/BookingContext'
-import { CABINS, type CabinCode } from '@/lib/cabins'
+import { parseSearchQuery } from '@/booking/slices'
+import { airportLabel } from '@/data/airports'
+import { CABINS } from '@/lib/cabins'
 import { addDays, longDate, shortDate } from '@/lib/format'
 
-type Leg = 'outbound' | 'inbound'
-
+/**
+ * Choosing the flights.
+ *
+ * The page works one slice at a time -- a slice being one journey the
+ * traveller asked for. A one-way has one, a return two, a multi-city as many
+ * as they entered, and the same code runs all three.
+ *
+ * Two searches go out per slice: the direct flights, and the connections.
+ * They are shown as separate lists because they are different products, and
+ * because a traveller who has a direct almost never wants to read the
+ * connections. When the direct search is empty the connections become the
+ * answer, and if there is no single-stop routing either, a second, more
+ * expensive two-stop search runs as a last resort.
+ */
 export default function Results() {
   const [params] = useSearchParams()
   const navigate = useNavigate()
-  const { draft, set } = useBooking()
+  const { draft, set, setSliceFlights, complete } = useBooking()
 
-  const origin = params.get('from') ?? draft.origin
-  const destination = params.get('to') ?? draft.destination
-  const depart = params.get('depart') ?? draft.depart
-  const ret = params.get('return') ?? draft.ret
-  const cabin = (params.get('cabin') as CabinCode) ?? draft.cabin
-  const adults = Number(params.get('adults') ?? draft.adults ?? 1)
+  const query = useMemo(() => parseSearchQuery(params), [params])
+  const [active, setActive] = useState(0)
 
-  const [leg, setLeg] = useState<Leg>('outbound')
-  const [rows, setRows] = useState<FlightResult[] | null>(null)
+  // Keep the draft aligned with the URL. If the journey being asked for has
+  // changed at all, previous selections belong to a different search and are
+  // dropped; if it is the same search, they survive a reload or a back-button.
+  useEffect(() => {
+    const sameJourney =
+      draft.slices.length === query.slices.length &&
+      draft.slices.every((s, i) =>
+        s.from === query.slices[i].from && s.to === query.slices[i].to && s.date === query.slices[i].date)
+
+    set({
+      tripType: query.tripType,
+      cabin: query.cabin,
+      adults: query.adults,
+      slices: sameJourney ? draft.slices : query.slices,
+    })
+    if (!sameJourney) setActive(0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query])
+
+  const slices = draft.slices.length ? draft.slices : query.slices
+  const slice = slices[active]
+
+  const [directs, setDirects] = useState<FlightResult[] | null>(null)
+  const [connections, setConnections] = useState<Itinerary[] | null>(null)
+  const [searchingDeeper, setSearchingDeeper] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const forOutbound = leg === 'outbound'
-  const from = forOutbound ? origin : destination
-  const to = forOutbound ? destination : origin
-  const date = forOutbound ? depart : (ret ?? depart)
-
   useEffect(() => {
-    set({ origin, destination, depart, ret, cabin, adults })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [origin, destination, depart, ret, cabin, adults])
-
-  useEffect(() => {
+    if (!slice) return
     let live = true
-    setRows(null)
+    setDirects(null)
+    setConnections(null)
     setError(null)
-    if (!from || !to || !date) { setError('Missing search details.'); return }
-    searchFlights({ origin: from, destination: to, date, cabin, seats: adults })
-      .then(({ data, error }) => {
-        if (!live) return
-        if (error) setError(error.message)
-        else setRows(data ?? [])
-      })
-    return () => { live = false }
-  }, [from, to, date, cabin, adults])
+    setSearchingDeeper(false)
 
-  function choose(f: FlightResult) {
-    if (forOutbound) {
-      set({ outbound: f })
-      if (ret) setLeg('inbound')
-      else navigate('/passengers')
-    } else {
-      set({ inbound: f })
-      navigate('/passengers')
+    const args = {
+      origin: slice.from, destination: slice.to, date: slice.date,
+      cabin: query.cabin, seats: query.adults,
     }
+
+    // Both go out together: the connections are useful even when directs
+    // exist, and waiting for one before starting the other doubles the wait.
+    searchFlights(args).then(({ data, error }) => {
+      if (!live) return
+      if (error) setError(error.message)
+      else setDirects(data ?? [])
+    })
+
+    searchConnections(args).then(async ({ data }) => {
+      if (!live) return
+      const found = groupItineraries(data)
+      if (found.length > 0) { setConnections(found); return }
+
+      // Nothing with one stop. Two stops reach far more of the network, but
+      // the query costs about three times as much, so it only runs here.
+      setSearchingDeeper(true)
+      const deeper = await searchDoubleConnections({ ...args, limit: 4 })
+      if (!live) return
+      setConnections(groupItineraries(deeper.data))
+      setSearchingDeeper(false)
+    })
+
+    return () => { live = false }
+  }, [slice?.from, slice?.to, slice?.date, query.cabin, query.adults])
+
+  function advance(index: number) {
+    const next = slices.findIndex((s, i) => i !== index && !(s.flights?.length))
+    if (next >= 0) setActive(next)
   }
 
-  const ready = draft.outbound && (!ret || draft.inbound)
+  function chooseDirect(f: FlightResult) {
+    setSliceFlights(active, [f])
+    advance(active)
+  }
+
+  function chooseItinerary(it: Itinerary) {
+    setSliceFlights(active, it.legs)
+    advance(active)
+  }
+
+  if (!slice) {
+    return (
+      <FunnelPage title="Choose your flight">
+        <p style={{ fontSize: 'var(--text-lead)' }}>That search is missing some details.</p>
+        <p className="mt-2" style={{ color: 'var(--color-ink-mute)' }}>
+          <Link to="/" className="underline">Start again</Link> and tell us where you're going.
+        </p>
+      </FunnelPage>
+    )
+  }
+
+  const chosenKeys = new Set((slice.flights ?? []).map((f) => `${f.flight_id}:${f.direction}`))
+  const chosenIsDirect = (slice.flights?.length ?? 0) === 1
+  const title =
+    slices.length === 1 ? 'Choose your flight'
+      : query.tripType === 'return'
+        ? (active === 0 ? 'Choose your outbound flight' : 'Choose your return flight')
+        : `Choose flight ${active + 1} of ${slices.length}`
 
   return (
-    <FunnelPage title={forOutbound ? 'Choose your outbound flight' : 'Choose your return flight'}>
+    <FunnelPage title={title}>
       <div className="mb-5 flex flex-wrap items-baseline gap-x-4 gap-y-2">
         <p style={{ fontSize: 'var(--text-lead)' }}>
-          <strong>{from}</strong> → <strong>{to}</strong>
+          <strong>{slice.from}</strong> → <strong>{slice.to}</strong>
         </p>
         <p style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }}>
-          {longDate(date)} · {CABINS[cabin]?.longName ?? 'Economy'} · {adults}{' '}
-          {adults === 1 ? 'passenger' : 'passengers'}
+          {longDate(slice.date)} · {CABINS[query.cabin]?.longName ?? 'Economy'} · {query.adults}{' '}
+          {query.adults === 1 ? 'passenger' : 'passengers'}
         </p>
         <Link to="/" className="kx-navlink ml-auto" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
           Change search
         </Link>
       </div>
 
-      {ret && (
-        <div className="mb-4 flex gap-2" role="tablist" aria-label="Trip legs">
-          {(['outbound', 'inbound'] as Leg[]).map((l) => (
+      {slices.length > 1 && (
+        <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Journeys">
+          {slices.map((s, i) => (
             <button
-              key={l}
+              key={`${s.from}-${s.to}-${s.date}`}
               role="tab"
-              aria-selected={leg === l}
-              onClick={() => setLeg(l)}
+              aria-selected={active === i}
+              onClick={() => setActive(i)}
               className="font-mono uppercase"
               style={{
                 fontSize: 'var(--text-micro)', letterSpacing: '0.14em',
                 padding: '8px 12px', minHeight: 40, borderRadius: 'var(--radius-edge)',
-                background: leg === l ? 'var(--color-paper-sunk)' : 'transparent',
-                border: 'var(--rule)',
-                color: 'var(--color-ink)',
+                background: active === i ? 'var(--color-paper-sunk)' : 'transparent',
+                border: 'var(--rule)', color: 'var(--color-ink)',
               }}
             >
-              {l === 'outbound' ? `Out ${shortDate(depart)}` : `Back ${shortDate(ret)}`}
-              {(l === 'outbound' ? draft.outbound : draft.inbound) ? ' ✓' : ''}
+              {s.from} → {s.to} {shortDate(s.date)}
+              {s.flights?.length ? ' ✓' : ''}
             </button>
           ))}
         </div>
       )}
 
       {/* loading: skeletons at the real row height, so nothing jumps */}
-      {rows === null && !error && (
+      {directs === null && !error && (
         <ul aria-busy="true" style={{ borderTop: 'var(--rule)' }}>
           {Array.from({ length: 4 }).map((_, i) => (
             <li key={i} style={{ height: 108, borderBottom: 'var(--rule)' }}>
@@ -119,23 +190,22 @@ export default function Results() {
         </p>
       )}
 
-      {rows && rows.length > 0 && (
+      {directs && directs.length > 0 && (
         <>
-          <p className="sr-only" role="status">{rows.length} flights found</p>
-          <p className="mb-2" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
-            {rows.length} {rows.length === 1 ? 'flight' : 'flights'}, cheapest first.
-          </p>
+          <p className="sr-only" role="status">{directs.length} direct flights found</p>
+          <h2
+            className="mb-2 font-mono uppercase"
+            style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: 'var(--color-ink-mute)' }}
+          >
+            Direct · {directs.length} {directs.length === 1 ? 'flight' : 'flights'}
+          </h2>
           <ul style={{ borderTop: '2px solid var(--color-ink)' }}>
-            {rows.map((f) => (
+            {directs.map((f) => (
               <FlightRow
                 key={`${f.flight_id}-${f.direction}-${f.cabin_code}`}
                 flight={f}
-                selected={
-                  forOutbound
-                    ? draft.outbound?.flight_id === f.flight_id && draft.outbound?.direction === f.direction
-                    : draft.inbound?.flight_id === f.flight_id && draft.inbound?.direction === f.direction
-                }
-                onSelect={choose}
+                selected={chosenIsDirect && chosenKeys.has(`${f.flight_id}:${f.direction}`)}
+                onSelect={chooseDirect}
                 seatsLeft={f.seats_per_departure}
               />
             ))}
@@ -143,26 +213,74 @@ export default function Results() {
         </>
       )}
 
-      {/* empty because the filter excluded everything: offer the nearest dates */}
-      {rows && rows.length === 0 && (
+      {/* No direct service: say so before the connections, so the list is
+          understood as the answer rather than as an oddity. */}
+      {directs && directs.length === 0 && (
         <div style={{ borderTop: '2px solid var(--color-ink)', paddingTop: 20 }}>
           <p style={{ fontSize: 'var(--text-lead)', marginBottom: 6 }}>
-            No {CABINS[cabin]?.longName ?? ''} flights from {from} to {to} on {shortDate(date)}.
+            We don't fly {airportLabel(slice.from)} to {airportLabel(slice.to)} direct
+            {CABINS[query.cabin] ? ` in ${CABINS[query.cabin].longName}` : ''} on {shortDate(slice.date)}.
           </p>
+          {connections === null && (
+            <p style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }} aria-busy="true">
+              {searchingDeeper ? 'Looking for a two-stop routing…' : 'Looking for connections…'}
+            </p>
+          )}
+        </div>
+      )}
+
+      {connections !== null && connections.length > 0 && (
+        <section className={directs && directs.length > 0 ? 'mt-10' : 'mt-6'}>
+          <h2
+            className="mb-1 font-mono uppercase"
+            style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: 'var(--color-ink-mute)' }}
+          >
+            {directs && directs.length > 0 ? 'Or connect' : 'Connecting flights'} ·{' '}
+            {connections.length} {connections.length === 1 ? 'option' : 'options'}
+          </h2>
+          <p className="mb-2" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
+            Booked as one reservation, shortest journey first. Times shown are local
+            at each airport.
+          </p>
+          <ul style={{ borderTop: '2px solid var(--color-ink)' }}>
+            {connections.map((it) => (
+              <ItineraryOption
+                key={it.key}
+                itinerary={it}
+                selected={
+                  !chosenIsDirect &&
+                  it.legs.every((l) => chosenKeys.has(`${l.flight_id}:${l.direction}`)) &&
+                  it.legs.length === (slice.flights?.length ?? 0)
+                }
+                onSelect={chooseItinerary}
+              />
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Nothing at all, direct or connecting: offer the nearest dates. */}
+      {directs && directs.length === 0 && connections !== null && connections.length === 0 && (
+        <div className="mt-4">
           <p style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }}>
-            Karination does not fly this route every day. Try a nearby date:
+            We could not build a connection for this date either. Karination does not
+            fly every route every day — try a nearby date:
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {[-2, -1, 1, 2, 3].map((d) => {
-              const alt = addDays(date, d)
-              const q = new URLSearchParams({
-                from: origin, to: destination, depart: forOutbound ? alt : depart,
-                cabin, adults: String(adults), ...(ret ? { return: forOutbound ? ret : alt } : {}),
-              })
+              const alt = addDays(slice.date, d)
+              const next = new URLSearchParams(params)
+              if (query.tripType === 'multi') {
+                next.set('legs', slices.map((s, i) => `${s.from}-${s.to}-${i === active ? alt : s.date}`).join('_'))
+              } else if (active === 0) {
+                next.set('depart', alt)
+              } else {
+                next.set('return', alt)
+              }
               return (
                 <Link
                   key={d}
-                  to={`/search?${q}`}
+                  to={`/search?${next}`}
                   className="tnum font-mono"
                   style={{
                     fontSize: 'var(--text-small)', padding: '10px 12px', minHeight: 44,
@@ -178,7 +296,7 @@ export default function Results() {
         </div>
       )}
 
-      {ready && (
+      {complete && (
         <div className="mt-6">
           <button
             onClick={() => navigate('/passengers')}

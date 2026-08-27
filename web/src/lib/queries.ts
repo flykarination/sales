@@ -80,6 +80,133 @@ export async function searchFlights(args: {
   return { data: (data ?? null) as FlightResult[] | null, error }
 }
 
+/* ------------------------------------------------------------------ */
+/* Connecting itineraries                                             */
+/*                                                                    */
+/* Most city pairs in a hub network have no direct service. The two    */
+/* RPCs below return one row per LEG, with legs of the same itinerary  */
+/* sharing an option_rank; groupItineraries() folds them back up.      */
+/* ------------------------------------------------------------------ */
+
+/** A leg row as the connection RPCs return it: a flight plus its itinerary. */
+export interface ConnectionLeg extends FlightResult {
+  option_rank: number
+  via_iata: string
+  connect_minutes: number
+  total_minutes: number
+  total_price_usd: number
+  leg_index: number
+}
+
+/** One sellable journey: two or three flights and the waits between them. */
+export interface Itinerary {
+  key: string
+  legs: FlightResult[]
+  /** Airport codes stopped at, in order. */
+  via: string[]
+  /** Ground time before each leg after the first: via[i] pairs with waits[i]. */
+  waits: number[]
+  totalMinutes: number
+  totalPriceUsd: number
+  stops: number
+}
+
+/** Fold the per-leg rows into itineraries, preserving the server's ranking. */
+export function groupItineraries(rows: ConnectionLeg[] | null): Itinerary[] {
+  if (!rows || rows.length === 0) return []
+  const byRank = new Map<number, ConnectionLeg[]>()
+  for (const r of rows) {
+    const list = byRank.get(r.option_rank)
+    if (list) list.push(r)
+    else byRank.set(r.option_rank, [r])
+  }
+  const out: Itinerary[] = []
+  for (const [rank, group] of [...byRank.entries()].sort((a, b) => a[0] - b[0])) {
+    const legs = [...group].sort((a, b) => a.leg_index - b.leg_index)
+    const via = legs.slice(0, -1).map((l) => l.destination_iata)
+    // The RPC reports total ground time; recompute per stop so each wait can
+    // be shown against the airport it happens at.
+    const waits = legs.slice(1).map((l, i) => waitMinutes(legs[i], l))
+    out.push({
+      key: `${rank}-${legs.map((l) => `${l.flight_id}:${l.direction}`).join('-')}`,
+      legs,
+      via,
+      waits,
+      totalMinutes: legs[0].total_minutes,
+      totalPriceUsd: legs[0].total_price_usd,
+      stops: legs.length - 1,
+    })
+  }
+  return out
+}
+
+/**
+ * Ground time between two consecutive legs, in minutes.
+ *
+ * Both clocks belong to the connecting airport -- departure_time and
+ * arrival_time are always local to the airport they name -- so this is a
+ * plain subtraction once the dates are accounted for. No offsets.
+ */
+export function waitMinutes(arriving: FlightResult, departing: FlightResult): number {
+  const days =
+    (Date.parse(`${departing.departure_date}T00:00:00Z`) -
+      Date.parse(`${arriving.arrival_date}T00:00:00Z`)) / 86400000
+  return Math.round(days * 1440 + (clockMinutes(departing.departure_time) - clockMinutes(arriving.arrival_time)))
+}
+
+function clockMinutes(t: string | null | undefined): number {
+  if (!t) return 0
+  const [h, m] = t.split(':')
+  return Number(h) * 60 + Number(m)
+}
+
+interface ConnectionArgs {
+  origin: string
+  destination: string
+  date: string
+  cabin?: string
+  seats?: number
+  limit?: number
+}
+
+/** One-stop itineraries, shortest total journey first. */
+export async function searchConnections(args: ConnectionArgs) {
+  const { data, error } = await supabase.rpc('search_connections', {
+    p_origin: args.origin,
+    p_destination: args.destination,
+    p_travel_date: args.date,
+    p_cabin: args.cabin ?? 'ECONOMY',
+    p_seats: args.seats ?? 1,
+    p_limit: args.limit ?? 8,
+  })
+  return { data: (data ?? null) as ConnectionLeg[] | null, error }
+}
+
+/**
+ * Two-stop itineraries. Only worth asking for when the one-stop search
+ * came back empty -- it costs about three times as much to run.
+ */
+export async function searchDoubleConnections(args: ConnectionArgs) {
+  const { data, error } = await supabase.rpc('search_double_connections', {
+    p_origin: args.origin,
+    p_destination: args.destination,
+    p_travel_date: args.date,
+    p_cabin: args.cabin ?? 'ECONOMY',
+    p_seats: args.seats ?? 1,
+    p_limit: args.limit ?? 4,
+  })
+  return { data: (data ?? null) as ConnectionLeg[] | null, error }
+}
+
+/** Airports that could join two cities, ignoring dates. Cheap. */
+export async function connectingPoints(origin: string, destination: string) {
+  const { data, error } = await supabase.rpc('kx_connecting_points', {
+    p_origin: origin,
+    p_destination: destination,
+  })
+  return { data: (data ?? null) as Array<{ via_iata: string; city_name: string | null; country_code: string | null }> | null, error }
+}
+
 /** Live seats remaining on one departure, simulated demand included. */
 export async function availableSeats(args: {
   flightId: string

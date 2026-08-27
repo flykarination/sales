@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { searchQueryString } from '@/booking/slices'
 import { SearchPanel, type SearchValues } from '@/components/SearchPanel'
 import { Slideshow } from '@/components/Slideshow'
 import { listRoutes, type RouteRow } from '@/lib/queries'
@@ -39,12 +40,7 @@ function Booking() {
   }, [fromParam, toParam])
 
   function go(v: SearchValues) {
-    const q = new URLSearchParams({
-      from: v.origin, to: v.destination, depart: v.depart,
-      cabin: v.cabin, adults: String(v.adults),
-      ...(v.ret ? { return: v.ret } : {}),
-    })
-    navigate(`/search?${q}`)
+    navigate(`/search?${searchQueryString(v)}`)
   }
 
   return (
