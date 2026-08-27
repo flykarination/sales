@@ -26,7 +26,6 @@ const SECTIONS: NavSection[] = [
     label: 'Book', to: '/', owns: ['/', '/search', '/passengers', '/payment', '/confirmation'],
     children: [
       { label: 'Search flights', to: '/' },
-      { label: 'Timetable', to: '/timetable' },
       { label: 'Manage booking', to: '/manage' },
     ],
   },
