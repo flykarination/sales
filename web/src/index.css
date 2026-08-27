@@ -278,6 +278,26 @@
 }
 
 @layer components {
+  /* A connection that needs immigration, or a terminal change, or both.
+     Amber because it is an advisory: nothing is wrong, but the ground time
+     is not free. */
+  .kx-connect-flag {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 7px;
+    border: 1px solid color-mix(in oklab, var(--color-spectrum-amber) 55%, transparent);
+    border-radius: var(--radius-edge);
+    background: color-mix(in oklab, var(--color-spectrum-amber) 14%, transparent);
+    color: var(--color-spectrum-amber-ink);
+    font-size: var(--text-micro);
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+  }
+  .kx-connect-flag:hover {
+    background: color-mix(in oklab, var(--color-spectrum-amber) 26%, transparent);
+  }
+
   /* ---- a carrier section ---------------------------------------------
      FORZA on the fleet page: a <details> that reads as a section header
      rather than a disclosure widget, because it is a whole airline. */

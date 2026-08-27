@@ -46,6 +46,7 @@ const SECTIONS: NavSection[] = [
     owns: ['/travel-info', '/flight-status', '/special-assistance', '/updates'],
     children: [
       { label: 'Travel updates', to: '/updates' },
+      { label: 'Connecting through Vietnam', to: '/travel-info/connecting-in-vietnam' },
       { label: 'Baggage', to: '/travel-info#baggage' },
       { label: 'Travel documents', to: '/travel-info/travel-documents' },
       { label: 'Children and infants', to: '/travel-info/children-and-infants' },

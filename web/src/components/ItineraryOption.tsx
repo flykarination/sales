@@ -1,4 +1,5 @@
 import { useId, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { cabin } from '@/lib/cabins'
 import {
   carrierName, dayOffset, dayOffsetSpoken, duration, durationSpoken,
@@ -6,6 +7,7 @@ import {
 } from '@/lib/format'
 import { airportLabel } from '@/data/airports'
 import type { Itinerary } from '@/lib/queries'
+import { connectionAdvice } from '@/lib/connections'
 import { OperatedBy } from '@/components/OperatedBy'
 import { governingCarrier, operatedNoteFor } from '@/data/carriers'
 import { BaggageNotice } from '@/components/BaggageNotice'
@@ -39,6 +41,9 @@ export function ItineraryOption({
 
   const nights = dayDiff(first.departure_date, last.arrival_date)
 
+  /** Per stop: what the ground time involves, where that is not obvious. */
+  const advice = itinerary.legs.slice(1).map((leg, i) => connectionAdvice(itinerary.legs[i], leg))
+
   /** Carriers on this itinerary that warrant a note, each named once. */
   const operators = [...new Set(
     itinerary.legs.map((l) => l.airline_code).filter((c): c is string => !!operatedNoteFor(c)),
@@ -51,7 +56,9 @@ export function ItineraryOption({
     `Depart ${timeSpoken(first.departure_time)} from ${first.origin_iata}, ` +
     `arrive ${timeSpoken(last.arrival_time)} at ${last.destination_iata}${dayOffsetSpoken(nights)}. ` +
     `${durationSpoken(itinerary.totalMinutes)} in total, ${stopsText}, ` +
-    itinerary.waits.map((w, i) => `${durationSpoken(w)} in ${itinerary.via[i]}`).join(', ') +
+    itinerary.waits
+      .map((w, i) => `${durationSpoken(w)} in ${itinerary.via[i]}${advice[i] ? `, where you ${advice[i]!.label.toLowerCase()}` : ''}`)
+      .join(', ') +
     `. ${c.longName}, ${price(itinerary.totalPriceUsd)} per passenger.` +
     operators.map((code) => ` ${operatedNoteFor(code)}`).join('') +
     (governingCarrier(itinerary.legs.map((l) => l.airline_code)).carrier.code === 'Z4'
@@ -120,6 +127,13 @@ export function ItineraryOption({
                 )}
                 {w < 90 && (
                   <span style={{ color: 'var(--color-spectrum-amber-ink)', fontWeight: 600 }}>· tight</span>
+                )}
+                {/* What the wait is actually spent doing. Sits beside the time
+                    because that is the number people judge a connection by. */}
+                {advice[i] && (
+                  <Link to="/travel-info/connecting-in-vietnam" className="kx-connect-flag">
+                    {advice[i]!.label}
+                  </Link>
                 )}
               </li>
             ))}
@@ -195,6 +209,15 @@ export function ItineraryOption({
                   >
                     <span className="tnum">{duration(itinerary.waits[i])}</span>{' '}
                     connection in {airportLabel(itinerary.via[i])}
+                    {advice[i] && (
+                      <>
+                        {' · '}
+                        <Link to="/travel-info/connecting-in-vietnam" className="underline"
+                              style={{ color: 'var(--color-spectrum-amber-ink)' }}>
+                          {advice[i]!.label}
+                        </Link>
+                      </>
+                    )}
                   </p>
                 )}
               </li>

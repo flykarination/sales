@@ -32,6 +32,7 @@ const ROUTES = [
   'travel-info/travel-documents', 'travel-info/children-and-infants',
   'travel-info/restricted-items', 'travel-info/pets', 'travel-info/health',
   'travel-info/disruption', 'travel-info/baggage-claim',
+  'travel-info/connecting-in-vietnam',
 ]
 
 if (!existsSync(source)) {

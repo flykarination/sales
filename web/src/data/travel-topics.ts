@@ -343,6 +343,88 @@ export const TOPICS: Topic[] = [
     ],
   },
   {
+    slug: 'connecting-in-vietnam',
+    title: 'Connecting through Vietnam',
+    standfirst:
+      'What a connection at one of our hubs actually asks of you on the ground — and why a domestic-to-international change needs more time than the clock suggests.',
+    hue: '--color-spectrum-amber',
+    sections: [
+      {
+        heading: 'Which kind of connection you have',
+        body:
+          'Only an international-to-international connection keeps you inside the secure area the whole way. Every other combination takes you back out and in again — through security, and across the border as well when the connection changes between domestic and international.',
+        table: {
+          columns: ['Your connection', 'What it involves'],
+          rows: [
+            ['International to international', 'Follow the "Connecting flights" signs. You stay airside.'],
+            ['Domestic to domestic', 'Exit through baggage claim and re-enter security.'],
+            ['Domestic to international', 'Leave the secure area, clear immigration, and at TP Hồ Chí Minh, Hà Nội and Đà Nẵng, change terminals.'],
+            ['International to domestic', 'The same in reverse.'],
+          ],
+        },
+      },
+      {
+        heading: 'Domestic to international at TP Hồ Chí Minh, Hà Nội or Đà Nẵng',
+        body:
+          'These three airports keep domestic and international in separate buildings, so this connection is a walk between terminals as well as a border crossing. Allow the full connection time we sell you — we do not sell one that cannot be made, but none of it is spare.',
+        points: [
+          'Leave the domestic terminal through arrivals and collect any checked bag if it was not tagged through.',
+          'Walk or take the shuttle to the international terminal. At all three airports they are within a few minutes of each other.',
+          'Check in for the onward flight if you were not given its boarding pass when you started.',
+          'Clear immigration and security.',
+          'Go to your gate.',
+        ],
+        callout: {
+          title: 'Ask for both boarding passes at the start',
+          body:
+            'When your whole journey is on one booking, ask at first check-in for the onward boarding pass too. It removes an entire step from the middle of the connection.',
+        },
+      },
+      {
+        heading: 'Domestic to international at our other Vietnamese airports',
+        body:
+          'Everywhere else in Vietnam, domestic and international share one building, so there is no terminal to change — but you still cross the border, which means leaving and re-entering the secure area.',
+        points: [
+          'Leave through domestic arrivals.',
+          'Re-enter the terminal at international departures.',
+          'Check in if you do not already hold the onward boarding pass.',
+          'Clear immigration and security, then go to your gate.',
+        ],
+      },
+      {
+        heading: 'International to domestic',
+        body:
+          'The same steps in the other order. Clear immigration on arrival, collect your bag if it was not checked through, then move to the domestic terminal — a separate building at TP Hồ Chí Minh, Hà Nội and Đà Nẵng, and the same one everywhere else — and check in there if you need to.',
+      },
+      {
+        heading: 'Domestic to domestic',
+        body:
+          'Exit through baggage claim and re-enter security. There is no immigration to clear and no terminal to change, but the connection is not made airside, so leave time for the security queue.',
+        points: [
+          'Leave through domestic arrivals, past baggage claim. Collect your bag if it was not tagged through to your final destination.',
+          'Re-enter at domestic departures.',
+          'Check in if you do not already hold the onward boarding pass.',
+          'Go through security, then to your gate.',
+        ],
+      },
+      {
+        heading: 'International to international',
+        body:
+          'Nothing to do but follow the "Connecting flights" signs from the moment you leave the aircraft. You do not clear immigration, you do not collect your bag, and you do not need to check in again. This is true at every hub we fly from.',
+      },
+      {
+        heading: 'If the first flight is late',
+        body:
+          'Where both flights are on one Karination booking, the connection is our responsibility and we rebook you onto the next available service at no charge — including when the two flights are on different airlines in the group. Where you booked them separately, we cannot.',
+        callout: {
+          title: 'Connections we sell are connections we stand behind',
+          body:
+            'Every itinerary shown as one journey on this site is sold as one booking, whichever of our airlines operates each leg.',
+        },
+      },
+    ],
+  },
+  {
     slug: 'baggage-claim',
     title: 'Delayed and damaged baggage',
     standfirst:

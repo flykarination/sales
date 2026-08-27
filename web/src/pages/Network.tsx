@@ -429,14 +429,20 @@ export default function Network() {
               <path d={land} fill="#1E1F5C" stroke="#2A2B72" strokeWidth={0.5}
                     vectorEffect="non-scaling-stroke" />
 
-              {/* every route, static */}
-              <g fill="none" strokeWidth={0.7} strokeLinecap="round" vectorEffect="non-scaling-stroke">
+              {/* Every route, static.
+                  vector-effect goes on each path, not on the group: unlike
+                  stroke-width it is not an inherited property, so on the <g>
+                  it did nothing at all and the arcs scaled with the zoom —
+                  0.8 screen pixels on the world view became 8 on the domestic
+                  one, which is what made that map unreadable. */}
+              <g fill="none" strokeWidth={0.7} strokeLinecap="round">
                 {arcs.map((a) => (
                   <path
                     key={`${a.route.origin_iata}-${a.route.destination_iata}`}
                     d={a.d}
                     stroke={REGION_STYLE[a.region].hue}
                     opacity={active ? 0.16 : 0.42}
+                    vectorEffect="non-scaling-stroke"
                   />
                 ))}
               </g>
