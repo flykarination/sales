@@ -30,11 +30,27 @@ export interface Slice {
   flights?: FlightResult[]
 }
 
+/**
+ * What each passenger type pays, as a fraction of the adult fare.
+ *
+ * Mirrors kx_pax_fare_factor() in the database, which is what actually
+ * prices the tickets. If one changes the other must: the number shown before
+ * paying has to be the number charged.
+ */
+export const PAX_FARE_FACTOR: Record<Passenger['passenger_type'], number> = {
+  ADULT: 1,
+  CHILD: 0.75,
+  INFANT: 0.1,
+}
+
 export interface Draft {
   tripType: TripType
   slices: Slice[]
   cabin: CabinCode
   adults: number
+  children: number
+  /** Under two, travelling on an adult's lap. Takes no seat. */
+  infants: number
   passengers: Passenger[]
   contactEmail: string
   contactName: string
@@ -46,6 +62,8 @@ const EMPTY: Draft = {
   slices: [],
   cabin: 'ECONOMY',
   adults: 1,
+  children: 0,
+  infants: 0,
   passengers: [],
   contactEmail: '',
   contactName: '',
@@ -65,6 +83,10 @@ interface Ctx {
   legs: FlightResult[]
   /** True once every slice has something in it. */
   complete: boolean
+  /** Seats needed. Infants travel on a lap, so they are not counted. */
+  seats: number
+  /** Everyone travelling, infants included. */
+  headCount: number
 }
 
 const BookingCtx = createContext<Ctx | null>(null)
@@ -121,13 +143,42 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     [draft.slices],
   )
 
-  const total = useMemo(
-    () => legs.reduce((sum, l) => sum + l.price_usd, 0) * Math.max(draft.adults, 1),
-    [legs, draft.adults],
+  const seats = useMemo(
+    () => Math.max(draft.adults, 1) + Math.max(draft.children, 0),
+    [draft.adults, draft.children],
   )
 
+  const headCount = useMemo(
+    () => seats + Math.max(draft.infants, 0),
+    [seats, draft.infants],
+  )
+
+  /**
+   * Priced the way the database prices it: per passenger, per leg, each
+   * ticket rounded on its own. Multiplying a leg total by a head count would
+   * drift from the charged amount once a child or infant is aboard.
+   */
+  const total = useMemo(() => {
+    const counts: Array<[Passenger['passenger_type'], number]> = [
+      ['ADULT', Math.max(draft.adults, 1)],
+      ['CHILD', Math.max(draft.children, 0)],
+      ['INFANT', Math.max(draft.infants, 0)],
+    ]
+    return legs.reduce(
+      (sum, leg) =>
+        sum +
+        counts.reduce(
+          (legSum, [type, n]) => legSum + n * Math.round(leg.price_usd * PAX_FARE_FACTOR[type]),
+          0,
+        ),
+      0,
+    )
+  }, [legs, draft.adults, draft.children, draft.infants])
+
   return (
-    <BookingCtx.Provider value={{ draft, set, reset, setSliceFlights, total, legs, complete }}>
+    <BookingCtx.Provider
+      value={{ draft, set, reset, setSliceFlights, total, legs, complete, seats, headCount }}
+    >
       {children}
     </BookingCtx.Provider>
   )

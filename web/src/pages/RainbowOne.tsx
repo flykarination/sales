@@ -23,11 +23,15 @@ export default function RainbowOne() {
   return (
     <div>
       {/* ---- opening -------------------------------------------------- */}
-      <section className="on-ink px-5 py-16 md:px-8 md:py-24" style={{ background: 'var(--color-ink)' }}>
+      {/* The band carries the four tiers in order — Jade, Amber, Amethyst,
+          Ruby — in their dark variants, which are the only ones that hold
+          white type. Left to right is the order you climb them, so the
+          gradient is the programme rather than decoration. */}
+      <section className="on-ink kx-tier-band px-5 py-16 md:px-8 md:py-24">
         <div className="mx-auto max-w-6xl">
           <p
             className="mb-6 font-mono uppercase"
-            style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.24em', color: 'var(--color-aqua)' }}
+            style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.24em', color: 'var(--color-paper)', opacity: 0.85 }}
           >
             RainbowOne
           </p>
@@ -37,7 +41,7 @@ export default function RainbowOne() {
           >
             Join our RainbowOne family.
           </h1>
-          <p className="mt-6" style={{ color: '#B9B6D8', fontSize: 'var(--text-lead)', maxWidth: '54ch' }}>
+          <p className="mt-6" style={{ color: 'rgba(255,255,255,.88)', fontSize: 'var(--text-lead)', maxWidth: '54ch' }}>
             Every kilometre you fly with Karination earns miles — more in the
             cabins up front, more again as you climb. Four tiers, each one named
             for a colour we fly under. It costs nothing to join.

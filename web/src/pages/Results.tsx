@@ -8,7 +8,8 @@ import {
   type FlightResult, type Itinerary,
 } from '@/lib/queries'
 import { useBooking } from '@/booking/BookingContext'
-import { parseSearchQuery } from '@/booking/slices'
+import { parseSearchQuery, seatsFor } from '@/booking/slices'
+import { summarise } from '@/components/PassengerPicker'
 import { airportLabel } from '@/data/airports'
 import { CABINS } from '@/lib/cabins'
 import { addDays, longDate, shortDate } from '@/lib/format'
@@ -48,6 +49,8 @@ export default function Results() {
       tripType: query.tripType,
       cabin: query.cabin,
       adults: query.adults,
+      children: query.children,
+      infants: query.infants,
       slices: sameJourney ? draft.slices : query.slices,
     })
     if (!sameJourney) setActive(0)
@@ -72,7 +75,8 @@ export default function Results() {
 
     const args = {
       origin: slice.from, destination: slice.to, date: slice.date,
-      cabin: query.cabin, seats: query.adults,
+      // seats, not heads: an infant on a lap needs none
+      cabin: query.cabin, seats: seatsFor(query),
     }
 
     // Both go out together: the connections are useful even when directs
@@ -98,7 +102,7 @@ export default function Results() {
     })
 
     return () => { live = false }
-  }, [slice?.from, slice?.to, slice?.date, query.cabin, query.adults])
+  }, [slice?.from, slice?.to, slice?.date, query.cabin, query.adults, query.children, query.infants])
 
   function advance(index: number) {
     const next = slices.findIndex((s, i) => i !== index && !(s.flights?.length))
@@ -141,8 +145,8 @@ export default function Results() {
           <strong>{slice.from}</strong> → <strong>{slice.to}</strong>
         </p>
         <p style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }}>
-          {longDate(slice.date)} · {CABINS[query.cabin]?.longName ?? 'Economy'} · {query.adults}{' '}
-          {query.adults === 1 ? 'passenger' : 'passengers'}
+          {longDate(slice.date)} · {CABINS[query.cabin]?.longName ?? 'Economy'} ·{' '}
+          {summarise(query)}
         </p>
         <Link to="/" className="kx-navlink ml-auto" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
           Change search

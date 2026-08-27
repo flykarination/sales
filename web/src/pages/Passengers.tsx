@@ -1,17 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BackLink, FunnelPage } from '@/components/Funnel'
 import { useBooking, type Passenger } from '@/booking/BookingContext'
 
 const EMPTY_PAX: Passenger = { given_name: '', family_name: '', passenger_type: 'ADULT' }
 
+const PAX_LABEL: Record<Passenger['passenger_type'], string> = {
+  ADULT: 'Adult',
+  CHILD: 'Child',
+  INFANT: 'Infant',
+}
+
 export default function Passengers() {
   const { draft, set, legs } = useBooking()
   const navigate = useNavigate()
+  // One row per traveller, already labelled with the type chosen in the
+  // search. The type stays editable — someone whose child turns twelve
+  // before departure needs to be able to fix it here rather than start over.
+  const seeded = useMemo<Passenger[]>(() => {
+    const rows: Passenger[] = []
+    const add = (n: number, type: Passenger['passenger_type']) => {
+      for (let i = 0; i < n; i += 1) rows.push({ ...EMPTY_PAX, passenger_type: type })
+    }
+    add(Math.max(draft.adults, 1), 'ADULT')
+    add(Math.max(draft.children, 0), 'CHILD')
+    add(Math.max(draft.infants, 0), 'INFANT')
+    return rows
+  }, [draft.adults, draft.children, draft.infants])
+
   const [pax, setPax] = useState<Passenger[]>(
-    draft.passengers.length === draft.adults
-      ? draft.passengers
-      : Array.from({ length: Math.max(draft.adults, 1) }, () => ({ ...EMPTY_PAX })),
+    draft.passengers.length === seeded.length ? draft.passengers : seeded,
   )
   const [email, setEmail] = useState(draft.contactEmail)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
@@ -64,7 +82,7 @@ export default function Passengers() {
                 className="mb-4 font-mono uppercase"
                 style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: 'var(--color-ink-mute)' }}
               >
-                Passenger {i + 1}
+                Passenger {i + 1} · {PAX_LABEL[p.passenger_type]}
               </legend>
               <div className="grid gap-5 sm:grid-cols-2">
                 <TextField

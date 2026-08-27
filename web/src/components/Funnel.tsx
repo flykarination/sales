@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useBooking } from '@/booking/BookingContext'
+import { summarise } from '@/components/PassengerPicker'
 import { cabin } from '@/lib/cabins'
 import { duration, price, shortDate, time } from '@/lib/format'
 
@@ -94,7 +95,7 @@ export function ItinerarySummary({ sticky = true }: { sticky?: boolean }) {
       <dl className="mt-5 pt-4" style={{ borderTop: '1px solid var(--color-ink)' }}>
         <div className="flex items-baseline justify-between">
           <dt style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
-            {c.longName} · {draft.adults} {draft.adults === 1 ? 'passenger' : 'passengers'}
+            {c.longName} · {summarise(draft)}
           </dt>
         </div>
         <div className="mt-2 flex items-baseline justify-between">

@@ -5,6 +5,8 @@ import { addDays, toIsoDate } from '@/lib/format'
 import type { Slice, TripType } from '@/booking/BookingContext'
 import type { SearchQuery } from '@/booking/slices'
 import { airportLabel } from '@/data/airports'
+import { DatePicker } from '@/components/DatePicker'
+import { PassengerPicker, type PartySize } from '@/components/PassengerPicker'
 
 /** The five Vietnamese hubs, so the field is useful before the network loads. */
 const HUBS: AirportRow[] = [
@@ -37,7 +39,8 @@ export function SearchPanel({
   const [depart, setDepart] = useState(addDays(today, 7))
   const [ret, setRet] = useState(addDays(today, 14))
   const [cabin, setCabin] = useState<CabinCode>(initialCabin ?? 'ECONOMY')
-  const [adults, setAdults] = useState(1)
+  const [party, setParty] = useState<PartySize>({ adults: 1, children: 0, infants: 0 })
+  const [flipped, setFlipped] = useState(false)
 
   /**
    * Multi-city legs, held separately from the simple fields rather than
@@ -72,6 +75,17 @@ export function SearchPanel({
     setTripType(next)
   }
 
+  /** Invert the two airports. The commonest correction there is. */
+  function swap() {
+    setOrigin(destination)
+    setDestination(origin)
+    setFlipped((f) => !f)
+  }
+
+  function swapLeg(i: number) {
+    setMulti((legs) => legs.map((l, j) => (j === i ? { ...l, from: l.to, to: l.from } : l)))
+  }
+
   function patchLeg(i: number, patch: Partial<Slice>) {
     setMulti((legs) => legs.map((l, j) => (j === i ? { ...l, ...patch } : l)))
   }
@@ -97,12 +111,12 @@ export function SearchPanel({
     e.preventDefault()
     if (!ready) return
     if (tripType === 'multi') {
-      onSearch?.({ tripType: 'multi', slices: multi, cabin, adults })
+      onSearch?.({ tripType: 'multi', slices: multi, cabin, ...party })
       return
     }
     const slices: Slice[] = [{ from: origin, to: destination, date: depart }]
     if (tripType === 'return') slices.push({ from: destination, to: origin, date: ret })
-    onSearch?.({ tripType, slices, cabin, adults })
+    onSearch?.({ tripType, slices, cabin, ...party })
   }
 
   return (
@@ -159,7 +173,7 @@ export function SearchPanel({
                       marginBottom: i < multi.length - 1 ? 16 : 0,
                     }}
                   >
-                    <div className="grid gap-4 sm:col-span-2 sm:grid-cols-2">
+                    <div className="relative grid gap-4 sm:col-span-2 sm:grid-cols-2">
                       <AirportField
                         label={`Flight ${i + 1} — from`}
                         value={leg.from}
@@ -179,10 +193,13 @@ export function SearchPanel({
                         exclude={leg.from}
                         placeholder="Where next?"
                       />
+                      <div className="kx-swap-slot">
+                        <SwapButton onClick={() => swapLeg(i)} label={`Swap flight ${i + 1}`} />
+                      </div>
                     </div>
                     <div className="flex items-end gap-3">
                       <div className="flex-1">
-                        <DateField
+                        <DatePicker
                           label="Date"
                           value={leg.date}
                           min={i === 0 ? today : multi[i - 1].date}
@@ -225,17 +242,26 @@ export function SearchPanel({
             </div>
           ) : (
             <>
-              <AirportField
-                label="From" value={origin} onChange={setOrigin}
-                airports={airports} exclude={destination}
-              />
-              <AirportField
-                label="To" value={destination} onChange={setDestination}
-                airports={airports} exclude={origin} placeholder="Where to?"
-              />
-              <DateField label="Depart" value={depart} min={today} onChange={setDepart} />
+              {/* From and To share a row so the swap control can sit between
+                  them, which is the only place it means anything. */}
+              <div className="relative sm:col-span-2">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <AirportField
+                    label="From" value={origin} onChange={setOrigin}
+                    airports={airports} exclude={destination}
+                  />
+                  <AirportField
+                    label="To" value={destination} onChange={setDestination}
+                    airports={airports} exclude={origin} placeholder="Where to?"
+                  />
+                </div>
+                <div className="kx-swap-slot">
+                  <SwapButton onClick={swap} flipped={flipped} />
+                </div>
+              </div>
+              <DatePicker label="Depart" value={depart} min={today} onChange={setDepart} />
               {tripType === 'return' ? (
-                <DateField label="Return" value={ret} min={depart} onChange={setRet} />
+                <DatePicker label="Return" value={ret} min={depart} onChange={setRet} />
               ) : (
                 <div className="hidden sm:block" aria-hidden />
               )}
@@ -245,18 +271,7 @@ export function SearchPanel({
 
         <div className="flex flex-col gap-4 md:pl-6">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-1">
-            <Field label="Passengers">
-              <select
-                value={adults}
-                onChange={(e) => setAdults(Number(e.target.value))}
-                className="w-full bg-transparent"
-                style={inputStyle}
-              >
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                  <option key={n} value={n}>{n} {n === 1 ? 'adult' : 'adults'}</option>
-                ))}
-              </select>
-            </Field>
+            <PassengerPicker value={party} onChange={setParty} />
             <Field label="Cabin">
               {/* The swatch carries the cabin colour reliably; option colours are
                   set too, but browsers style native options inconsistently, so
@@ -324,6 +339,27 @@ export function SearchPanel({
   )
 }
 
+function SwapButton({
+  onClick, flipped, label = 'Swap origin and destination',
+}: { onClick: () => void; flipped?: boolean; label?: string }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className="kx-swap"
+      data-flipped={flipped ? 'true' : undefined}
+    >
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden focusable="false">
+        <path d="M4.5 2.5 2 5l2.5 2.5M2 5h9M11.5 13.5 14 11l-2.5-2.5M14 11H5"
+              fill="none" stroke="currentColor" strokeWidth="1.5"
+              strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  )
+}
+
 const inputStyle: React.CSSProperties = {
   fontFamily: 'var(--font-sans)',
   fontSize: 'var(--text-body)',
@@ -346,21 +382,6 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       </span>
       {children}
     </label>
-  )
-}
-
-function DateField({
-  label, value, min, onChange,
-}: { label: string; value: string; min: string; onChange: (v: string) => void }) {
-  return (
-    <Field label={label}>
-      <input
-        type="date" value={value} min={min}
-        onChange={(e) => onChange(e.target.value)}
-        className="tnum w-full bg-transparent font-mono"
-        style={inputStyle}
-      />
-    </Field>
   )
 }
 

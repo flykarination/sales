@@ -19,6 +19,14 @@ export interface SearchQuery {
   slices: Slice[]
   cabin: CabinCode
   adults: number
+  children: number
+  /** Under two, on a lap. Counted for the booking but not for seats. */
+  infants: number
+}
+
+/** Seats a party needs. Infants travel on a lap and need none. */
+export function seatsFor(q: Pick<SearchQuery, 'adults' | 'children'>): number {
+  return Math.max(q.adults, 1) + Math.max(q.children, 0)
 }
 
 const ISO = /^\d{4}-\d{2}-\d{2}$/
@@ -40,14 +48,21 @@ export function serialiseMultiLegs(slices: Slice[]): string {
 
 export function parseSearchQuery(params: URLSearchParams): SearchQuery {
   const cabin = (params.get('cabin')?.toUpperCase() as CabinCode) || 'ECONOMY'
-  const adults = Math.min(Math.max(Number(params.get('adults') ?? 1) || 1, 1), 9)
+  const whole = (key: string, fallback: number, min: number, max: number) => {
+    const n = Number(params.get(key) ?? fallback)
+    return Number.isFinite(n) ? Math.min(Math.max(Math.trunc(n), min), max) : fallback
+  }
+  const adults = whole('adults', 1, 1, 9)
+  const children = whole('children', 0, 0, 8)
+  // one infant per accompanying adult, as the travel information page says
+  const infants = Math.min(whole('infants', 0, 0, 9), adults)
 
   const legsParam = params.get('legs')
   const declared = params.get('trip') as TripType | null
 
   if (declared === 'multi' || (!declared && legsParam)) {
     const slices = parseMultiLegs(legsParam ?? '')
-    if (slices.length > 0) return { tripType: 'multi', slices, cabin, adults }
+    if (slices.length > 0) return { tripType: 'multi', slices, cabin, adults, children, infants }
   }
 
   const from = (params.get('from') ?? '').toUpperCase()
@@ -67,6 +82,8 @@ export function parseSearchQuery(params: URLSearchParams): SearchQuery {
     slices,
     cabin,
     adults,
+    children,
+    infants,
   }
 }
 
@@ -87,6 +104,9 @@ export function searchQueryString(q: SearchQuery): string {
   }
   p.set('cabin', q.cabin)
   p.set('adults', String(q.adults))
+  // omitted when zero, so the ordinary one-adult link stays short
+  if (q.children > 0) p.set('children', String(q.children))
+  if (q.infants > 0) p.set('infants', String(q.infants))
   return p.toString()
 }
 

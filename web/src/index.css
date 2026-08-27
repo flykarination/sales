@@ -343,6 +343,254 @@
   .kx-prose td:first-child { color: var(--color-ink); font-weight: 500; }
   .kx-prose hr { border: none; border-top: 2px solid var(--color-ink); margin: 2em 0; }
 
+  /* ---- RainbowOne tier band ------------------------------------------
+     The four tiers in the order you climb them, in the -ink variants of
+     their hues. Those are the dark ends of the scale, chosen for text on
+     paper, which is exactly what makes them able to carry white type here.
+     A dark indigo backstop sits underneath for any engine that cannot
+     paint the gradient. */
+  .kx-tier-band {
+    background-color: var(--color-ink);
+    background-image: linear-gradient(
+      100deg,
+      var(--color-spectrum-teal-ink) 0%,
+      var(--color-spectrum-amber-ink) 34%,
+      var(--color-spectrum-violet-ink) 68%,
+      var(--color-spectrum-magenta-ink) 100%
+    );
+  }
+
+  /* ---- search panel controls -----------------------------------------
+     The date and passenger fields open panels of our own rather than the
+     browser's. Both share the trigger and popover styling below so they
+     read as one control family. */
+
+  .kx-field-label {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-mute);
+  }
+
+  /* the trigger, matched to the plain inputs beside it */
+  .kx-datefield {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 0;
+    text-align: left;
+    color: var(--color-ink);
+    font-size: var(--text-body);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-paper-edge);
+    border-radius: 0;
+  }
+  .kx-datefield:hover { border-bottom-color: var(--color-ink-faint); }
+
+  /* the panel. Anchored to the field's own box so it is exactly as wide,
+     with a floor so a seven-column calendar is never crushed. */
+  .kx-popover,
+  .kx-calendar {
+    position: absolute;
+    z-index: 30;
+    top: 100%;
+    left: 0;
+    right: 0;
+    /* Matches the field it belongs to. The floor only exists to stop seven
+       columns being crushed in a field narrower than any real layout gives
+       it; at every viewport the site actually uses, the panel and the field
+       are the same width. */
+    min-width: 240px;
+    margin-top: 6px;
+    padding: 14px;
+    background: var(--color-paper);
+    border: 1px solid var(--color-paper-edge);
+    border-top: 3px solid var(--color-ink);
+    border-radius: var(--radius-soft);
+    box-shadow: 0 18px 44px -18px rgba(23, 24, 80, 0.34);
+  }
+
+  /* a phone gives the field ~262px, so the padding comes in to keep the day
+     cells as large as the width allows */
+  @media (max-width: 420px) {
+    .kx-popover,
+    .kx-calendar { padding: 12px 10px; }
+  }
+
+  .kx-calendar-head {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .kx-calendar-month {
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 1.2;
+    color: var(--color-ink);
+  }
+  .kx-calendar-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-edge);
+    color: var(--color-ink-mute);
+  }
+  .kx-calendar-step:hover:not(:disabled) {
+    background: var(--color-paper-sunk);
+    color: var(--color-ink);
+  }
+  .kx-calendar-step:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .kx-calendar-dow,
+  .kx-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .kx-calendar-dow {
+    margin-bottom: 4px;
+    padding-bottom: 6px;
+    border-bottom: var(--rule);
+  }
+  .kx-calendar-dow span {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.06em;
+    color: var(--color-ink-faint);
+  }
+  .kx-calendar-grid { gap: 1px; }
+
+  .kx-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    min-height: 34px;
+    font-size: var(--text-small);
+    color: var(--color-ink);
+    border-radius: var(--radius-edge);
+  }
+  .kx-day:hover:not(:disabled) { background: var(--color-paper-sunk); }
+  .kx-day[data-outside='true'] { color: var(--color-ink-faint); }
+  .kx-day:disabled { color: var(--color-paper-edge); cursor: not-allowed; }
+  /* the chosen day carries the spectrum, not the system blue */
+  .kx-day[data-selected='true'] {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-weight: 600;
+  }
+  .kx-day[data-selected='true']:hover { background: var(--color-ink); }
+
+  .kx-calendar-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: var(--rule);
+  }
+  .kx-calendar-action {
+    min-height: 40px;
+    padding: 0 6px;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-aqua-deep);
+  }
+  .kx-calendar-action:hover { text-decoration: underline; }
+
+  /* passenger steppers */
+  .kx-stepper-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: var(--rule);
+  }
+  .kx-stepper-row:last-child { border-bottom: none; }
+  .kx-stepper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: none;
+  }
+  .kx-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--color-ink);
+    border: 1px solid var(--color-paper-edge);
+    border-radius: 999px;
+  }
+  .kx-step:hover:not(:disabled) {
+    border-color: var(--color-ink);
+    background: var(--color-paper-sunk);
+  }
+  .kx-step:disabled { opacity: 0.32; cursor: not-allowed; }
+  .kx-stepper output {
+    min-width: 28px;
+    text-align: center;
+    font-size: var(--text-body);
+    font-weight: 500;
+  }
+  .kx-popover-note {
+    margin-top: 10px;
+    font-size: var(--text-micro);
+    color: var(--color-ink-mute);
+  }
+
+  /* The swap sits on the seam between From and To: centred on the pair at
+     tablet and up, and tucked to the right edge on a phone where the two
+     fields are stacked instead of side by side. */
+  .kx-swap-slot {
+    position: absolute;
+    right: 0;
+    top: 26px;
+    z-index: 5;
+  }
+  @media (min-width: 640px) {
+    .kx-swap-slot {
+      left: 50%;
+      right: auto;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  /* swap the two airports */
+  .kx-swap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--color-ink-mute);
+    background: var(--color-paper);
+    border: 1px solid var(--color-paper-edge);
+    border-radius: 999px;
+    transition: transform 220ms var(--ease-paint, ease-out), color 160ms ease-out;
+  }
+  .kx-swap:hover { color: var(--color-ink); border-color: var(--color-ink); }
+  .kx-swap[data-flipped='true'] { transform: rotate(180deg); }
+  @media (prefers-reduced-motion: reduce) {
+    .kx-swap { transition: none; }
+  }
+
   /* ---- fleet hero band ------------------------------------------------
      A 1077px-wide panorama, so it is bled but not blown up beyond what it can
      carry: the band's height is capped and the photo cropped to fit rather
