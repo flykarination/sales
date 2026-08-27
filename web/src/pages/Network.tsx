@@ -21,6 +21,30 @@ const isDomestic = (a: string, b: string) =>
   getAirport(a)?.country === 'VN' && getAirport(b)?.country === 'VN'
 
 /**
+ * The end of a route that decides which region it belongs to.
+ *
+ * v_routes holds both directions of every city pair, so one of the two is
+ * dropped before drawing and the survivor is simply whichever sorted first.
+ * Reading the region off `destination_iata` therefore asked "which way round
+ * did this row happen to be stored?" rather than "where does this route go":
+ * the pair (ADL, SGN) survives as ADL -> SGN, whose destination is Sài Gòn,
+ * so Adelaide was filed and coloured as Southeast Asia. So were Auckland,
+ * Algiers and Stockholm — 438 of 754 routes.
+ *
+ * The far end is the one away from the home network. Where exactly one end is
+ * Vietnamese, the other is what the route is *for*; where both are (a
+ * domestic sector) or neither is (an onward stopover sector), the destination
+ * is as good an answer as exists.
+ */
+function farEnd(origin: string, destination: string): string {
+  const originVN = getAirport(origin)?.country === 'VN'
+  const destinationVN = getAirport(destination)?.country === 'VN'
+  if (originVN && !destinationVN) return destination
+  if (destinationVN && !originVN) return origin
+  return destination
+}
+
+/**
  * The viewBox rectangle that frames a set of projected points.
  *
  * Zooming by animating the viewBox rather than transforming a group: CSS
@@ -131,7 +155,7 @@ export default function Network() {
       seen.add(key)
       if (region === 'ALL') return true
       if (region === 'DOMESTIC') return isDomestic(r.origin_iata, r.destination_iata)
-      return regionOf(r.destination_iata) === region
+      return regionOf(farEnd(r.origin_iata, r.destination_iata)) === region
     })
   }, [routes, region])
 
@@ -144,7 +168,7 @@ export default function Network() {
           if (!from || !to) return null
           const d = greatCirclePath(r.origin_iata, r.destination_iata, projection)
           if (!d) return null
-          return { route: r, d, region: regionOf(r.destination_iata) }
+          return { route: r, d, region: regionOf(farEnd(r.origin_iata, r.destination_iata)) }
         })
         .filter(Boolean) as Array<{ route: RouteRow; d: string; region: RegionKey }>,
     [shown, projection],
@@ -447,7 +471,7 @@ export default function Network() {
                 {active.origin_iata} → {active.destination_iata}
               </span>
               <span style={{ color: '#B9B6D8', fontSize: 'var(--text-small)' }}>
-                {airportLabel(active.destination_iata)}
+                {airportLabel(farEnd(active.origin_iata, active.destination_iata))}
               </span>
               {Number.isFinite(activeKm) && (
                 <span className="tnum font-mono" style={{ color: '#8F8CB4', fontSize: 'var(--text-small)' }}>
