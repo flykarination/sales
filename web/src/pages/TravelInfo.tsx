@@ -35,7 +35,7 @@ const FAQ: Array<[string, string]> = [
   ],
   [
     'What if I need assistance?',
-    'Tell us when you book or at the airport. Wheelchair assistance, help with boarding and priority seating are available on every Karination flight at no charge.',
+    'Wheelchair assistance, help with boarding, accessible seating and support for hidden disabilities are free on every Karination flight. Tell us at least 48 hours before departure — see the special assistance page for the full list and how to request it.',
   ],
 ]
 

@@ -39,14 +39,18 @@ const SECTIONS: NavSection[] = [
     ],
   },
   {
+    label: 'Check in', to: '/checkin', owns: ['/checkin'],
+    children: [{ label: 'Check in', to: '/checkin' }],
+  },
+  {
     label: 'Travel information', to: '/travel-info',
-    owns: ['/travel-info', '/checkin', '/flight-status'],
+    owns: ['/travel-info', '/flight-status', '/special-assistance'],
     children: [
       { label: 'Baggage', to: '/travel-info#baggage' },
       { label: 'At the airport', to: '/travel-info#airport' },
-      { label: 'Check in', to: '/checkin' },
       { label: 'Flight status', to: '/flight-status' },
-      { label: 'Special assistance', to: '/travel-info#questions' },
+      { label: 'Special assistance', to: '/special-assistance' },
+      { label: 'Questions', to: '/travel-info#questions' },
     ],
   },
   {
