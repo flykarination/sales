@@ -16,6 +16,8 @@ export interface Chapter {
   body: string
   /** A smaller supporting line: the specific fact under the paragraph. */
   detail?: string
+  /** Contradictory versions of the same event, printed without a verdict. */
+  accounts?: Array<{ label: string; text: string; hue: string; ink: string }>
   hue: string
   ink: string
 }
@@ -34,7 +36,30 @@ export const STORY: Chapter[] = [
     body:
       'Đổi Mới had opened the door two years earlier, and a group of engineers and pilots walked through it. They started an airline because nobody else was going to — not a businessman with a plan, but the people who already knew how to keep aircraft flying and could not find anyone willing to let them.',
     detail:
-      'The first revenue flight was VN-A301, a Tupolev Tu-134, Sài Gòn to Hà Nội. Three founders later gave three different accounts of where the name came from. All three are in the archive. None of them can be proved, and we have stopped trying.',
+      'The first revenue flight was VN-A301, a Tupolev Tu-134, Sài Gòn to Hà Nội.',
+    accounts: [
+      {
+        label: 'The first account',
+        text:
+          'The name is a flower. That is the whole of it, and the founder who gave this version never elaborated on which flower or why, and was reportedly irritated to be asked.',
+        hue: 'var(--color-spectrum-rose)',
+        ink: 'var(--color-spectrum-rose-ink)',
+      },
+      {
+        label: 'The second account',
+        text:
+          'The name is a flower shop in old Sài Gòn — a specific one, on a street that no longer exists under that name. This version is the most detailed and the least verifiable, which is either the point or the problem.',
+        hue: 'var(--color-spectrum-amber)',
+        ink: 'var(--color-spectrum-amber-ink)',
+      },
+      {
+        label: 'The third account',
+        text:
+          'The founder dreamt of a time machine, travelled forward in it, heard a song that had not been written yet, and brought back the line we have painted on the side of every aircraft since. This is the version the other two founders liked least and the one nobody has ever managed to disprove.',
+        hue: 'var(--color-spectrum-violet)',
+        ink: 'var(--color-spectrum-violet-ink)',
+      },
+    ],
     hue: 'var(--color-spectrum-teal)',
     ink: 'var(--color-spectrum-teal-ink)',
   },
@@ -98,9 +123,9 @@ export const STORY: Chapter[] = [
     when: '2020–22',
     title: 'What the aeroplanes were for',
     body:
-      'When the roads closed, the flying did not. Karination put its widebodies to moving medical equipment and supplies at scale, and FORZA put its jets into the places nothing else could reach — the provincial strips, the island airports, the towns at the end of a mountain road that was no longer passable. Both airlines grew through those two years, in the one role that mattered.',
+      'When the roads closed, the flying did not. Karination flew its 777-300ERs at medical equipment and supplies by the tonne, because it was the aircraft that could carry the most into the fewest airports. FORZA flew the original E190s at the opposite problem — the provincial strips, the island airports, the towns at the end of a mountain road that was no longer passable — because it was the jet that could get in anywhere. Both airlines grew through those two years, in the one role that mattered.',
     detail:
-      'It is the period we point at when anyone asks what the mission actually means. For two years, we were the connection.',
+      'The 777-300ER is still our hardest-worked widebody, fifty frames across fifty-five cities. FORZA’s original E190s have since been replaced by their own successor: twenty E190-E2s now reach fifty-two cities, more of the map than anything else the group flies. It is the period we point at when anyone asks what the mission actually means. For two years, we were the connection.',
     hue: 'var(--color-spectrum-teal)',
     ink: 'var(--color-spectrum-teal-ink)',
   },

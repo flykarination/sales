@@ -56,6 +56,47 @@ export default function OurStory() {
                     {c.detail}
                   </p>
                 )}
+
+                {/* Where the record contradicts itself, all of it is printed
+                    and none of it is picked. */}
+                {c.accounts && (
+                  <div className="mt-6">
+                    <p
+                      className="mb-3 font-mono uppercase"
+                      style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: 'var(--color-ink-faint)' }}
+                    >
+                      Where the name comes from · three accounts
+                    </p>
+                    <ul className="grid gap-4 md:grid-cols-3">
+                      {c.accounts.map((a) => (
+                        <li
+                          key={a.label}
+                          style={{
+                            borderTop: `3px solid ${a.hue}`,
+                            paddingTop: 12,
+                          }}
+                        >
+                          <p
+                            className="mb-2 font-mono uppercase"
+                            style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.14em', color: a.ink, fontWeight: 600 }}
+                          >
+                            {a.label}
+                          </p>
+                          <p style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }}>
+                            {a.text}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                    <p
+                      className="mt-4"
+                      style={{ color: 'var(--color-ink)', fontSize: 'var(--text-small)', maxWidth: '58ch' }}
+                    >
+                      All three are in the archive. None of them can be proved, and
+                      we have stopped trying.
+                    </p>
+                  </div>
+                )}
               </li>
             ))}
           </ol>
