@@ -5,6 +5,7 @@ import { count } from '@/lib/format'
 import { CABIN_ORDER, CABINS } from '@/lib/cabins'
 import { assetUrl } from '@/lib/assets'
 import { carrierByCode } from '@/data/carriers'
+import { MISSION } from '@/data/about'
 
 const HUB_CITY: Record<string, string> = {
   SGN: 'TP Hồ Chí Minh', HAN: 'Hà Nội', DAD: 'Đà Nẵng', CXR: 'Nha Trang', PQC: 'Phú Quốc',
@@ -51,6 +52,12 @@ export default function About() {
           >
             A Vietnamese airline with a colour for every cabin.
           </h1>
+          <p
+            className="mt-6 font-display"
+            style={{ color: 'var(--color-paper)', fontSize: 'clamp(1.3rem, 2.8vw, 1.9rem)', lineHeight: 1.25, maxWidth: '26ch' }}
+          >
+            {MISSION}
+          </p>
           <p className="mt-6" style={{ color: '#B9B6D8', fontSize: 'var(--text-lead)', maxWidth: '58ch' }}>
             Karination flies from five hubs along the length of Vietnam — TP Hồ Chí Minh,
             Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc — to{' '}
@@ -59,6 +66,17 @@ export default function About() {
             largest of the KarinationGroup airlines, and the one this site is
             about.
           </p>
+        </div>
+      </section>
+
+      <section className="on-ink px-5 pb-14 md:px-8" style={{ background: 'var(--color-ink)' }}>
+        <div className="mx-auto flex max-w-6xl flex-wrap gap-x-8 gap-y-3">
+          <Link to="/about/our-story" className="kx-navlink" style={{ color: 'var(--color-aqua)' }}>
+            Our story — thirty-eight years →
+          </Link>
+          <Link to="/about/what-we-believe" className="kx-navlink" style={{ color: 'var(--color-aqua)' }}>
+            What we believe →
+          </Link>
         </div>
       </section>
 

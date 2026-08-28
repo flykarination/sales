@@ -12,6 +12,8 @@ const Payment = lazy(() => import('@/pages/Payment'))
 const Confirmation = lazy(() => import('@/pages/Confirmation'))
 const Manage = lazy(() => import('@/pages/Manage'))
 const About = lazy(() => import('@/pages/About'))
+const OurStory = lazy(() => import('@/pages/OurStory'))
+const WhatWeBelieve = lazy(() => import('@/pages/WhatWeBelieve'))
 const Fleet = lazy(() => import('@/pages/Fleet'))
 const Network = lazy(() => import('@/pages/Network'))
 const Destinations = lazy(() => import('@/pages/Destinations'))
@@ -74,6 +76,8 @@ export default function App() {
               <Route path="/confirmation" element={<Confirmation />} />
               <Route path="/manage" element={<Manage />} />
               <Route path="/about" element={<About />} />
+              <Route path="/about/our-story" element={<OurStory />} />
+              <Route path="/about/what-we-believe" element={<WhatWeBelieve />} />
               <Route path="/fleet" element={<Fleet />} />
               <Route path="/cabins" element={<Cabins />} />
               <Route path="/network" element={<Network />} />

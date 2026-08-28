@@ -24,7 +24,7 @@ const source = join(dist, 'index.html')
 /** Static routes. Parameterised ones still fall through to 404.html. */
 const ROUTES = [
   'search', 'passengers', 'payment', 'confirmation', 'manage',
-  'about', 'fleet', 'cabins', 'network', 'destinations', 'timetable',
+  'about', 'about/our-story', 'about/what-we-believe', 'fleet', 'cabins', 'network', 'destinations', 'timetable',
   'rainbowone', 'join', 'signin', 'account',
   'checkin', 'flight-status', 'travel-info', 'partners', 'special-assistance',
   'updates',

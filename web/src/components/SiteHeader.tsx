@@ -71,6 +71,8 @@ const SECTIONS: NavSection[] = [
     label: 'About', to: '/about', owns: ['/about', '/fleet', '/partners', '/cabins'],
     children: [
       { label: 'About us', to: '/about' },
+      { label: 'Our story', to: '/about/our-story' },
+      { label: 'What we believe', to: '/about/what-we-believe' },
       { label: 'On board', to: '/cabins' },
       { label: 'Our fleet', to: '/fleet' },
       { label: 'Partners', to: '/partners' },
