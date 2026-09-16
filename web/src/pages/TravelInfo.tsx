@@ -138,6 +138,11 @@ export default function TravelInfo() {
                   </tbody>
                 </table>
               </div>
+              {carrier.cabinExtra && (
+                <p className="mt-2" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
+                  Plus, in every cabin, {carrier.cabinExtra}.
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -149,7 +154,7 @@ export default function TravelInfo() {
         <p className="mt-2" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-faint)', maxWidth: '62ch' }}>
           FORZA carries less than we do, but every FORZA fare still includes a
           checked bag — which is the line between a lower-cost airline and a
-          low-cost one.
+          low-cost one. Sonder sits between the two, with its fan bag on top.
         </p>
       </section>
 

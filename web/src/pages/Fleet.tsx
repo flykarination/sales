@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { listFleet, type FleetRow } from '@/lib/queries'
 import { count, duration } from '@/lib/format'
 import { CABINS } from '@/lib/cabins'
-import { FLEET_NOTES, FORZA_FLEET_NOTES, type FleetNote } from '@/data/fleet-notes'
-import { FORZA } from '@/data/carriers'
+import { FLEET_NOTES, FORZA_FLEET_NOTES, SONDER_FLEET_NOTES, type FleetNote } from '@/data/fleet-notes'
+import { FORZA, SONDER } from '@/data/carriers'
 import { assetUrl } from '@/lib/assets'
 
 /** The game's product codes, said the way a passenger would say them. */
@@ -71,9 +71,19 @@ export default function Fleet() {
   // describe neither airline.
   const kx = useMemo(() => (rows ?? []).filter((r) => r.airline_code === 'KX'), [rows])
   const z4 = useMemo(() => (rows ?? []).filter((r) => r.airline_code === 'Z4'), [rows])
+  const sd = useMemo(() => (rows ?? []).filter((r) => r.airline_code === 'SD'), [rows])
 
   const types = useMemo(() => groupTypes(kx), [kx])
   const forzaTypes = useMemo(() => groupTypes(z4), [z4])
+  const sonderTypes = useMemo(() => groupTypes(sd), [sd])
+
+  /** The group's other airlines, each in its own closed section below ours. */
+  const subsidiaries = [
+    { carrier: FORZA, aircraft: z4.length, types: forzaTypes, notes: FORZA_FLEET_NOTES,
+      allowance: 'Its baggage allowances are tighter than ours.' },
+    { carrier: SONDER, aircraft: sd.length, types: sonderTypes, notes: SONDER_FLEET_NOTES,
+      allowance: 'Its baggage allowances sit between ours and FORZA’s, with a fan bag in every cabin.' },
+  ].filter((s) => s.types.length > 0)
 
   const total = kx.length
   const idle = kx.filter((r) => r.is_unassigned).length
@@ -97,8 +107,14 @@ export default function Fleet() {
           <p className="mt-5" style={{ color: '#B9B6D8', maxWidth: '52ch' }}>
             Every airframe below is a real aircraft in our operation, with the
             cabin it actually flies. Seat pitch is in inches.
-            {z4.length > 0 && (
-              <> Our subsidiary FORZA flies a further {count(z4.length)}; its fleet is at the foot of the page.</>
+            {subsidiaries.length > 0 && (
+              <>
+                {' '}Our {subsidiaries.length === 1 ? 'subsidiary' : 'subsidiaries'}{' '}
+                {subsidiaries.map((s) => s.carrier.name).join(' and ')}{' '}
+                {subsidiaries.length === 1 ? 'flies' : 'fly'} a further{' '}
+                {subsidiaries.map((s) => count(s.aircraft)).join(' and ')};{' '}
+                {subsidiaries.length === 1 ? 'its fleet is' : 'their fleets are'} at the foot of the page.
+              </>
             )}
           </p>
         </div>
@@ -150,20 +166,20 @@ export default function Fleet() {
             </>
           )}
 
-          {/* ---- FORZA ---------------------------------------------------
-              A separate airline, with its own allowances and its own idea of
-              what an aircraft is for. Closed by default: most people on this
-              page came to read about Karination. */}
-          {forzaTypes.length > 0 && (
-            <details className="kx-carrier">
+          {/* ---- FORZA and Sonder ------------------------------------------
+              Separate airlines, with their own allowances and their own idea
+              of what an aircraft is for. Closed by default: most people on
+              this page came to read about Karination. */}
+          {subsidiaries.map((s) => (
+            <details key={s.carrier.code} className="kx-carrier">
               <summary className="kx-carrier-summary">
-                <span aria-hidden className="kx-carrier-mark" style={{ background: FORZA.accent }} />
+                <span aria-hidden className="kx-carrier-mark" style={{ background: s.carrier.accent }} />
                 <span className="min-w-0 flex-1">
-                  <span className="kx-carrier-name">FORZA</span>
-                  <span className="kx-carrier-role">{FORZA.role}</span>
+                  <span className="kx-carrier-name">{s.carrier.name}</span>
+                  <span className="kx-carrier-role">{s.carrier.role}</span>
                 </span>
                 <span className="tnum font-mono kx-carrier-count">
-                  {count(z4.length)} aircraft · {forzaTypes.length} types
+                  {count(s.aircraft)} aircraft · {s.types.length} {s.types.length === 1 ? 'type' : 'types'}
                 </span>
                 <span aria-hidden className="kx-carrier-chevron">
                   <svg viewBox="0 0 16 16" width="16" height="16" focusable="false">
@@ -175,15 +191,13 @@ export default function Fleet() {
 
               <div className="pt-6">
                 <p className="mb-6" style={{ color: 'var(--color-ink-mute)', maxWidth: '64ch' }}>
-                  {FORZA.blurb}{' '}
-                  <Link to="/travel-info#baggage" className="underline">
-                    Its baggage allowances are tighter than ours.
-                  </Link>
+                  {s.carrier.blurb}{' '}
+                  <Link to="/travel-info#baggage" className="underline">{s.allowance}</Link>
                 </p>
-                <TypeList types={forzaTypes} notes={FORZA_FLEET_NOTES} />
+                <TypeList types={s.types} notes={s.notes} />
               </div>
             </details>
-          )}
+          ))}
         </div>
       </section>
     </div>

@@ -34,6 +34,12 @@ export interface GroupCarrier {
    * same allowance share a rank, so mixing them says nothing.
    */
   baggageRank: number
+  /**
+   * Something a carrier adds in every cabin on its own flights, whatever the
+   * journey's governing allowance -- Sonder's fan bag. Written to follow
+   * "plus".
+   */
+  cabinExtra?: string
   /** Where it is based. */
   hubs: string[]
   accent: string
@@ -50,7 +56,7 @@ export const KARINATION: GroupCarrier = {
     'Karination flies from five hubs along the length of Vietnam to 481 destinations, in four cabins, with a full-flat bed in Business on every long-haul sector — including the narrowbodies, which is unusual.',
   operatedNote: 'Operated by Karination.',
   hubs: ['SGN', 'HAN', 'DAD', 'CXR', 'PQC'],
-  baggageRank: 2,
+  baggageRank: 3,
   accent: 'var(--color-spectrum-teal)',
   accentInk: 'var(--color-spectrum-teal-ink)',
   baggage: {
@@ -91,34 +97,36 @@ export const FORZA: GroupCarrier = {
 }
 
 /**
- * Sonder, the group's Korean carrier, based at Incheon.
+ * Sonder, the group's Korean airline, based at Incheon.
  *
- * PROVISIONAL. The notice follows FORZA's wording exactly, minus the alliance
- * — the group's own records give Sonder none, and inventing one would be the
- * kind of claim this site does not make. Its colour and its allowances are
- * placeholders pending a decision on how Sonder is portrayed: the allowances
- * match Karination's, so on a mixed itinerary nothing changes and nothing is
- * shown, which is the least surprising default until that is settled.
+ * A Korean low-cost carrier that collapsed after the pandemic, rescued by the
+ * group and relaunched in 2026 with K-culture as the product and a fan's
+ * energy rather than a flag carrier's. Its colour is rose.
+ *
+ * Its allowances sit between Karination's and FORZA's in every cabin, and
+ * every cabin adds a fan bag for albums and merchandise. The notice follows
+ * FORZA's wording minus the alliance: the group's records give Sonder none.
  */
 export const SONDER: GroupCarrier = {
   code: 'SD',
   name: 'Sonder',
   country: 'KR',
   alliance: null,
-  role: 'The group’s Korean carrier',
+  role: 'The group’s Korean airline, with K-culture on board',
   blurb:
-    'Sonder flies from Incheon, on A350-1000s and 787-8s, to a network that looks like no one else’s: Ashgabat and Khartoum, Malta and Port Moresby, Boston and Sacramento.',
+    'Sonder is a Korean budget airline that collapsed after the pandemic, rescued by the group and relaunched from Incheon as something louder. Korean food, K-drama and K-pop are the product, on A350-1000s and 787-8s, to a network that looks like no one else’s: Ashgabat and Khartoum, Malta and Port Moresby, Boston and Sacramento.',
   operatedNote: 'This flight is operated by Sonder, a KarinationGroup member.',
   hubs: ['ICN'],
   baggageRank: 2,
-  accent: 'var(--color-spectrum-magenta)',
-  accentInk: 'var(--color-spectrum-magenta-ink)',
+  accent: 'var(--color-spectrum-rose)',
+  accentInk: 'var(--color-spectrum-rose-ink)',
   baggage: {
-    FIRST: { checked: '3 × 32 kg', hand: '2 pieces, 10 kg' },
-    BUSINESS: { checked: '2 × 32 kg', hand: '2 pieces, 10 kg' },
-    PREMIUM_ECONOMY: { checked: '2 × 23 kg', hand: '1 piece, 7 kg' },
-    ECONOMY: { checked: '1 × 23 kg', hand: '1 piece, 7 kg' },
+    FIRST: { checked: '3 × 25 kg', hand: '2 pieces, 10 kg' },
+    BUSINESS: { checked: '2 × 28 kg', hand: '1 piece, 10 kg' },
+    PREMIUM_ECONOMY: { checked: '2 × 20 kg', hand: '1 piece, 7 kg' },
+    ECONOMY: { checked: '1 × 22 kg', hand: '1 piece, 7 kg' },
   },
+  cabinExtra: 'a fan bag of up to 5 kg, for albums, lightsticks and merchandise',
 }
 
 export const CARRIERS: GroupCarrier[] = [KARINATION, FORZA, SONDER]
@@ -156,18 +164,23 @@ export function operatedNoteFor(code: string | null | undefined): string | null 
 export function governingCarrier(airlineCodes: Array<string | null | undefined>): {
   carrier: GroupCarrier
   mixed: boolean
+  /** The most generous carrier on the journey, when that is not the governing one. */
+  instead: GroupCarrier | null
+  /** Every group carrier flying part of the journey. */
+  present: GroupCarrier[]
 } {
   const present = [...new Set(airlineCodes.map((c) => (c ?? '').toUpperCase()).filter(Boolean))]
     .map((c) => BY_CODE.get(c))
     .filter((c): c is GroupCarrier => Boolean(c))
-  if (present.length === 0) return { carrier: KARINATION, mixed: false }
+  if (present.length === 0) return { carrier: KARINATION, mixed: false, instead: null, present }
 
   // The tightest allowance on the journey governs all of it.
   const carrier = present.reduce((a, b) => (b.baggageRank < a.baggageRank ? b : a))
   // "mixed" means someone on this itinerary would have allowed more, so the
   // governing allowance is a surprise worth stating rather than a given.
   const mixed = present.some((c) => c.baggageRank > carrier.baggageRank)
-  return { carrier, mixed }
+  const instead = mixed ? present.reduce((a, b) => (b.baggageRank > a.baggageRank ? b : a)) : null
+  return { carrier, mixed, instead, present }
 }
 
 /** True when a carrier allows less than Karination, the published default. */

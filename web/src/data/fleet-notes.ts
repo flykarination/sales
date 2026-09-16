@@ -179,3 +179,22 @@ export const FORZA_FLEET_NOTES: Record<string, FleetNote> = {
     signature: { route: 'Vân Đồn – Vinh', km: 321, minutes: 50 },
   },
 }
+
+/**
+ * The same, for Sonder. Two types, both out of Incheon; figures from the
+ * schedule as above.
+ */
+export const SONDER_FLEET_NOTES: Record<string, FleetNote> = {
+  'Airbus A350-1000': {
+    role: 'Long-haul flagship',
+    description:
+      'Twenty aircraft across fourteen cities, and most of what Sonder is: Incheon to Boston and three Californian cities, to Paris, Nantes, Geneva and the south of France, to Malta and Sicily, to Ashgabat, and south to Melbourne and Port Moresby. Seoul to Boston is the longest of them, at thirteen hours.',
+    signature: { route: 'Seoul – Boston', km: 10964, minutes: 785 },
+  },
+  'Boeing 787-8 Dreamliner': {
+    role: 'Long-haul, thin routes',
+    description:
+      'Eight aircraft across seven cities, on the routes where an A350-1000 would be too much aeroplane. It alone flies Khartoum, its longest sector, and shares Paris, Nantes, Geneva, Malta, Sicily and Sacramento with the bigger jet.',
+    signature: { route: 'Seoul – Khartoum', km: 9296, minutes: 680 },
+  },
+}

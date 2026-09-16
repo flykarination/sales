@@ -7,11 +7,15 @@ import type { CabinCode } from '@/lib/cabins'
  * What you may bring, when it is not what you would expect.
  *
  * Shown only where the answer is a smaller allowance than Karination's --
- * today, FORZA's: either because FORZA is flying you, or because it is flying
- * one leg of an itinerary and a bag has to satisfy every carrier that touches
- * it. A journey on Karination, or on a carrier as generous (Sonder), gets
- * nothing here — the allowance is the one already published and repeating it
- * on every result is noise.
+ * FORZA's or Sonder's: either because that airline is flying you, or because
+ * it is flying one leg of an itinerary and a bag has to satisfy every carrier
+ * that touches it. A journey entirely on Karination gets nothing here — the
+ * allowance is the one already published and repeating it on every result is
+ * noise.
+ *
+ * A carrier's cabin extra (Sonder's fan bag) is not part of the governing
+ * allowance. It is carried in the cabin, so it belongs to that carrier's own
+ * flights and is stated separately when the journey mixes airlines.
  */
 export function BaggageNotice({
   airlineCodes, cabinCode,
@@ -19,7 +23,7 @@ export function BaggageNotice({
   airlineCodes: Array<string | null | undefined>
   cabinCode: string
 }) {
-  const { carrier, mixed } = governingCarrier(airlineCodes)
+  const { carrier, mixed, instead, present } = governingCarrier(airlineCodes)
   // Nothing to say when the allowance is the published default.
   if (!isTighterThanDefault(carrier)) return null
 
@@ -40,7 +44,12 @@ export function BaggageNotice({
         {mixed ? `${carrier.name} baggage rules apply to this whole journey.` : `${carrier.name} baggage rules apply.`}
       </strong>{' '}
       {c.longName}: {allowance.checked} checked, {allowance.hand} in the cabin
-      {mixed ? ' — tighter than Karination’s, because a bag has to satisfy every airline carrying it' : ''}.{' '}
+      {!mixed && carrier.cabinExtra ? `, plus ${carrier.cabinExtra}` : ''}
+      {instead ? ` — tighter than ${instead.name}’s, because a bag has to satisfy every airline carrying it` : ''}.{' '}
+      {present
+        .filter((k) => k.cabinExtra && (mixed || k.code !== carrier.code))
+        .map((k) => `${k.name}’s own flights add ${k.cabinExtra}. `)
+        .join('')}
       <Link to="/travel-info#baggage" className="underline">Full allowances</Link>
     </p>
   )

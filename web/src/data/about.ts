@@ -139,6 +139,16 @@ export const STORY: Chapter[] = [
     hue: 'var(--color-spectrum-amber)',
     ink: 'var(--color-spectrum-amber-ink)',
   },
+  {
+    when: '2024–26',
+    title: 'Sonder',
+    body:
+      'The pandemic ended; the reckoning after it did not. At Incheon, a Korean budget airline that had carried students, fans and weekend travellers across the region ran out of money and stopped flying. Its aircraft went back to the lessors. Its people, its licence and its slots had nowhere to go, and in 2024 we took them in.',
+    detail:
+      'We did not rebuild a budget airline. We rebuilt what its passengers had been travelling for: Korean food, K-drama and K-pop are the product on board, and the energy is a fan’s, not a flag carrier’s. The name is the point. Sonder is the word for realising that every stranger in the terminal is living a life as vivid and complicated as your own, which, for an airline, is the whole job. Its first schedule went on sale in September 2026: A350-1000s and 787-8s from Incheon, to a network that looks like no one else’s.',
+    hue: 'var(--color-spectrum-rose)',
+    ink: 'var(--color-spectrum-rose-ink)',
+  },
 ]
 
 export interface Belief {

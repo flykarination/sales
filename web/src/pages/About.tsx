@@ -221,31 +221,19 @@ export default function About() {
             })}
           </div>
 
-          {/* Sonder now flies and sells here. The headline line is the group's
-              own announcement and is kept as written until it is decided how
-              Sonder should be introduced; only the factual line beneath it has
-              been brought up to date. */}
-          <div
-            className="mt-10"
-            style={{ borderLeft: '3px solid var(--color-spectrum-magenta)', paddingLeft: 16, maxWidth: '62ch' }}
-          >
-            <p
-              className="mb-1 font-mono uppercase"
-              style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: 'var(--color-spectrum-magenta-ink)' }}
+          {/* The "coming in the next months" teaser retired when Sonder
+              launched; the news itself lives on Travel updates. */}
+          <p className="mt-10" style={{ borderLeft: '3px solid var(--color-spectrum-rose)', paddingLeft: 16, maxWidth: '62ch' }}>
+            <span
+              className="mb-1 block font-mono uppercase"
+              style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: 'var(--color-spectrum-rose-ink)' }}
             >
-              In the works
-            </p>
-            <p style={{ fontSize: 'var(--text-lead)', color: 'var(--color-ink)' }}>
-              Coming in the next months, an all new Hallyu experience will be
-              flown the KarinationGroup way.
-            </p>
-            <p className="mt-2" style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }}>
-              Sonder is the group’s Korean airline, based at Incheon. Its first
-              schedule is on sale now: A350-1000s and 787-8s from Incheon to
-              Europe, Africa, Oceania and North America, bookable here like any
-              other KarinationGroup flight.
-            </p>
-          </div>
+              Now flying
+            </span>
+            <Link to="/updates/sonder-launch" className="underline" style={{ fontSize: 'var(--text-lead)', color: 'var(--color-ink)' }}>
+              Sonder: an all new Hallyu experience, flown the KarinationGroup way
+            </Link>
+          </p>
         </div>
       </section>
 
