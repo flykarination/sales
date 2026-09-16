@@ -135,7 +135,7 @@ export const STORY: Chapter[] = [
     body:
       'We committed to 574 aircraft in 2021, while much of the world was still grounded. It was not a bet. We had just spent two years watching what happened to communities when the link went, and we ordered on the evidence.',
     detail:
-      'The programme runs to 2030 and is still in progress. Forty A350-1000s are on FORZA’s register and not yet in service; more are coming. Everything this site tells you about our fleet is a snapshot of a company halfway through re-equipping itself.',
+      'The programme runs to 2030 and is still in progress. FORZA’s A350-1000s went from forty aircraft waiting on the register to a hundred and fifty in service, and the six longest flights in the group are now all FORZA’s. Everything this site tells you about our fleet is a snapshot of a company halfway through re-equipping itself.',
     hue: 'var(--color-spectrum-amber)',
     ink: 'var(--color-spectrum-amber-ink)',
   },

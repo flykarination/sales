@@ -5,6 +5,8 @@ import {
 } from '@/lib/queries'
 import { CABIN_ORDER, CABINS, cabin, type CabinCode } from '@/lib/cabins'
 import { addDays, longDate, price, shortDate, time, toIsoDate } from '@/lib/format'
+import { OperatedBy } from '@/components/OperatedBy'
+import { sliceHeading } from '@/booking/slices'
 
 interface BookingRow {
   segment_id: string
@@ -22,6 +24,7 @@ interface BookingRow {
   destination_iata: string
   departure_time: string
   arrival_time: string
+  arrival_date: string | null
   cabin_code: string
   cabin_name: string
   segment_price_usd: number
@@ -31,6 +34,48 @@ interface BookingRow {
 }
 
 type Notice = { ok: boolean; text: string }
+
+/**
+ * What to call each flight on the card: which journey it starts, or that it
+ * connects.
+ *
+ * A booking keeps its flights, not the shape of the trip they were bought as,
+ * so the journeys are read back from the flights. One that leaves from where
+ * the previous one landed, within a day and without doubling back, is a
+ * connection; anything else starts a new journey. The segment's `direction`
+ * cannot answer this -- it is the direction of the flight number's own
+ * rotation, and says nothing about which way the traveller is going.
+ */
+function segmentLabels(rows: BookingRow[]): Map<string, string> {
+  const journeys: BookingRow[][] = []
+  for (const seg of [...rows].sort((a, b) => a.segment_order - b.segment_order)) {
+    const current = journeys[journeys.length - 1]
+    const prev = current?.[current.length - 1]
+    const wait = prev
+      ? (Date.parse(`${seg.travel_date}T${seg.departure_time}Z`)
+         - Date.parse(`${prev.arrival_date ?? prev.travel_date}T${prev.arrival_time}Z`)) / 60000
+      : NaN
+    const connects = !!prev
+      && seg.origin_iata === prev.destination_iata
+      && wait >= 0 && wait <= 1440
+      && !current.some((s) => s.origin_iata === seg.destination_iata)
+    if (connects) current.push(seg)
+    else journeys.push([seg])
+  }
+
+  const first = journeys[0]
+  const last = journeys[journeys.length - 1]
+  const isReturn = journeys.length === 2
+    && last[last.length - 1].destination_iata === first[0].origin_iata
+    && last[0].origin_iata === first[first.length - 1].destination_iata
+
+  const labels = new Map<string, string>()
+  journeys.forEach((journey, ji) =>
+    journey.forEach((seg, si) =>
+      labels.set(seg.segment_id, si > 0 ? 'Connecting'
+        : sliceHeading(isReturn ? 'return' : 'multi', ji, journeys.length))))
+  return labels
+}
 
 export default function Manage() {
   const [pnr, setPnr] = useState('')
@@ -82,6 +127,7 @@ export default function Manage() {
   const b = rows?.[0]
   const today = toIsoDate(new Date())
   const cancelled = b?.booking_status === 'CANCELLED'
+  const labels = segmentLabels(rows ?? [])
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-12 md:px-8">
@@ -166,7 +212,7 @@ export default function Manage() {
             <div key={seg.segment_id} className="mt-6 pt-5" style={{ borderTop: 'var(--rule)' }}>
               <p className="font-mono uppercase"
                  style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.16em', color: 'var(--color-ink-faint)' }}>
-                {seg.direction === 'OUTBOUND' ? 'Outbound' : 'Return'} ·{' '}
+                {labels.get(seg.segment_id)} ·{' '}
                 {seg.operating_airline_code ?? 'KX'} {seg.flight_number} · {seg.cabin_name}
               </p>
               <p className="mt-1" style={{ fontWeight: 600 }}>{longDate(seg.travel_date)}</p>
@@ -183,6 +229,7 @@ export default function Manage() {
                 {seg.origin_iata} → {seg.destination_iata}
                 {seg.aircraft_model ? ` · ${seg.aircraft_model}` : ''}
               </p>
+              <OperatedBy airlineCode={seg.operating_airline_code} />
 
               {!cancelled && (
                 <div className="mt-3 flex flex-wrap items-end gap-3">

@@ -81,10 +81,11 @@ export default function Results() {
 
     // Both go out together: the connections are useful even when directs
     // exist, and waiting for one before starting the other doubles the wait.
-    searchFlights(args).then(({ data, error }) => {
-      if (!live) return
+    const directsFound = searchFlights(args).then(({ data, error }) => {
+      if (!live) return null
       if (error) setError(error.message)
       else setDirects(data ?? [])
+      return error ? null : (data ?? [])
     })
 
     searchConnections(args).then(async ({ data }) => {
@@ -93,7 +94,13 @@ export default function Results() {
       if (found.length > 0) { setConnections(found); return }
 
       // Nothing with one stop. Two stops reach far more of the network, but
-      // the query costs about three times as much, so it only runs here.
+      // the query costs several times as much, and a two-stop routing is no
+      // answer to a route we fly nonstop -- so it only runs when there is no
+      // direct flight either (or when the direct search failed outright).
+      const direct = await directsFound
+      if (!live) return
+      if (!direct || direct.length > 0) { setConnections([]); return }
+
       setSearchingDeeper(true)
       const deeper = await searchDoubleConnections({ ...args, limit: 4 })
       if (!live) return

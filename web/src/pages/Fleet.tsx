@@ -92,7 +92,7 @@ export default function Fleet() {
             className="font-display"
             style={{ fontSize: 'clamp(2rem, 5.5vw, 4rem)', lineHeight: 1.04, color: 'var(--color-paper)', maxWidth: '16ch' }}
           >
-            {total ? count(total) : '717'} aircraft, {types.length || 13} types.
+            {total ? count(total) : '712'} aircraft, {types.length || 12} types.
           </h1>
           <p className="mt-5" style={{ color: '#B9B6D8', maxWidth: '52ch' }}>
             Every airframe below is a real aircraft in our operation, with the

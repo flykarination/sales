@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { listRoutes, type RouteRow } from '@/lib/queries'
+import { listAllRoutes, type RouteRow } from '@/lib/queries'
 import { airportLabel } from '@/data/airports'
 import { getAirport, regionOf, REGION_KEYS, REGION_LABELS, type RegionKey } from '@/lib/geo'
 import { REGION_STYLE } from '@/lib/cabins'
@@ -20,7 +20,9 @@ export default function Destinations() {
 
   useEffect(() => {
     let live = true
-    listRoutes(900).then(({ data, error }) => {
+    // Every route, not the cheapest 900: ordered by fare, a capped list
+    // dropped exactly the long-haul cities once the network passed that size.
+    listAllRoutes().then(({ data, error }) => {
       if (!live) return
       if (error || !data) setFailed(true); else setRoutes(data)
     })

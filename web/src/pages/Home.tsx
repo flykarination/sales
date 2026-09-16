@@ -87,7 +87,7 @@ function Booking() {
           {[
             ['766', 'routes', 'var(--color-spectrum-teal)'],
             ['481', 'destinations', 'var(--color-spectrum-amber)'],
-            ['717', 'aircraft', 'var(--color-spectrum-rose)'],
+            ['712', 'aircraft', 'var(--color-spectrum-rose)'],
             ['5', 'hubs', 'var(--color-spectrum-violet)'],
           ].map(([n, l, hue]) => (
             <div key={l} className="pt-4" style={{ paddingRight: 24 }}>

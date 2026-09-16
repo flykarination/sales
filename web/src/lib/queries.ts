@@ -183,8 +183,8 @@ export async function searchConnections(args: ConnectionArgs) {
 }
 
 /**
- * Two-stop itineraries. Only worth asking for when the one-stop search
- * came back empty -- it costs about three times as much to run.
+ * Two-stop itineraries. Only worth asking for when there is neither a
+ * direct flight nor a one-stop connection -- it costs several times as much.
  */
 export async function searchDoubleConnections(args: ConnectionArgs) {
   const { data, error } = await supabase.rpc('search_double_connections', {
@@ -314,14 +314,35 @@ export interface FleetRow {
   is_unassigned: boolean
 }
 
-/** Every airframe with its cabin products. 717 rows for Karination. */
-export async function listFleet() {
-  return supabase
-    .from('v_fleet')
-    .select('*')
-    .order('aircraft_model')
-    .order('registration')
-    .returns<FleetRow[]>()
+/**
+ * Every airframe in the group with its cabin products.
+ *
+ * Pages, for the reason listAllRoutes() does. With Sonder's aircraft the view
+ * passed PostgREST's 1,000-row ceiling (1,121 rows in September 2026), and a
+ * single request quietly lost the last 121 -- the fleet page counted 660
+ * Karination aircraft instead of 712. aircraft_id closes the ordering: a few
+ * registrations repeat within a type in the source data, and an ambiguous
+ * order could move a row across a page boundary, skipping or repeating it.
+ */
+export async function listFleet(): Promise<{ data: FleetRow[] | null; error: unknown }> {
+  const PAGE = 1000
+  const out: FleetRow[] = []
+  for (let from = 0; ; from += PAGE) {
+    const { data, error } = await supabase
+      .from('v_fleet')
+      .select('*')
+      .order('aircraft_model')
+      .order('registration')
+      .order('aircraft_id')
+      .range(from, from + PAGE - 1)
+      .returns<FleetRow[]>()
+    // a partial fleet would be counted as if it were the whole one
+    if (error) return { data: null, error }
+    if (!data || data.length === 0) break
+    out.push(...data)
+    if (data.length < PAGE) break
+  }
+  return { data: out, error: null }
 }
 
 export interface AirlineRow {

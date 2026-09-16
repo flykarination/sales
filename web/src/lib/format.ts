@@ -66,6 +66,12 @@ export function count(n: number | null | undefined): string {
   return n == null ? '--' : n.toLocaleString('en-US')
 }
 
+/** Whole calendar days from one ISO date to another; 0 if either is missing. */
+export function dayDiff(from: string | null | undefined, to: string | null | undefined): number {
+  if (!from || !to) return 0
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86400000)
+}
+
 /**
  * The `+1` that goes beside an arrival time when it lands on a later day.
  * Returns an empty string for same-day arrivals so callers can render it

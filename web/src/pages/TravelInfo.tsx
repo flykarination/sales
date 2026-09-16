@@ -80,10 +80,11 @@ export default function TravelInfo() {
       <section id="baggage" className="mt-14 scroll-mt-32">
         <h2 className="font-display mb-4" style={{ fontSize: '1.7rem' }}>Baggage</h2>
         <p className="mb-5" style={{ color: 'var(--color-ink-mute)', maxWidth: '60ch' }}>
-          What is included in the fare. Karination and FORZA allow different
-          amounts, and a KarinationGroup booking can include flights on both —
-          the allowance that applies is the one for the airline operating that
-          flight, shown against it when you book.
+          What is included in the fare. Each airline in the group sets its own
+          allowance, and a KarinationGroup booking can include flights on more
+          than one. A bag has to satisfy every airline that will carry it, so on
+          a booking that mixes them the smaller allowance applies throughout —
+          and we show it when you book.
         </p>
 
         <div className="grid gap-8 lg:grid-cols-2">
@@ -143,7 +144,7 @@ export default function TravelInfo() {
 
         <p className="mt-5" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)', maxWidth: '62ch' }}>
           RainbowOne Amber adds one checked bag; Amethyst and Ruby add two. Tier
-          allowances apply on both airlines.
+          allowances apply on every airline in the group.
         </p>
         <p className="mt-2" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-faint)', maxWidth: '62ch' }}>
           FORZA carries less than we do, but every FORZA fare still includes a

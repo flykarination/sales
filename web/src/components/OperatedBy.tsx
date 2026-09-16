@@ -3,7 +3,7 @@ import { carrierByCode, operatedNoteFor } from '@/data/carriers'
 /**
  * Who is actually flying this.
  *
- * Karination sells FORZA's flights under its own booking engine, so a
+ * Karination sells FORZA's and Sonder's flights in its own booking engine, so a
  * traveller can buy a KarinationGroup ticket and board an aeroplane in
  * someone else's livery. That has to be said before they pay, not discovered
  * at the gate, and it is said in the carrier's own accent colour so it reads

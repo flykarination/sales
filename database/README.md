@@ -16,7 +16,9 @@ database/
   README.md                  this file
   original_json/             verbatim copy of every source file
   csv/                       12 tables, ready to load
-  sql/                       01 .. 07, run in numeric order
+  sql/                       01 .. 07 build the database (deploy.ps1);
+                             08 .. 25 are later migrations, applied in order
+    queries/                 read-only lookups for the Supabase SQL editor
   scripts/
     build_database.py        JSON  -> csv/          (re-run any time)
     backfill_airports.py     csv/  -> sql/03_...    (re-run with a reference file)
@@ -43,8 +45,17 @@ winget install PostgreSQL.PostgreSQL.17
 ```
 
 `save_password.ps1` prompts for the database password without echoing it and
-writes it to `%APPDATA%\postgresql\pgpass.conf`, so no password ever appears on
-a command line, in shell history, or in this repo. It also sets `KX_DB_URL`.
+writes it to this project's own credential file, `%APPDATA%\karination\pgpass.conf`,
+so no password ever appears on a command line, in shell history, or in this
+repo. Once the password is verified it sets `KX_DB_URL`, whose `passfile=`
+parameter points psql at that file and only that file.
+
+It deliberately does not use psql's default `%APPDATA%\postgresql\pgpass.conf`.
+That file is shared by every project on the machine, and when another Supabase
+project saved its own password there, Karination's entry was lost -- psql then
+fell back to prompting, which looked exactly like a database that would not
+answer. Nor does it set a global `PGPASSFILE`, which would redirect every other
+project's psql here.
 
 This project lives in **eu-west-1**, so its pooler URL is:
 
@@ -355,7 +366,23 @@ Rewrites every CSV from the JSON and refreshes `reports/build_report.md`. It
 checks primary keys, foreign keys, and that no two aircraft are rostered on the
 same flight on the same weekday.
 
-**Adding FORZA and Sonder:** their folders are currently empty, so only their
-`airlines` and `airline_stats` rows exist. Drop their four JSON files into
-`FORZA/` and `Sonder/` and re-run — the script picks up any carrier named in
-`kxgroup_info.json` and warns about the ones it cannot find.
+The script picks up any carrier named in `kxgroup_info.json` whose folder holds
+its JSON files, and warns about the ones it cannot find.
+
+### Merging a new export into the live database
+
+A new export goes in without rebuilding, and without touching a single
+booking. Replace the JSON under `original_json/`, re-run the build above, then
+rehearse the merge -- `dry=1` does all the work and rolls it back, printing
+what would change:
+
+```powershell
+psql -w $env:KX_DB_URL -v dry=1 -f database/sql/21_merge_2026_09.sql
+psql -w $env:KX_DB_URL -f database/sql/21_merge_2026_09.sql
+```
+
+It upserts aircraft, flights, assignments and fares; re-sizes and re-prices
+inventory still to fly, never below the seats already booked; and withdraws
+only what no booking refers to, reporting anything it had to keep. New
+airports need their names, time zones and coordinates filled in afterwards,
+as `22_airports_2026_09.sql` does for September's.

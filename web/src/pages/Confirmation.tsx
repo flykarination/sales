@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { StepIndicator } from '@/components/Funnel'
+import { OperatedBy } from '@/components/OperatedBy'
 import { useBooking } from '@/booking/BookingContext'
+import { sliceHeading } from '@/booking/slices'
+import { airportLabel } from '@/data/airports'
 import { cabin } from '@/lib/cabins'
 import { duration, longDate, price, time } from '@/lib/format'
 
@@ -29,10 +32,11 @@ export default function Confirmation() {
    */
   const destinationLine = (() => {
     const slices = draft.slices
-    if (slices.length === 0) return legs[legs.length - 1]?.destination_iata ?? ''
+    if (slices.length === 0) return airportLabel(legs[legs.length - 1]?.destination_iata ?? '')
     const stops = slices.map((s) => s.to)
     if (stops.length > 1 && stops[stops.length - 1] === slices[0].from) stops.pop()
-    const named = [...new Set(stops)]
+    // the city, not the code: "You're going to Sacramento", not "SMF"
+    const named = [...new Set(stops)].map((code) => airportLabel(code))
     if (named.length <= 1) return named[0] ?? ''
     return `${named.slice(0, -1).join(', ')} and ${named[named.length - 1]}`
   })()
@@ -86,30 +90,41 @@ export default function Confirmation() {
         </div>
 
         <div className="px-6 py-6">
-          {legs.map((leg, i) => (
-            <div key={leg.flight_id + leg.direction} className={i > 0 ? 'mt-6 pt-6' : ''} style={i > 0 ? { borderTop: 'var(--rule)' } : undefined}>
-              <p
-                className="font-mono uppercase"
-                style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.16em', color: 'var(--color-ink-faint)' }}
-              >
-                {i === 0 ? 'Outbound' : 'Return'} · {leg.flight_designator}
-              </p>
-              <p className="mt-1" style={{ fontWeight: 600 }}>{longDate(leg.departure_date)}</p>
-              <div className="mt-2 flex flex-wrap items-baseline gap-x-4">
-                <span className="tnum font-mono" style={{ fontSize: 'var(--text-time)', fontWeight: 500 }}>
-                  {time(leg.departure_time)}
-                </span>
-                <span style={{ color: 'var(--color-ink-faint)' }}>—</span>
-                <span className="tnum font-mono" style={{ fontSize: 'var(--text-time)', fontWeight: 500 }}>
-                  {time(leg.arrival_time)}
-                </span>
-                <span className="tnum font-mono" style={{ color: 'var(--color-ink-mute)' }}>
-                  {duration(leg.duration_minutes)}
-                </span>
-              </div>
-              <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
-                {leg.origin_iata} → {leg.destination_iata} · {leg.aircraft_model}
-              </p>
+          {/* By journey, as it was bought. Numbering the flights "Outbound,
+              Return, Return" was only ever right for a nonstop return trip. */}
+          {draft.slices.map((slice, si) => (
+            <div
+              key={`${slice.from}-${slice.to}-${slice.date}`}
+              className={si > 0 ? 'mt-6 pt-6' : ''}
+              style={si > 0 ? { borderTop: 'var(--rule)' } : undefined}
+            >
+              {(slice.flights ?? []).map((leg, li) => (
+                <div key={leg.flight_id + leg.direction} className={li > 0 ? 'mt-5' : ''}>
+                  <p
+                    className="font-mono uppercase"
+                    style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.16em', color: 'var(--color-ink-faint)' }}
+                  >
+                    {li === 0 ? sliceHeading(draft.tripType, si, draft.slices.length) : 'Connecting'} · {leg.flight_designator}
+                  </p>
+                  <p className="mt-1" style={{ fontWeight: 600 }}>{longDate(leg.departure_date)}</p>
+                  <div className="mt-2 flex flex-wrap items-baseline gap-x-4">
+                    <span className="tnum font-mono" style={{ fontSize: 'var(--text-time)', fontWeight: 500 }}>
+                      {time(leg.departure_time)}
+                    </span>
+                    <span style={{ color: 'var(--color-ink-faint)' }}>—</span>
+                    <span className="tnum font-mono" style={{ fontSize: 'var(--text-time)', fontWeight: 500 }}>
+                      {time(leg.arrival_time)}
+                    </span>
+                    <span className="tnum font-mono" style={{ color: 'var(--color-ink-mute)' }}>
+                      {duration(leg.duration_minutes)}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
+                    {leg.origin_iata} → {leg.destination_iata} · {leg.aircraft_model}
+                  </p>
+                  <OperatedBy airlineCode={leg.airline_code} />
+                </div>
+              ))}
             </div>
           ))}
 

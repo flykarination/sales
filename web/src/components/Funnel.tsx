@@ -3,9 +3,9 @@ import { useBooking } from '@/booking/BookingContext'
 import { summarise } from '@/components/PassengerPicker'
 import { OperatedBy } from '@/components/OperatedBy'
 import { BaggageNotice } from '@/components/BaggageNotice'
-import type { TripType } from '@/booking/BookingContext'
+import { sliceHeading } from '@/booking/slices'
 import { cabin } from '@/lib/cabins'
-import { duration, price, shortDate, time } from '@/lib/format'
+import { dayDiff, dayOffset, duration, price, shortDate, time } from '@/lib/format'
 
 const STEPS = [
   { path: '/search', label: 'Choose flights' },
@@ -96,8 +96,12 @@ export function ItinerarySummary({ sticky = true }: { sticky?: boolean }) {
 
           {(slice.flights ?? []).map((leg, li) => (
             <div key={leg.flight_id + leg.direction} className={li > 0 ? 'mt-3' : ''}>
+              {/* Days counted from the date in the heading: on a long
+                  connection the second and third flights are often tomorrow's. */}
               <p className="tnum mt-1 font-mono" style={{ fontSize: 'var(--text-lead)' }}>
-                {time(leg.departure_time)} — {time(leg.arrival_time)}
+                {time(leg.departure_time)}<DayMark days={dayDiff(slice.date, leg.departure_date)} />
+                {' — '}
+                {time(leg.arrival_time)}<DayMark days={dayDiff(slice.date, leg.arrival_date)} />
               </p>
               <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
                 {leg.origin_iata} → {leg.destination_iata} · {duration(leg.duration_minutes)} · {leg.flight_designator}
@@ -166,9 +170,12 @@ export function BackLink({ to, children }: { to: string; children: React.ReactNo
   )
 }
 
-/** What to call one slice in the summary. */
-function sliceHeading(trip: TripType, index: number, total: number): string {
-  if (trip === 'return' && total === 2) return index === 0 ? 'Outbound' : 'Return'
-  if (total === 1) return 'Your flight'
-  return `Flight ${index + 1} of ${total}`
+/** `+1` beside a time on a later day than the journey's own date; nothing otherwise. */
+function DayMark({ days }: { days: number }) {
+  if (!days) return null
+  return (
+    <sup className="tnum" style={{ fontSize: '0.55em', color: 'var(--color-spectrum-rose-ink)', marginLeft: 2 }}>
+      {dayOffset(days)}
+    </sup>
+  )
 }

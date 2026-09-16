@@ -148,7 +148,8 @@ export default function About() {
             Karination is the airline you are booking with, and the one the rest
             of this page is about. It is one of three carriers in the group, each
             keeping its own fleet, hubs and alliance — and a Karination booking
-            can put you on a FORZA aeroplane, which is said plainly when it does.
+            can put you on a FORZA or Sonder aeroplane, which is said plainly
+            when it does.
           </p>
 
           <div className="grid gap-8 md:grid-cols-3">
@@ -156,8 +157,9 @@ export default function About() {
               const s = statFor(c.uid)
               const h = hubsFor(c.uid)
               // Whether WE can sell it, which is not the same as whether it
-              // flies: Sonder has 28 aircraft in the group's own records, but
-              // its schedule is not published to this site.
+              // flies. Driven by the carriers this site actually sells, so a
+              // future member with a fleet but no published schedule is marked
+              // unbookable without anyone having to remember to.
               const sellable = Boolean(carrierByCode(c.airline_code))
               return (
                 <article
@@ -219,8 +221,10 @@ export default function About() {
             })}
           </div>
 
-          {/* Sonder is on the group register — Korean, based at Incheon — with
-              no aircraft and no schedule, so it is announced rather than sold. */}
+          {/* Sonder now flies and sells here. The headline line is the group's
+              own announcement and is kept as written until it is decided how
+              Sonder should be introduced; only the factual line beneath it has
+              been brought up to date. */}
           <div
             className="mt-10"
             style={{ borderLeft: '3px solid var(--color-spectrum-magenta)', paddingLeft: 16, maxWidth: '62ch' }}
@@ -236,10 +240,10 @@ export default function About() {
               flown the KarinationGroup way.
             </p>
             <p className="mt-2" style={{ color: 'var(--color-ink-mute)', fontSize: 'var(--text-small)' }}>
-              Sonder is already on the group register — Korean, based at
-              Incheon, and flying in its own right. Its schedule is not
-              published to this site yet, so there is nothing here to book.
-              When there is, it will be here.
+              Sonder is the group’s Korean airline, based at Incheon. Its first
+              schedule is on sale now: A350-1000s and 787-8s from Incheon to
+              Europe, Africa, Oceania and North America, bookable here like any
+              other KarinationGroup flight.
             </p>
           </div>
         </div>

@@ -1,12 +1,25 @@
 <#
 .SYNOPSIS
-    Store the Supabase database password in psql's credential file.
+    Store the Karination database password in this project's OWN credential file.
 
 .DESCRIPTION
-    Writes an entry to %APPDATA%\postgresql\pgpass.conf so psql can connect
-    without a password on the command line. The password is typed into a masked
-    prompt, so it never appears on screen, in shell history, in the process list,
-    or in any file in this project.
+    The password is typed into a masked prompt, so it never appears on screen,
+    in shell history, in the process list, or anywhere in this repository.
+
+    Why a file of its own. psql's default credential file,
+    %APPDATA%\postgresql\pgpass.conf, is shared by every project on this
+    machine. Karination and another Supabase project were both keeping their
+    password there, and each time one of them saved, the other's entry was
+    lost. psql then found no password and silently fell back to prompting for
+    one -- which from the outside looked exactly like a database that would
+    not answer.
+
+    So this project's password lives in:
+        %APPDATA%\karination\pgpass.conf
+    and the connection string saved to KX_DB_URL names that file with libpq's
+    `passfile` setting. Anything that connects with KX_DB_URL reads this file
+    and only this file. The shared default file is never read or written here,
+    so other projects' passwords are left exactly as they are.
 
     Run this once, then deploy with:
         .\database\scripts\deploy.ps1 -ConnectionString $env:KX_DB_URL
@@ -15,52 +28,69 @@
     .\database\scripts\save_password.ps1
 #>
 param(
-    [string]$DbHost = 'aws-1-eu-west-1.pooler.supabase.com',
-    [int]$Port      = 5432,
+    [string]$DbHost   = 'aws-1-eu-west-1.pooler.supabase.com',
+    [int]$Port        = 5432,
     [string]$Database = 'postgres',
-    [string]$User   = 'postgres.fqxiskkyvbkhrpejxtol'
+    [string]$User     = 'postgres.fqxiskkyvbkhrpejxtol',
+    [string]$PassFile = (Join-Path $env:APPDATA 'karination\pgpass.conf')
 )
 
 $ErrorActionPreference = 'Stop'
 
-Write-Host "Storing the database password for:" -ForegroundColor Cyan
+Write-Host "Storing the Karination database password for:" -ForegroundColor Cyan
 Write-Host "  $User@${DbHost}:$Port/$Database"
+Write-Host "  in $PassFile  (this project only)"
 Write-Host ""
-Write-Host "This is the DATABASE password (Supabase -> Settings -> Database)," -ForegroundColor DarkGray
-Write-Host "not an API key. Nothing is echoed as you type." -ForegroundColor DarkGray
+Write-Host "This is the DATABASE password (Supabase -> Project Settings -> Database)," -ForegroundColor DarkGray
+Write-Host "not an API key. Nothing is echoed as you type. You will only be asked once." -ForegroundColor DarkGray
 Write-Host ""
 
-$secure = Read-Host -Prompt "Password" -AsSecureString
-$plain  = [Runtime.InteropServices.Marshal]::PtrToStringBSTR(
-              [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure))
+$secure = Read-Host -Prompt "Database password" -AsSecureString
+$bstr   = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+try     { $plain = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($bstr) }
+finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
 
 if ([string]::IsNullOrWhiteSpace($plain)) { throw "no password entered" }
 
-$dir  = Join-Path $env:APPDATA 'postgresql'
-$file = Join-Path $dir 'pgpass.conf'
+# pgpass format: hostname:port:database:username:password
+# A backslash or colon inside a field is escaped with a backslash. In a .NET
+# regex REPLACEMENT a backslash is literal, so '\\' inserts exactly two -- the
+# previous version wrote '\\\\' and inserted four, corrupting any password
+# that contained a backslash.
+$esc = { param($s) ($s -replace '\\', '\\') -replace ':', '\:' }
+$prefix = "{0}:{1}:{2}:{3}:" -f (& $esc $DbHost), $Port, (& $esc $Database), (& $esc $User)
+$line   = $prefix + (& $esc $plain)
+
+$dir = Split-Path -Parent $PassFile
 if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir | Out-Null }
 
-# pgpass format: hostname:port:database:username:password
-# a colon or backslash inside any field has to be escaped with a backslash
-$esc = { param($s) $s -replace '\\', '\\\\' -replace ':', '\:' }
-$line = "{0}:{1}:{2}:{3}:{4}" -f (& $esc $DbHost), $Port, (& $esc $Database),
-                                 (& $esc $User), (& $esc $plain)
+# Replace this user's line, keep any other line in this project's file.
+$lines = @()
+if (Test-Path $PassFile) {
+    $lines = @(Get-Content $PassFile | Where-Object {
+        -not $_.StartsWith($prefix) -and $_.Trim() -ne ''
+    })
+}
+$lines += $line
 
-$prefix = "{0}:{1}:{2}:{3}:" -f (& $esc $DbHost), $Port, (& $esc $Database), (& $esc $User)
-$existing = if (Test-Path $file) {
-    @(Get-Content $file | Where-Object { $_ -notlike "$prefix*" -and $_.Trim() -ne '' })
-} else { @() }
-
-Set-Content -Path $file -Value ($existing + $line) -Encoding ascii
-$plain = $null
+# UTF-8 WITHOUT a byte-order mark. Set-Content -Encoding ascii turned any
+# non-ASCII character in a password into '?', and Windows PowerShell's UTF8
+# option adds a BOM that breaks libpq's match on the first line.
+[IO.File]::WriteAllLines($PassFile, [string[]]$lines, (New-Object Text.UTF8Encoding $false))
+$plain = $null; $line = $null; $lines = $null
 [GC]::Collect()
 
-# readable only by this account
-icacls $file /inheritance:r /grant:r "$($env:USERNAME):(R,W)" | Out-Null
+# No icacls here. %APPDATA% is already private to this account; the previous
+# version tightened the ACL and discarded icacls' output, so a partial failure
+# could lock the account out of its own file without saying so.
 
 Write-Host ""
-Write-Host "Saved to $file" -ForegroundColor Green
-Write-Host "psql will now authenticate on its own. Verifying..." -ForegroundColor Cyan
+Write-Host "Saved to $PassFile" -ForegroundColor Green
+
+# The connection string names the file, so no global PGPASSFILE is needed --
+# setting one would redirect every other project's psql here too.
+$fileParam = [uri]::EscapeDataString(($PassFile -replace '\\', '/'))
+$uri = "postgresql://$User@${DbHost}:$Port/$Database`?sslmode=require&passfile=$fileParam"
 
 $psql = (Get-Command psql -ErrorAction SilentlyContinue).Source
 if (-not $psql) {
@@ -68,19 +98,34 @@ if (-not $psql) {
             Sort-Object FullName -Descending | Select-Object -First 1 -ExpandProperty FullName
 }
 
-$uri = "postgresql://$User@${DbHost}:$Port/$Database`?sslmode=require"
-$env:KX_DB_URL = $uri
-[Environment]::SetEnvironmentVariable('KX_DB_URL', $uri, 'User')
+Write-Host "Verifying..." -ForegroundColor Cyan
+# -w: never prompt. If the saved password is wrong or unreadable this fails
+# with a message instead of asking for a password a second time.
+#
+# psql reports failure on stderr. Under Windows PowerShell 5.1 with
+# ErrorActionPreference 'Stop', capturing that stream turns psql's own message
+# into a terminating NativeCommandError and a stack trace, so the preference is
+# relaxed for this one call and the exit code is read instead.
+$ErrorActionPreference = 'Continue'
+$out  = (& $psql -w $uri -tAc "select 'connected to ' || current_database() || ' as ' || current_user;" 2>&1 |
+         ForEach-Object { "$_" }) -join ' '
+$code = $LASTEXITCODE
+$ErrorActionPreference = 'Stop'
 
-& $psql $uri -t -c "select 'connected to ' || current_database() || ' as ' || current_user;"
-if ($LASTEXITCODE -eq 0) {
+if ($code -eq 0) {
+    # Only now, with a password that demonstrably works, is the environment
+    # changed. A mistyped password leaves KX_DB_URL exactly as it was.
+    $env:KX_DB_URL = $uri
+    [Environment]::SetEnvironmentVariable('KX_DB_URL', $uri, 'User')
+    Write-Host "  $out"
     Write-Host ""
     Write-Host "Connection works. KX_DB_URL is set for future terminals." -ForegroundColor Green
-    Write-Host "Tell Claude it is done, or run:" -ForegroundColor Green
-    Write-Host "  .\database\scripts\deploy.ps1 -ConnectionString `"$uri`""
+    Write-Host "Tell Claude it is done."
 } else {
+    Write-Host "  $out" -ForegroundColor Red
     Write-Host ""
-    Write-Host "Could not connect. Most likely the password is wrong -- you can reset it" -ForegroundColor Red
-    Write-Host "at Supabase -> Project Settings -> Database -> Reset database password," -ForegroundColor Red
-    Write-Host "then run this script again." -ForegroundColor Red
+    Write-Host "Could not connect with that password. If you are not sure of it, reset it at" -ForegroundColor Red
+    Write-Host "Supabase -> Project Settings -> Database -> Reset database password" -ForegroundColor Red
+    Write-Host "(this does not affect the website, which uses the API key), then run this again." -ForegroundColor Red
+    exit 1
 }

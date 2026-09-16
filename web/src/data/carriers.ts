@@ -28,6 +28,12 @@ export interface GroupCarrier {
   /** Shown on any flight this carrier operates. */
   operatedNote: string
   baggage: Record<CabinCode, Allowance>
+  /**
+   * How generous the allowance is, highest first. On an itinerary that mixes
+   * carriers the lowest rank governs the whole journey. Carriers with the
+   * same allowance share a rank, so mixing them says nothing.
+   */
+  baggageRank: number
   /** Where it is based. */
   hubs: string[]
   accent: string
@@ -44,6 +50,7 @@ export const KARINATION: GroupCarrier = {
     'Karination flies from five hubs along the length of Vietnam to 481 destinations, in four cabins, with a full-flat bed in Business on every long-haul sector — including the narrowbodies, which is unusual.',
   operatedNote: 'Operated by Karination.',
   hubs: ['SGN', 'HAN', 'DAD', 'CXR', 'PQC'],
+  baggageRank: 2,
   accent: 'var(--color-spectrum-teal)',
   accentInk: 'var(--color-spectrum-teal-ink)',
   baggage: {
@@ -68,10 +75,11 @@ export const FORZA: GroupCarrier = {
   alliance: 'Echo Proxima',
   role: 'Lower-cost regional, and a fast-growing long-haul network',
   blurb:
-    'FORZA flies from thirteen provincial airports Karination does not base at, on everything from a Dash 8 to a 787-10. It began as a regional carrier and its long-haul network is growing quickly — the Dreamliners and A330-900s now reach Europe, Africa and the Pacific.',
+    'FORZA flies from thirteen provincial airports Karination does not base at, on everything from a Dash 8 to a 787-10. It began as a regional carrier and its long-haul network is growing quickly — the A350s, Dreamliners and A330-900s now reach Europe, Africa, the Pacific and across the Americas to the Caribbean.',
   operatedNote:
     'This flight is operated by FORZA, a KarinationGroup member of Echo Proxima.',
   hubs: ['CXR', 'DLI', 'PQC', 'DIN', 'HUI', 'VCL', 'UIH', 'CAH', 'PXU', 'VCA', 'VCS', 'BMV', 'HPH'],
+  baggageRank: 1,
   accent: 'var(--color-spectrum-amber)',
   accentInk: 'var(--color-spectrum-amber-ink)',
   baggage: {
@@ -83,17 +91,37 @@ export const FORZA: GroupCarrier = {
 }
 
 /**
- * Sonder is in the group's own records — Korean, based at Incheon — but has
- * no aircraft or schedule yet, so it is announced rather than sold.
+ * Sonder, the group's Korean carrier, based at Incheon.
+ *
+ * PROVISIONAL. The notice follows FORZA's wording exactly, minus the alliance
+ * — the group's own records give Sonder none, and inventing one would be the
+ * kind of claim this site does not make. Its colour and its allowances are
+ * placeholders pending a decision on how Sonder is portrayed: the allowances
+ * match Karination's, so on a mixed itinerary nothing changes and nothing is
+ * shown, which is the least surprising default until that is settled.
  */
-export const SONDER = {
+export const SONDER: GroupCarrier = {
   code: 'SD',
   name: 'Sonder',
   country: 'KR',
-  hub: 'ICN',
-} as const
+  alliance: null,
+  role: 'The group’s Korean carrier',
+  blurb:
+    'Sonder flies from Incheon, on A350-1000s and 787-8s, to a network that looks like no one else’s: Ashgabat and Khartoum, Malta and Port Moresby, Boston and Sacramento.',
+  operatedNote: 'This flight is operated by Sonder, a KarinationGroup member.',
+  hubs: ['ICN'],
+  baggageRank: 2,
+  accent: 'var(--color-spectrum-magenta)',
+  accentInk: 'var(--color-spectrum-magenta-ink)',
+  baggage: {
+    FIRST: { checked: '3 × 32 kg', hand: '2 pieces, 10 kg' },
+    BUSINESS: { checked: '2 × 32 kg', hand: '2 pieces, 10 kg' },
+    PREMIUM_ECONOMY: { checked: '2 × 23 kg', hand: '1 piece, 7 kg' },
+    ECONOMY: { checked: '1 × 23 kg', hand: '1 piece, 7 kg' },
+  },
+}
 
-export const CARRIERS: GroupCarrier[] = [KARINATION, FORZA]
+export const CARRIERS: GroupCarrier[] = [KARINATION, FORZA, SONDER]
 
 const BY_CODE = new Map(CARRIERS.map((c) => [c.code, c]))
 
@@ -129,12 +157,20 @@ export function governingCarrier(airlineCodes: Array<string | null | undefined>)
   carrier: GroupCarrier
   mixed: boolean
 } {
-  const codes = new Set(
-    airlineCodes.map((c) => (c ?? '').toUpperCase()).filter(Boolean),
-  )
-  const carrier = codes.has('Z4') ? FORZA : KARINATION
-  // "mixed" means the rule is not simply the operating carrier's own: a
-  // Karination flight is in there too, so the allowance is a surprise worth
-  // stating rather than a given.
-  return { carrier, mixed: codes.has('Z4') && codes.has('KX') }
+  const present = [...new Set(airlineCodes.map((c) => (c ?? '').toUpperCase()).filter(Boolean))]
+    .map((c) => BY_CODE.get(c))
+    .filter((c): c is GroupCarrier => Boolean(c))
+  if (present.length === 0) return { carrier: KARINATION, mixed: false }
+
+  // The tightest allowance on the journey governs all of it.
+  const carrier = present.reduce((a, b) => (b.baggageRank < a.baggageRank ? b : a))
+  // "mixed" means someone on this itinerary would have allowed more, so the
+  // governing allowance is a surprise worth stating rather than a given.
+  const mixed = present.some((c) => c.baggageRank > carrier.baggageRank)
+  return { carrier, mixed }
+}
+
+/** True when a carrier allows less than Karination, the published default. */
+export function isTighterThanDefault(carrier: GroupCarrier): boolean {
+  return carrier.baggageRank < KARINATION.baggageRank
 }

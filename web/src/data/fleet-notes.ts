@@ -115,14 +115,14 @@ export const FORZA_FLEET_NOTES: Record<string, FleetNote> = {
   'Airbus A330-900': {
     role: 'Long-haul, newest reach',
     description:
-      'The furthest-flying aircraft FORZA owns, and the clearest sign of where the airline is going. Twenty frames turn nineteen cities from provincial bases that had no long-haul service at all three years ago — including a sector from Cần Thơ to San Francisco that is longer than anything Karination flies out of Nha Trang.',
-    signature: { route: 'Cần Thơ – San Francisco', km: 12727, minutes: 950 },
+      'Twenty-four frames turning thirty-two cities from provincial bases that had no long-haul service at all a few years ago — including Cần Thơ to Tijuana, a sector longer than anything Karination flies out of Nha Trang.',
+    signature: { route: 'Cần Thơ – Tijuana', km: 13461, minutes: 1020 },
   },
   'Airbus A350-900': {
     role: 'Long-haul backbone',
     description:
-      'Ninety aircraft reaching sixty cities: the type most FORZA long-haul passengers will actually meet, and close to half the entire fleet. It carries the whole spread of the network, from a two-hour regional turn to a fifteen-hour crossing to Vancouver.',
-    signature: { route: 'Cần Thơ – Vancouver', km: 11885, minutes: 885 },
+      'Ninety aircraft reaching ninety-five cities, and the type that carries the long-haul network from one end of its range to the other — from a two-hour regional turn to the fourteen-thousand-kilometre crossing between Hải Phòng and Florida.',
+    signature: { route: 'Hải Phòng – Tampa', km: 14499, minutes: 1015 },
   },
   'Boeing 787-10 Dreamliner': {
     role: 'Long-haul, high capacity',
@@ -133,26 +133,26 @@ export const FORZA_FLEET_NOTES: Record<string, FleetNote> = {
   'Boeing 787-8 Dreamliner': {
     role: 'Long-haul, thin routes',
     description:
-      'Only two aircraft, used where the traffic is real but not yet deep enough for a larger frame. Five cities, and the pair of them are what keeps Shannon and Dublin on the map from the Delta.',
+      'Only two aircraft, used where the traffic is real but not yet deep enough for a larger frame. Six cities, and the pair of them are what keeps Shannon and Dublin on the map from the Delta.',
     signature: { route: 'Cần Thơ – Shannon', km: 10706, minutes: 780 },
   },
   'Boeing 777-300ER': {
     role: 'Long-haul, high density',
     description:
-      'Nine aircraft doing the heavy lifting on fourteen cities. At Karination this type is a workhorse across fifty-four destinations; here it is a specialist, opening the routes that need the most seats at once — Belfast among them.',
+      'Nine aircraft doing the heavy lifting on sixteen cities. At Karination this type is a workhorse across fifty-five destinations; here it is a specialist, opening the routes that need the most seats at once — Belfast among them.',
     signature: { route: 'Cần Thơ – Belfast', km: 10453, minutes: 760 },
   },
   'Airbus A350-1000': {
-    role: 'Delivered, not yet flying',
+    role: 'Long-haul flagship',
     description:
-      'Forty aircraft on the register and not one of them rostered onto a route yet — the single clearest measure of how fast this airline is growing. When they enter service they will be the largest frames FORZA flies, sharing their cabin products with Karination’s A350-1000s.',
-    signature: { route: '', km: 0, minutes: 0 },
+      'A hundred and fifty aircraft, every one of them flying: the largest type in the group and the one doing more of FORZA’s growth than any other, across a hundred and thirty-seven cities. Its longest sector is the longest flight in KarinationGroup by time in the air — Cần Thơ to the southern tip of Argentina, most of a day aloft.',
+    signature: { route: 'Cần Thơ – Ushuaia', km: 15010, minutes: 1185 },
   },
   'Airbus A321neo': {
     role: 'Long, thin, narrowbody',
     description:
-      'Fifty aircraft flying sectors a narrowbody has no business flying — Đà Lạt to Yekaterinburg is eight hours and six and a half thousand kilometres. This is how FORZA opens a route before it can justify a widebody, and several of its long-haul destinations started here.',
-    signature: { route: 'Đà Lạt – Yekaterinburg', km: 6429, minutes: 480 },
+      'Forty-two aircraft flying sectors a narrowbody has no business flying — Đà Lạt to Kamchatka is more than eight hours. This is how FORZA opens a route before it can justify a widebody, and several of its long-haul destinations started here.',
+    signature: { route: 'Đà Lạt – Petropavlovsk-Kamchatsky', km: 6377, minutes: 495 },
   },
   'Airbus A220-100': {
     role: 'Regional, medium haul',
@@ -175,7 +175,7 @@ export const FORZA_FLEET_NOTES: Record<string, FleetNote> = {
   'De Havilland Canada Dash 8 Q100': {
     role: 'The shortest sectors',
     description:
-      'Three turboprops on the hops nothing else can make pay — nine airports, and a Đà Lạt to TP Hồ Chí Minh sector of forty-five minutes gate to gate. The smallest aircraft in the group, and the one doing the least glamorous and most necessary work.',
-    signature: { route: 'Đà Lạt – TP Hồ Chí Minh', km: 214, minutes: 45 },
+      'Three turboprops on the hops nothing else can make pay — fifteen airports, none of them far apart. The smallest aircraft in the group, and the one doing the least glamorous and most necessary work.',
+    signature: { route: 'Vân Đồn – Vinh', km: 321, minutes: 50 },
   },
 }

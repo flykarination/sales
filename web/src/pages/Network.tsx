@@ -10,7 +10,7 @@ import { listAllRoutes, type RouteRow } from '@/lib/queries'
 import { REGION_STYLE } from '@/lib/cabins'
 import { count, duration, price } from '@/lib/format'
 import { airportLabel } from '@/data/airports'
-import { FORZA, KARINATION } from '@/data/carriers'
+import { CARRIERS, carrierByCode, type GroupCarrier } from '@/data/carriers'
 
 const W = 1000
 const H = 520
@@ -19,7 +19,7 @@ const H = 520
 type Filter = RegionKey | 'ALL' | 'DOMESTIC'
 
 /** Which carrier's routes are on the map. */
-type CarrierFilter = 'ALL' | 'KX' | 'Z4'
+type CarrierFilter = 'ALL' | GroupCarrier['code']
 
 const isDomestic = (a: string, b: string) =>
   getAirport(a)?.country === 'VN' && getAirport(b)?.country === 'VN'
@@ -110,18 +110,22 @@ function spectrumAt(t: number): string {
 }
 
 /**
- * Every base in the group, Karination's five first and FORZA's thirteen
- * after. Both carriers' routes are on this map because both are bookable
- * here, so grouping by Karination's hubs alone filed a quarter of the
- * network under "Onward".
+ * Every base in the group, in carrier order — Karination's five, then FORZA's
+ * and Sonder's. Every carrier's routes are on this map because all of them
+ * are bookable here, so grouping by Karination's hubs alone would file most
+ * of the group's network under "Onward". A hub two carriers share is headed
+ * by the first to claim it.
  */
-const HUB_ORDER: string[] = [...KARINATION.hubs, ...FORZA.hubs.filter((h) => !KARINATION.hubs.includes(h))]
-
-/** Which carrier bases at a hub, for the section heading. */
-const HUB_CARRIER = new Map<string, string>([
-  ...KARINATION.hubs.map((h) => [h, KARINATION.name] as [string, string]),
-  ...FORZA.hubs.filter((h) => !KARINATION.hubs.includes(h)).map((h) => [h, FORZA.name] as [string, string]),
-])
+const HUB_ORDER: string[] = []
+/** Which carrier bases at a hub, for the section heading: the first to claim it. */
+const HUB_CARRIER = new Map<string, GroupCarrier>()
+for (const c of CARRIERS) {
+  for (const h of c.hubs) {
+    if (HUB_CARRIER.has(h)) continue
+    HUB_ORDER.push(h)
+    HUB_CARRIER.set(h, c)
+  }
+}
 
 /** Ease-out cubic: quick departure, soft landing, matching --ease-paint. */
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3)
@@ -306,13 +310,13 @@ export default function Network() {
       .map((h) => ({
         hub: h,
         city: airportLabel(h),
-        carrier: HUB_CARRIER.get(h) ?? '',
+        carrier: HUB_CARRIER.get(h) ?? null,
         total: hubs.get(h)!.length,
         arcs: hubs.get(h)!.slice(0, 24),
       }))
     if (other.length) {
       groups.push({
-        hub: 'Onward', city: 'Stopover sectors', carrier: '',
+        hub: 'Onward', city: 'Stopover sectors', carrier: null,
         total: other.length, arcs: other.slice(0, 24),
       })
     }
@@ -340,9 +344,9 @@ export default function Network() {
           <p className="mt-5" style={{ color: '#B9B6D8', maxWidth: '52ch' }}>
             {routes ? count(shown.length) : '—'}{' '}
             {region === 'DOMESTIC' ? 'routes within Vietnam' : 'city pairs'}
-            {carrier === 'KX' ? ' flown by Karination'
-              : carrier === 'Z4' ? ' flown by FORZA'
-              : ' across Karination and FORZA'}.
+            {carrier === 'ALL'
+              ? ` across ${CARRIERS.map((c) => c.name).join(', ').replace(/, ([^,]*)$/, ' and $1')}`
+              : ` flown by ${carrierByCode(carrier)?.name ?? carrier}`}.
             Each arc is the real great-circle track; colour shows the region it
             reaches. Choose a region to fly the map to it, or select a route to draw it.
           </p>
@@ -350,9 +354,8 @@ export default function Network() {
           {/* Airline first: it changes what the region counts even mean. */}
           <div className="mt-7 flex flex-wrap gap-2" role="group" aria-label="Filter by airline">
             {([
-              ['ALL', 'Both airlines', 'var(--color-aqua)'],
-              ['KX', 'Karination', KARINATION.accent],
-              ['Z4', 'FORZA', FORZA.accent],
+              ['ALL', 'All airlines', 'var(--color-aqua)'],
+              ...CARRIERS.map((c) => [c.code, c.name, c.accent] as [CarrierFilter, string, string]),
             ] as Array<[CarrierFilter, string, string]>).map(([key, label, hue]) => {
               const on = carrier === key
               return (
@@ -577,15 +580,15 @@ export default function Network() {
                 <span className="tnum font-mono" style={{ color: '#8F8CB4', fontSize: 'var(--text-small)' }}>
                   {count(group.total)} {group.total === 1 ? 'route' : 'routes'}
                 </span>
-                {group.carrier && group.carrier !== 'Karination' && (
+                {group.carrier && group.carrier.code !== 'KX' && (
                   <span
                     className="font-mono uppercase"
                     style={{
                       fontSize: 'var(--text-micro)', letterSpacing: '0.14em',
-                      color: 'var(--color-spectrum-amber)',
+                      color: group.carrier.accent,
                     }}
                   >
-                    {group.carrier} base
+                    {group.carrier.name} base
                   </span>
                 )}
               </div>
@@ -609,15 +612,15 @@ export default function Network() {
                         <span className="min-w-0 truncate" style={{ color: '#8F8CB4', fontSize: 'var(--text-micro)' }}>
                           {airportLabel(far)}
                         </span>
-                        {carrier === 'ALL' && a.route.airline_code === 'Z4' && (
+                        {carrier === 'ALL' && a.route.airline_code && a.route.airline_code !== 'KX' && (
                           <span
                             className="font-mono"
                             style={{
                               fontSize: 'var(--text-micro)', letterSpacing: '0.08em',
-                              color: FORZA.accent, flex: 'none',
+                              color: carrierByCode(a.route.airline_code)?.accent ?? '#B9B6D8', flex: 'none',
                             }}
                           >
-                            Z4
+                            {a.route.airline_code}
                           </span>
                         )}
                         {a.route.from_price_economy_usd && (

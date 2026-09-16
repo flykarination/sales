@@ -2,14 +2,14 @@ import { useId, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { cabin } from '@/lib/cabins'
 import {
-  carrierName, dayOffset, dayOffsetSpoken, duration, durationSpoken,
+  carrierName, dayDiff, dayOffset, dayOffsetSpoken, duration, durationSpoken,
   price, shortDate, time, timeSpoken,
 } from '@/lib/format'
 import { airportLabel } from '@/data/airports'
 import type { Itinerary } from '@/lib/queries'
 import { connectionAdvice } from '@/lib/connections'
 import { OperatedBy } from '@/components/OperatedBy'
-import { governingCarrier, operatedNoteFor } from '@/data/carriers'
+import { governingCarrier, isTighterThanDefault, operatedNoteFor } from '@/data/carriers'
 import { BaggageNotice } from '@/components/BaggageNotice'
 
 /**
@@ -61,8 +61,9 @@ export function ItineraryOption({
       .join(', ') +
     `. ${c.longName}, ${price(itinerary.totalPriceUsd)} per passenger.` +
     operators.map((code) => ` ${operatedNoteFor(code)}`).join('') +
-    (governingCarrier(itinerary.legs.map((l) => l.airline_code)).carrier.code === 'Z4'
-      ? ' FORZA baggage rules apply to this journey.' : '')
+    (isTighterThanDefault(governingCarrier(itinerary.legs.map((l) => l.airline_code)).carrier)
+      ? ` ${governingCarrier(itinerary.legs.map((l) => l.airline_code)).carrier.name} baggage rules apply to this journey.`
+      : '')
 
   return (
     <li style={{ borderBottom: 'var(--rule)', borderLeft: `3px solid ${selected ? c.hue : 'transparent'}`, background: selected ? c.wash : 'transparent' }}>
@@ -234,9 +235,4 @@ function waitHue(minutes: number): string {
   if (minutes < 90) return 'var(--color-spectrum-amber)'
   if (minutes >= 600) return 'var(--color-spectrum-rose)'
   return 'var(--color-spectrum-teal)'
-}
-
-function dayDiff(a: string | null, b: string | null): number {
-  if (!a || !b) return 0
-  return Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86400000)
 }

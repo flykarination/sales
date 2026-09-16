@@ -114,3 +114,13 @@ export function searchQueryString(q: SearchQuery): string {
 export function sliceLabel(s: Slice): string {
   return `${s.from} → ${s.to}`
 }
+
+/**
+ * What to call one journey of a trip. "Outbound / Return" only describes a
+ * return trip; a one-way is just the flight, a multi-city is numbered.
+ */
+export function sliceHeading(trip: TripType, index: number, total: number): string {
+  if (trip === 'return' && total === 2) return index === 0 ? 'Outbound' : 'Return'
+  if (total === 1) return 'Your flight'
+  return `Flight ${index + 1} of ${total}`
+}
