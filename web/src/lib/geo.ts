@@ -287,8 +287,11 @@ export const REGION_LABELS: Record<RegionKey, string> = {
 }
 
 /**
- * Country code → region. Covers all 112 country codes present in
- * `public.airports`, plus the near neighbours most likely to be added next.
+ * Country code → region. Covers every country code among the network's
+ * airports (148 in September 2026), plus the near neighbours most likely to
+ * be added next. The Americas are listed in full: FORZA's long-haul growth
+ * reached the Caribbean and Central America, and islands arrive one country
+ * code at a time.
  *
  * Three judgement calls worth knowing about before you colour a map with this:
  *
@@ -353,32 +356,73 @@ export const REGION_BY_COUNTRY: Record<string, RegionKey> = {
   NZ: 'OCEANIA', PG: 'OCEANIA', SB: 'OCEANIA', VU: 'OCEANIA',
   PF: 'OCEANIA', TO: 'OCEANIA', WS: 'OCEANIA',
 
-  // Americas
+  // Americas: North America
   AR: 'AMERICAS', US: 'AMERICAS',
   BR: 'AMERICAS', CA: 'AMERICAS', CL: 'AMERICAS', CO: 'AMERICAS',
   MX: 'AMERICAS', PE: 'AMERICAS',
+  BM: 'AMERICAS', PM: 'AMERICAS',
+  // Central America
+  BZ: 'AMERICAS', CR: 'AMERICAS', GT: 'AMERICAS', HN: 'AMERICAS', NI: 'AMERICAS',
+  PA: 'AMERICAS', SV: 'AMERICAS',
+  // The Caribbean
+  AG: 'AMERICAS', AI: 'AMERICAS', AW: 'AMERICAS', BB: 'AMERICAS', BL: 'AMERICAS',
+  BQ: 'AMERICAS', BS: 'AMERICAS', CU: 'AMERICAS', CW: 'AMERICAS', DM: 'AMERICAS',
+  DO: 'AMERICAS', GD: 'AMERICAS', GP: 'AMERICAS', HT: 'AMERICAS', JM: 'AMERICAS',
+  KN: 'AMERICAS', KY: 'AMERICAS', LC: 'AMERICAS', MF: 'AMERICAS', MQ: 'AMERICAS',
+  MS: 'AMERICAS', PR: 'AMERICAS', SX: 'AMERICAS', TC: 'AMERICAS', TT: 'AMERICAS',
+  VC: 'AMERICAS', VG: 'AMERICAS', VI: 'AMERICAS',
+  // the rest of South America
+  BO: 'AMERICAS', EC: 'AMERICAS', FK: 'AMERICAS', GF: 'AMERICAS', GY: 'AMERICAS',
+  PY: 'AMERICAS', SR: 'AMERICAS', UY: 'AMERICAS', VE: 'AMERICAS',
 }
 
-/**
- * Fallback for a country code that is not in {@link REGION_BY_COUNTRY}.
- *
- * The network is Vietnamese and every unmapped code today would be a new
- * destination somewhere near it, so an unknown lands in the home region rather
- * than being dropped from the map. If a legend ever shows a suspiciously large
- * South East Asia, an unmapped country is the first thing to check.
- */
+/** For an IATA code the network does not serve at all: the home region. */
 const DEFAULT_REGION: RegionKey = 'SEA'
+
+/**
+ * The region of an airport whose country is not in {@link REGION_BY_COUNTRY}:
+ * that of the nearest airport whose country is.
+ *
+ * This used to be a flat default of South East Asia, on the theory that any
+ * new destination would be somewhere near Vietnam. FORZA's September 2026
+ * schedule disproved it: 42 airports in 28 Caribbean, Central and South
+ * American countries arrived unmapped, and the route map painted Havana and
+ * Punta Cana as South East Asia. The nearest mapped airport cannot be that
+ * wrong — an unmapped island takes the region of the coast beside it. The
+ * table stays the real answer; development builds say which code to add.
+ */
+const inferredRegion = new Map<string, RegionKey>()
+
+function nearestMappedRegion(airport: Airport): RegionKey {
+  const cached = inferredRegion.get(airport.iata)
+  if (cached) return cached
+  let region = DEFAULT_REGION
+  let nearest = Infinity
+  for (const other of AIRPORTS) {
+    const known = REGION_BY_COUNTRY[other.country]
+    if (!known) continue
+    const km = distanceKm(airport.iata, other.iata)
+    if (km < nearest) { nearest = km; region = known }
+  }
+  inferredRegion.set(airport.iata, region)
+  if (import.meta.env.DEV) {
+    console.warn(
+      `regionOf: no region for country ${airport.country} (${airport.iata}); ` +
+      `using the nearest mapped airport's, ${region}. Add it to REGION_BY_COUNTRY.`,
+    )
+  }
+  return region
+}
 
 /**
  * The region an airport belongs to, resolved through its country code.
  *
- * Unknown IATA codes and unmapped countries both return {@link DEFAULT_REGION}
- * rather than throwing, so this is safe to call while rendering. If you need to
- * distinguish "not in the network" from "in the network, region unknown", check
- * {@link getAirport} first.
+ * An unmapped country takes the region of the nearest mapped airport; an IATA
+ * code outside the network returns {@link DEFAULT_REGION}. Neither throws, so
+ * this is safe to call while rendering.
  */
 export function regionOf(iata: string): RegionKey {
   const airport = getAirport(iata)
   if (!airport) return DEFAULT_REGION
-  return REGION_BY_COUNTRY[airport.country] ?? DEFAULT_REGION
+  return REGION_BY_COUNTRY[airport.country] ?? nearestMappedRegion(airport)
 }

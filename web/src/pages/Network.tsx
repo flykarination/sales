@@ -35,17 +35,33 @@ const isDomestic = (a: string, b: string) =>
  * so Adelaide was filed and coloured as Southeast Asia. So were Auckland,
  * Algiers and Stockholm — 438 of 754 routes.
  *
- * The far end is the one away from the home network. Where exactly one end is
- * Vietnamese, the other is what the route is *for*; where both are (a
- * domestic sector) or neither is (an onward stopover sector), the destination
+ * The far end is the one away from the hub, and "away" is measured: each
+ * end's distance from the nearest base of the airline flying the route, the
+ * farther end winning. The hub end of a route is zero away, so a route is
+ * coloured by where it goes whichever way round its row was stored. That used
+ * to be decided by which end was in Vietnam, and it failed wherever neither
+ * was: every Sonder route out of Incheon fell back to the stored destination,
+ * so Incheon–Boston, kept as BOS -> ICN, was coloured East Asia. An onward
+ * stopover sector, with no base at either end, is coloured by the end further
+ * from home. Only a route between two bases ties, and there the destination
  * is as good an answer as exists.
  */
-function farEnd(origin: string, destination: string): string {
-  const originVN = getAirport(origin)?.country === 'VN'
-  const destinationVN = getAirport(destination)?.country === 'VN'
-  if (originVN && !destinationVN) return destination
-  if (destinationVN && !originVN) return origin
-  return destination
+const farEnds = new Map<string, string>()
+
+function farEnd(route: Pick<RouteRow, 'origin_iata' | 'destination_iata' | 'airline_code'>): string {
+  const { origin_iata: o, destination_iata: d, airline_code } = route
+  const key = `${airline_code}:${o}:${d}`
+  const cached = farEnds.get(key)
+  if (cached) return cached
+  // a route whose airline this site does not know is judged against every base
+  const bases = carrierByCode(airline_code)?.hubs ?? HUB_ORDER
+  const fromBase = (iata: string) => {
+    const km = Math.min(...bases.map((b) => distanceKm(b, iata)))
+    return Number.isFinite(km) ? km : 0
+  }
+  const far = fromBase(o) > fromBase(d) ? o : d
+  farEnds.set(key, far)
+  return far
 }
 
 /**
@@ -182,7 +198,7 @@ export default function Network() {
         seen.add(key)
         if (region === 'ALL') return true
         if (region === 'DOMESTIC') return isDomestic(r.origin_iata, r.destination_iata)
-        return regionOf(farEnd(r.origin_iata, r.destination_iata)) === region
+        return regionOf(farEnd(r)) === region
       })
   }, [routes, region, carrier])
 
@@ -195,9 +211,10 @@ export default function Network() {
           if (!from || !to) return null
           const d = greatCirclePath(r.origin_iata, r.destination_iata, projection)
           if (!d) return null
-          return { route: r, d, region: regionOf(farEnd(r.origin_iata, r.destination_iata)) }
+          const far = farEnd(r)
+          return { route: r, d, far, region: regionOf(far) }
         })
-        .filter(Boolean) as Array<{ route: RouteRow; d: string; region: RegionKey }>,
+        .filter(Boolean) as Array<{ route: RouteRow; d: string; far: string; region: RegionKey }>,
     [shown, projection],
   )
 
@@ -289,17 +306,18 @@ export default function Network() {
    *
    * A flat list of 700 city pairs tells a reader nothing about how the
    * airline is arranged. Grouped by hub it does: this is what Sài Gòn flies,
-   * this is what Đà Nẵng flies. Routes between two hubs are filed under the
-   * origin; the handful that touch no hub — the second leg of a stopover
-   * service — are gathered at the end rather than dropped.
+   * this is what Đà Nẵng flies. A route is filed under its near end — the one
+   * that is not its far end — so Karination's Sài Gòn–Incheon sits under Sài
+   * Gòn, not under Sonder's base at the other end of it. The handful that
+   * touch no hub — the second leg of a stopover service — are gathered at the
+   * end rather than dropped.
    */
   const byHub = useMemo(() => {
     const hubs = new Map<string, typeof arcs>()
     const other: typeof arcs = []
     for (const a of arcs) {
-      const o = a.route.origin_iata
-      const d = a.route.destination_iata
-      const hub = HUB_ORDER.includes(o) ? o : HUB_ORDER.includes(d) ? d : null
+      const near = a.far === a.route.origin_iata ? a.route.destination_iata : a.route.origin_iata
+      const hub = HUB_ORDER.includes(near) ? near : null
       if (!hub) { other.push(a); continue }
       const list = hubs.get(hub)
       if (list) list.push(a)
@@ -540,7 +558,7 @@ export default function Network() {
                 {active.origin_iata} → {active.destination_iata}
               </span>
               <span style={{ color: '#B9B6D8', fontSize: 'var(--text-small)' }}>
-                {airportLabel(farEnd(active.origin_iata, active.destination_iata))}
+                {airportLabel(farEnd(active))}
               </span>
               {Number.isFinite(activeKm) && (
                 <span className="tnum font-mono" style={{ color: '#8F8CB4', fontSize: 'var(--text-small)' }}>
@@ -596,7 +614,7 @@ export default function Network() {
               <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
                 {group.arcs.map((a) => {
                   const on = active === a.route
-                  const far = a.route.origin_iata === group.hub ? a.route.destination_iata : a.route.origin_iata
+                  const far = a.far
                   return (
                     <li key={`${a.route.origin_iata}-${a.route.destination_iata}`}>
                       <button

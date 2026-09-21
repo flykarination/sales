@@ -1,0 +1,29 @@
+[
+    {
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "numAircraft": 28,
+        "numRoutes": 16,
+        "numFlights": 29,
+        "flagshipAircraft": "Airbus A350-1000",
+        "majorHubAirport": "ICN",
+        "lastOnlineTime": "2026-08-22T06:25:42.441+00:00"
+    },
+    {
+        "uid": "58b1650b-3ded-4974-b2e3-8e4861875d79",
+        "numAircraft": 712,
+        "numRoutes": 766,
+        "numFlights": 1302,
+        "flagshipAircraft": "Airbus A321XLR",
+        "majorHubAirport": "SGN",
+        "lastOnlineTime": "2026-08-26T14:07:23.49+00:00"
+    },
+    {
+        "uid": "e3f48e70-92a1-40c3-9767-22a0b96d5c66",
+        "numAircraft": 275,
+        "numRoutes": 295,
+        "numFlights": 504,
+        "flagshipAircraft": "Airbus A350-900",
+        "majorHubAirport": "VCA",
+        "lastOnlineTime": "2026-08-26T14:12:04.49+00:00"
+    }
+]
