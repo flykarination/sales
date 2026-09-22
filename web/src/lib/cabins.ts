@@ -76,7 +76,9 @@ export function cabin(code: string | null | undefined): Cabin {
 
 /**
  * Region hues for the route map, drawn from the same six-hue spectrum as the
- * cabins so the whole site shares one colour vocabulary.
+ * cabins so the whole site shares one colour vocabulary, plus the turquoise
+ * for Oceania and sky blue for the Americas: eight regions need eight hues,
+ * and until sky blue the Americas shared rose with the Middle East.
  */
 export type RegionKey =
   | 'SEA' | 'EASTASIA' | 'SOUTHASIA' | 'MIDEAST'
@@ -90,5 +92,5 @@ export const REGION_STYLE: Record<RegionKey, { label: string; hue: string; ink: 
   EUROPE:    { label: 'Europe',         hue: 'var(--color-spectrum-violet)',  ink: 'var(--color-spectrum-violet-ink)' },
   AFRICA:    { label: 'Africa',         hue: 'var(--color-spectrum-magenta)', ink: 'var(--color-spectrum-magenta-ink)' },
   OCEANIA:   { label: 'Oceania',        hue: 'var(--color-aqua-mid)',         ink: 'var(--color-aqua-deep)' },
-  AMERICAS:  { label: 'The Americas',   hue: 'var(--color-spectrum-rose)',    ink: 'var(--color-spectrum-rose-ink)' },
+  AMERICAS:  { label: 'The Americas',   hue: 'var(--color-skyblue)',          ink: 'var(--color-skyblue-ink)' },
 }

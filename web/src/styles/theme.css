@@ -49,6 +49,17 @@
   --color-spectrum-violet:    #A060F0;
   --color-spectrum-violet-ink: #5B1DA8;
 
+  /* ---- one hue from outside the lettering ------------------------ */
+  /* The route map needs eight region colours and the brand gives seven,
+     so the Americas and the Middle East were sharing rose. Sky blue was
+     chosen for the Americas (September 2026) because it sits furthest
+     from every other colour on the map -- at least 26 CIEDE2000 from all
+     of them, where textbook #87CEEB would all but match Oceania's aqua.
+     The -ink variant keeps the hue and clears 7:1 on paper. Named
+     "skyblue" so it cannot be mistaken for Tailwind's own sky-* scale. */
+  --color-skyblue:     #4F9DFF;
+  --color-skyblue-ink: #1754A1;
+
   /* ---- cabin = hue. the whole point of the system --------------- */
   --color-cabin-first:     var(--color-spectrum-magenta);
   --color-cabin-first-ink: var(--color-spectrum-magenta-ink);
