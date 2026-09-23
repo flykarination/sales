@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BackLink, FunnelPage } from '@/components/Funnel'
 import { useBooking } from '@/booking/BookingContext'
-import { createBooking, payWithMiles } from '@/lib/queries'
+import { useAuth } from '@/auth/AuthContext'
+import { attachBookingToAccount, createBooking, payWithMiles } from '@/lib/queries'
 import { count } from '@/lib/format'
 import { price } from '@/lib/format'
 
@@ -17,6 +18,7 @@ import { price } from '@/lib/format'
  */
 export default function Payment() {
   const { draft, legs, total, set } = useBooking()
+  const { user } = useAuth()
   const navigate = useNavigate()
   const [state, setState] = useState<'idle' | 'paying' | 'failed'>('idle')
   const [milesNotice, setMilesNotice] = useState<string | null>(null)
@@ -25,6 +27,25 @@ export default function Payment() {
   useEffect(() => {
     if (legs.length === 0 || draft.passengers.length === 0) navigate('/', { replace: true })
   }, [legs.length, draft.passengers.length, navigate])
+
+  /**
+   * Put the new booking on the member's RainbowOne account, if they asked
+   * for it on the passengers page.
+   *
+   * Never fatal. The booking exists either way and manage booking can add it
+   * afterwards, so a failure here is a line on the confirmation rather than a
+   * reason to tell someone their trip did not happen.
+   */
+  async function addToAccount(pnr: string) {
+    if (!draft.addToAccount || !user) return
+    const { data, error } = await attachBookingToAccount(pnr, draft.contactEmail)
+    set({
+      accountResult: data ?? {
+        ok: false,
+        message: error?.message ?? 'We could not add it to your account just now.',
+      },
+    })
+  }
 
   async function pay(e: React.FormEvent) {
     e.preventDefault()
@@ -55,6 +76,7 @@ export default function Payment() {
       return
     }
 
+    await addToAccount(String(data))
     set({ pnr: String(data) })
     navigate('/confirmation')
   }
@@ -95,6 +117,7 @@ export default function Payment() {
       return
     }
 
+    await addToAccount(pnr)
     set({ pnr })
     navigate('/confirmation')
   }

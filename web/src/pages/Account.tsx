@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthContext'
-import { myAccount, myLedger, type AccountRow, type LedgerRow } from '@/lib/queries'
+import {
+  attachBookingToAccount, myAccount, myBookings, myLedger,
+  type AccountBookingRow, type AccountRow, type LedgerRow,
+} from '@/lib/queries'
 import { cabin } from '@/lib/cabins'
-import { count, shortDate } from '@/lib/format'
+import { airportLabel } from '@/data/airports'
+import { count, price, shortDate } from '@/lib/format'
 
 export default function Account() {
   const { user, loading, signOut } = useAuth()
   const navigate = useNavigate()
   const [acct, setAcct] = useState<AccountRow | null>(null)
   const [ledger, setLedger] = useState<LedgerRow[]>([])
+  const [trips, setTrips] = useState<AccountBookingRow[] | null>(null)
+  const [adding, setAdding] = useState<string | null>(null)
+  const [tripNotice, setTripNotice] = useState<string | null>(null)
   const [state, setState] = useState<'loading' | 'ready' | 'missing' | 'error'>('loading')
 
   useEffect(() => {
@@ -19,16 +26,35 @@ export default function Account() {
   useEffect(() => {
     if (!user) return
     let live = true
-    Promise.all([myAccount(), myLedger(50)]).then(([a, l]) => {
+    Promise.all([myAccount(), myLedger(50), myBookings()]).then(([a, l, b]) => {
       if (!live) return
       if (a.error) { setState('error'); return }
       if (!a.data) { setState('missing'); return }
       setAcct(a.data as AccountRow)
       setLedger((l.data ?? []) as LedgerRow[])
+      setTrips(b.data ?? [])
       setState('ready')
     })
     return () => { live = false }
   }, [user])
+
+  /**
+   * Add a booking the member has but never attached -- one made with their
+   * membership address before they signed in. Miles can land with it, so the
+   * card and the ledger are re-read rather than patched.
+   */
+  async function addTrip(trip: AccountBookingRow) {
+    setAdding(trip.pnr)
+    setTripNotice(null)
+    const { data, error } = await attachBookingToAccount(trip.pnr, trip.contact_email)
+    setAdding(null)
+    setTripNotice(data?.message ?? error?.message ?? 'We could not add that booking.')
+    if (!data?.ok) return
+    const [a, l, b] = await Promise.all([myAccount(), myLedger(50), myBookings()])
+    if (a.data) setAcct(a.data as AccountRow)
+    setLedger((l.data ?? []) as LedgerRow[])
+    setTrips(b.data ?? [])
+  }
 
   if (loading || state === 'loading') {
     return <div className="mx-auto max-w-4xl px-5 py-16 md:px-8" aria-busy="true">
@@ -58,6 +84,7 @@ export default function Account() {
     )
   }
 
+  const today = new Date().toISOString().slice(0, 10)
   const pct = acct.next_tier_code && acct.miles_to_next_tier != null
     ? Math.min(100, Math.round(
         (acct.qualifying_miles_ytd / (acct.qualifying_miles_ytd + acct.miles_to_next_tier)) * 100))
@@ -165,6 +192,90 @@ export default function Account() {
           </ul>
         </section>
       )}
+
+      {/* trips */}
+      <section className="mt-10">
+        <h2 className="mb-3 font-mono uppercase" style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.2em', color: 'var(--color-ink-mute)' }}>
+          Your trips
+        </h2>
+
+        {tripNotice && (
+          <p role="status" className="mb-3"
+             style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)', borderLeft: '2px solid var(--color-aqua-deep)', paddingLeft: 12 }}>
+            {tripNotice}
+          </p>
+        )}
+
+        {trips === null ? (
+          <p aria-busy="true" style={{ color: 'var(--color-ink-mute)' }}>Looking for your bookings…</p>
+        ) : trips.length === 0 ? (
+          <div style={{ borderTop: '2px solid var(--color-ink)', paddingTop: 20 }}>
+            <p style={{ fontSize: 'var(--text-lead)' }}>Nothing booked yet.</p>
+            <p className="mt-2" style={{ color: 'var(--color-ink-mute)', maxWidth: '48ch' }}>
+              Bookings you add to your account appear here, and you can change or
+              cancel them without hunting for the reference.
+            </p>
+            <Link to="/" className="kx-cta mt-5">Find a flight</Link>
+          </div>
+        ) : (
+          <ul style={{ borderTop: '2px solid var(--color-ink)' }}>
+            {trips.map((t) => {
+              const cancelled = t.status === 'CANCELLED'
+              const flown = Boolean(t.last_travel_date) && t.last_travel_date! < today
+              return (
+                <li
+                  key={t.pnr}
+                  className="flex flex-wrap items-baseline gap-x-5 gap-y-2 py-4"
+                  style={{ borderBottom: 'var(--rule)', opacity: cancelled ? 0.6 : 1 }}
+                >
+                  <span className="min-w-0" style={{ flex: '1 1 16rem' }}>
+                    <span style={{ fontWeight: 600 }}>
+                      {airportLabel(t.origin_iata ?? '')}
+                      {t.destination_iata && t.destination_iata !== t.origin_iata
+                        ? ` → ${airportLabel(t.destination_iata)}` : ''}
+                    </span>
+                    <span className="mt-0.5 block" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
+                      {t.first_travel_date ? shortDate(t.first_travel_date) : '—'}
+                      {t.last_travel_date && t.last_travel_date !== t.first_travel_date
+                        ? ` – ${shortDate(t.last_travel_date)}` : ''}
+                      {' · '}
+                      {t.passenger_count} {t.passenger_count === 1 ? 'passenger' : 'passengers'}
+                      {' · '}
+                      {t.segment_count} {t.segment_count === 1 ? 'flight' : 'flights'}
+                      {cancelled ? ' · cancelled' : flown ? ' · flown' : ''}
+                    </span>
+                  </span>
+
+                  <span className="tnum font-mono" style={{ letterSpacing: '0.16em' }}>{t.pnr}</span>
+                  <span className="tnum font-mono" style={{ color: 'var(--color-ink-mute)' }}>
+                    {price(t.total_amount_usd)}
+                  </span>
+
+                  {t.on_account ? (
+                    <Link to={`/manage?pnr=${t.pnr}`} className="underline" style={{ fontSize: 'var(--text-small)' }}>
+                      Manage
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => addTrip(t)}
+                      disabled={adding === t.pnr}
+                      className="font-mono uppercase"
+                      style={{
+                        border: 'var(--rule)', borderRadius: 'var(--radius-edge)',
+                        padding: '8px 12px', minHeight: 40, fontSize: 'var(--text-micro)',
+                        letterSpacing: '0.14em',
+                      }}
+                      title="Booked with your membership address, but not on your account yet"
+                    >
+                      {adding === t.pnr ? 'Adding…' : 'Add to account'}
+                    </button>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </section>
 
       {/* ledger */}
       <section className="mt-10">

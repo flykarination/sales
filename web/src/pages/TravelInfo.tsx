@@ -27,7 +27,7 @@ const FAQ: Array<[string, string]> = [
   ],
   [
     'How do I earn miles?',
-    'Join RainbowOne and book with the same email address. Miles are the distance flown multiplied by your cabin, plus your tier bonus, and they credit automatically.',
+    'Join RainbowOne and book with the same email address. Miles are the distance flown multiplied by your cabin, plus your tier bonus, and they credit automatically. Or sign in when you book and add the booking to your account, and it earns for you whatever address is on it.',
   ],
   [
     'What if I need assistance?',

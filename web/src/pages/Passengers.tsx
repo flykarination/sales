@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { BackLink, FunnelPage } from '@/components/Funnel'
 import { useBooking, type Passenger } from '@/booking/BookingContext'
+import { useAuth } from '@/auth/AuthContext'
 
 const EMPTY_PAX: Passenger = { given_name: '', family_name: '', passenger_type: 'ADULT' }
 
@@ -13,6 +14,7 @@ const PAX_LABEL: Record<Passenger['passenger_type'], string> = {
 
 export default function Passengers() {
   const { draft, set, legs } = useBooking()
+  const { user } = useAuth()
   const navigate = useNavigate()
   // One row per traveller, already labelled with the type chosen in the
   // search. The type stays editable — someone whose child turns twelve
@@ -31,7 +33,13 @@ export default function Passengers() {
   const [pax, setPax] = useState<Passenger[]>(
     draft.passengers.length === seeded.length ? draft.passengers : seeded,
   )
-  const [email, setEmail] = useState(draft.contactEmail)
+  // The signed-in member's own address stands in until they type another.
+  // Derived rather than seeded into state: auth resolves after the first
+  // render, and filling the field from an effect makes it flash empty first.
+  const [typedEmail, setTypedEmail] = useState(draft.contactEmail)
+  const [emailEdited, setEmailEdited] = useState(Boolean(draft.contactEmail))
+  const email = emailEdited ? typedEmail : (typedEmail || user?.email || '')
+  const [addToAccount, setAddToAccount] = useState(draft.addToAccount ?? true)
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [tried, setTried] = useState(false)
 
@@ -57,6 +65,8 @@ export default function Passengers() {
       passengers: pax.map((p) => ({ ...p, given_name: p.given_name.trim(), family_name: p.family_name.trim() })),
       contactEmail: email.trim().toLowerCase(),
       contactName: `${pax[0].given_name} ${pax[0].family_name}`.trim(),
+      addToAccount: Boolean(user) && addToAccount,
+      accountResult: undefined,
     })
     navigate('/payment')
   }
@@ -126,10 +136,47 @@ export default function Passengers() {
               label="Email" value={email} type="email" autoComplete="email"
               hint="Your booking reference is sent here, and you will need it to manage the booking."
               error={(tried || touched.email) && !emailValid ? 'Enter an email address like name@example.com.' : null}
-              onChange={setEmail}
+              onChange={(v) => { setEmailEdited(true); setTypedEmail(v) }}
               onBlur={() => setTouched((t) => ({ ...t, email: true }))}
             />
           </div>
+
+          {/* RainbowOne. A booking is attached because the member asked for
+              it, not because the address matched: one inbox can belong to a
+              whole family. */}
+          {user ? (
+            <label
+              className="mt-5 flex items-start gap-3"
+              style={{
+                border: 'var(--rule)', borderLeft: '3px solid var(--color-aqua-deep)',
+                borderRadius: 'var(--radius-edge)', padding: '14px 16px', cursor: 'pointer',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={addToAccount}
+                onChange={(e) => setAddToAccount(e.target.checked)}
+                style={{ width: 20, height: 20, marginTop: 2, flex: 'none', accentColor: 'var(--color-aqua-deep)' }}
+              />
+              <span>
+                <span style={{ fontWeight: 600, display: 'block' }}>
+                  Add this booking to my RainbowOne account
+                </span>
+                <span style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
+                  It appears under your trips, where you can change or cancel it
+                  without digging out the reference, and its miles credit to you.
+                </span>
+              </span>
+            </label>
+          ) : (
+            <p className="mt-5" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)', maxWidth: '54ch' }}>
+              RainbowOne member?{' '}
+              <Link to="/signin?next=/passengers" className="underline">Sign in</Link>{' '}
+              to keep this booking on your account — or{' '}
+              <Link to="/join" className="underline">join</Link>, which is free. You can
+              also add it afterwards from manage booking.
+            </p>
+          )}
         </fieldset>
 
         <div className="flex flex-wrap items-center gap-5">

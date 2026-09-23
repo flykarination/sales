@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthContext'
 
 export default function Join() {
   const { signUp, user } = useAuth()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  /**
+   * Where to go once they are in. `next` lets the booking funnel send someone
+   * to sign in and get them back to the step they left. Only a path on this
+   * site is honoured, so the parameter cannot bounce anyone elsewhere.
+   */
+  const next = params.get('next')
+  const after = next && next.startsWith('/') && !next.startsWith('//') ? next : '/account'
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -12,7 +20,7 @@ export default function Join() {
   const [error, setError] = useState<string | null>(null)
   const [tried, setTried] = useState(false)
 
-  useEffect(() => { if (user) navigate('/account', { replace: true }) }, [user, navigate])
+  useEffect(() => { if (user) navigate(after, { replace: true }) }, [user, navigate, after])
 
   const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim())
   const passOk = password.length >= 6
@@ -28,7 +36,7 @@ export default function Join() {
     const { error } = await signUp(email, password, name)
     setBusy(false)
     if (error) setError(error)
-    else navigate('/account', { replace: true })
+    else navigate(after, { replace: true })
   }
 
   return (

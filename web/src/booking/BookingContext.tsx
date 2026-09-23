@@ -55,6 +55,10 @@ export interface Draft {
   contactEmail: string
   contactName: string
   pnr?: string
+  /** Whether to put this booking on the signed-in member's RainbowOne account. */
+  addToAccount?: boolean
+  /** What came back when we tried, so the confirmation can say so. */
+  accountResult?: { ok: boolean; message: string }
 }
 
 const EMPTY: Draft = {

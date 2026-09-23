@@ -491,6 +491,50 @@ export async function myLedger(limit = 50) {
     .returns<LedgerRow[]>()
 }
 
+/** One trip on a member's account. `destination_iata` is the furthest point. */
+export interface AccountBookingRow {
+  pnr: string
+  status: string
+  contact_email: string
+  contact_name: string | null
+  total_amount_usd: number
+  created_at: string
+  passenger_count: number
+  segment_count: number
+  first_travel_date: string | null
+  last_travel_date: string | null
+  origin_iata: string | null
+  destination_iata: string | null
+  /** False for a booking found by membership address but never added. */
+  on_account: boolean
+}
+
+/**
+ * Every booking the signed-in member has, upcoming first.
+ *
+ * Wider than what they have added: it also finds bookings made with their
+ * membership address, so a trip booked before signing in is not invisible.
+ */
+export async function myBookings() {
+  const { data, error } = await supabase.rpc('my_bookings')
+  return { data: (data ?? null) as AccountBookingRow[] | null, error }
+}
+
+export interface AttachResult { ok: boolean; message: string; miles_credited: number }
+
+/**
+ * Put a booking on the signed-in member's account, crediting any miles it
+ * never earned. Needs the reference and the email it was booked with — being
+ * signed in is not by itself a claim on a booking.
+ */
+export async function attachBookingToAccount(pnr: string, email: string) {
+  const { data, error } = await supabase.rpc('attach_booking_to_account', {
+    p_pnr: pnr.trim().toUpperCase(),
+    p_email: email.trim(),
+  })
+  return { data: (Array.isArray(data) ? data[0] : data) as AttachResult | null, error }
+}
+
 export interface DepartureRow {
   flight_id: string
   aircraft_id: string

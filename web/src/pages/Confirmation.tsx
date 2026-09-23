@@ -87,6 +87,28 @@ export default function Confirmation() {
           <p style={{ fontSize: 'var(--text-micro)', color: 'var(--color-ink-faint)' }}>
             Keep this. You'll need it and your email to manage the booking.
           </p>
+
+          {/* Whether it reached the member's account. Said either way: a
+              booking that quietly did not arrive there is worse than one
+              that says so and offers the way to fix it. */}
+          {draft.accountResult && (
+            <p
+              className="mt-3"
+              style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}
+            >
+              {draft.accountResult.ok ? (
+                <>
+                  {draft.accountResult.message}{' '}
+                  <Link to="/account" className="underline">Your trips</Link>
+                </>
+              ) : (
+                <>
+                  {draft.accountResult.message} You can add it from{' '}
+                  <Link to="/manage" className="underline">manage booking</Link>.
+                </>
+              )}
+            </p>
+          )}
         </div>
 
         <div className="px-6 py-6">

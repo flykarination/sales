@@ -1,8 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import {
-  bookingHistory, cancelBooking, changeSegmentDate, findBooking, redeemUpgrade,
+  attachBookingToAccount, bookingHistory, cancelBooking, changeSegmentDate,
+  findBooking, myBookings, redeemUpgrade,
   type BookingEvent,
 } from '@/lib/queries'
+import { useAuth } from '@/auth/AuthContext'
 import { CABIN_ORDER, CABINS, cabin, type CabinCode } from '@/lib/cabins'
 import { addDays, longDate, price, shortDate, time, toIsoDate } from '@/lib/format'
 import { OperatedBy } from '@/components/OperatedBy'
@@ -78,8 +81,15 @@ function segmentLabels(rows: BookingRow[]): Map<string, string> {
 }
 
 export default function Manage() {
-  const [pnr, setPnr] = useState('')
+  const { user } = useAuth()
+  const [params] = useSearchParams()
+  // Seeded from ?pnr= so a link from the account arrives filled in. The
+  // reference alone opens nothing -- the email is still required -- so it is
+  // safe in a link, which is why the address is not in one.
+  const [pnr, setPnr] = useState(() => params.get('pnr')?.trim().toUpperCase() ?? '')
   const [email, setEmail] = useState('')
+  /** Whether the booking on screen is on the signed-in member's account. */
+  const [onAccount, setOnAccount] = useState<boolean | null>(null)
   const [rows, setRows] = useState<BookingRow[] | null>(null)
   const [events, setEvents] = useState<BookingEvent[]>([])
   const [state, setState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
@@ -92,10 +102,12 @@ export default function Manage() {
   const [confirmCancel, setConfirmCancel] = useState(false)
 
   /** Re-read the booking after anything changes it, so the card never lies. */
-  const load = useCallback(async (quiet = false) => {
+  const load = useCallback(async (quiet = false, creds?: { pnr: string; email: string }) => {
+    const usePnr = creds?.pnr ?? pnr
+    const useEmail = creds?.email ?? email
     if (!quiet) setState('loading')
     setMessage(null)
-    const { data, error } = await findBooking(pnr, email)
+    const { data, error } = await findBooking(usePnr, useEmail)
     if (error) {
       setState('error')
       setMessage('We could not reach the booking system. Try again in a moment.')
@@ -111,9 +123,38 @@ export default function Manage() {
       setEvents([])
       return
     }
-    const { data: h } = await bookingHistory(pnr, email)
+    const { data: h } = await bookingHistory(usePnr, useEmail)
     setEvents(h ?? [])
-  }, [pnr, email])
+
+    // Is it on the member's account? Only they can be told, and only about
+    // their own bookings, so this asks their account rather than the booking.
+    if (user) {
+      const { data: mine } = await myBookings()
+      const row = (mine ?? []).find((b) => b.pnr === usePnr.trim().toUpperCase())
+      setOnAccount(row ? row.on_account : false)
+    } else {
+      setOnAccount(null)
+    }
+  }, [pnr, email, user])
+
+  /**
+   * Opened from the account with ?pnr=. The email is looked up from the
+   * member's own bookings rather than carried in the address bar, which is no
+   * place for someone's contact details.
+   */
+  useEffect(() => {
+    const wanted = params.get('pnr')?.trim().toUpperCase()
+    if (!wanted || !user || rows || state === 'loading') return
+    let live = true
+    myBookings().then(({ data }) => {
+      const row = (data ?? []).find((b) => b.pnr === wanted)
+      if (!live || !row) return
+      setPnr(row.pnr)
+      setEmail(row.contact_email)
+      load(false, { pnr: row.pnr, email: row.contact_email })
+    })
+    return () => { live = false }
+  }, [params, user, rows, state, load])
 
   async function act(key: string, run: () => Promise<Notice>) {
     setActing(key)
@@ -207,6 +248,36 @@ export default function Manage() {
           <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
             {b.contact_name} · {b.passenger_count} {b.passenger_count === 1 ? 'passenger' : 'passengers'}
           </p>
+
+          {/* RainbowOne. Shown only to a signed-in member: to anyone else it
+              would be an advert in the middle of their booking. */}
+          {user && onAccount === true && (
+            <p className="mt-2" style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
+              On your RainbowOne account ·{' '}
+              <Link to="/account" className="underline">your trips</Link>
+            </p>
+          )}
+          {user && onAccount === false && !cancelled && (
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <button
+                className="kx-cta"
+                disabled={acting === 'attach'}
+                onClick={() => act('attach', async () => {
+                  const { data, error } = await attachBookingToAccount(pnr, email)
+                  if (data?.ok) setOnAccount(true)
+                  return {
+                    ok: Boolean(data?.ok),
+                    text: data?.message ?? error?.message ?? 'We could not add that booking.',
+                  }
+                })}
+              >
+                {acting === 'attach' ? 'Adding…' : 'Add to my RainbowOne account'}
+              </button>
+              <span style={{ fontSize: 'var(--text-small)', color: 'var(--color-ink-mute)' }}>
+                It joins your trips, and earns any miles it has not already.
+              </span>
+            </div>
+          )}
 
           {rows.map((seg) => (
             <div key={seg.segment_id} className="mt-6 pt-5" style={{ borderTop: 'var(--rule)' }}>
