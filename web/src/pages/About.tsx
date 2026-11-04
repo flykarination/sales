@@ -61,7 +61,7 @@ export default function About() {
           <p className="mt-6" style={{ color: '#B9B6D8', fontSize: 'var(--text-lead)', maxWidth: '58ch' }}>
             Karination flies from five hubs along the length of Vietnam — TP Hồ Chí Minh,
             Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc — to{' '}
-            {kxStats ? count(kxStats.num_routes) : '766'} routes across Asia, the
+            {kxStats ? count(kxStats.num_routes) : '803'} routes across Asia, the
             Middle East, Europe, Africa, Oceania and the Americas. It is the
             largest of the KarinationGroup airlines, and the one this site is
             about.
@@ -85,9 +85,9 @@ export default function About() {
         <div className="mx-auto max-w-6xl">
           <dl className="grid grid-cols-2 gap-x-8 gap-y-8 md:grid-cols-4">
             {[
-              ['Aircraft', kxStats ? count(kxStats.num_aircraft) : '712', 'var(--color-spectrum-teal)'],
-              ['Routes', kxStats ? count(kxStats.num_routes) : '766', 'var(--color-spectrum-amber)'],
-              ['Flight pairs', kxStats ? count(kxStats.num_flights) : '1,302', 'var(--color-spectrum-rose)'],
+              ['Aircraft', kxStats ? count(kxStats.num_aircraft) : '847', 'var(--color-spectrum-teal)'],
+              ['Routes', kxStats ? count(kxStats.num_routes) : '803', 'var(--color-spectrum-amber)'],
+              ['Flight pairs', kxStats ? count(kxStats.num_flights) : '1,409', 'var(--color-spectrum-rose)'],
               ['Flagship', kxStats?.flagship_aircraft_model ?? 'Airbus A321XLR', 'var(--color-spectrum-violet)'],
             ].map(([label, value, hue]) => (
               <div key={label}>

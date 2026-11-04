@@ -69,7 +69,7 @@ function Booking() {
               maxWidth: '34ch',
             }}
           >
-            Fly to <strong style={{ fontWeight: 600, color: 'var(--color-ink)' }}>481 destinations</strong> from
+            Fly to <strong style={{ fontWeight: 600, color: 'var(--color-ink)' }}>507 destinations</strong> from
             TP Hồ Chí Minh, Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc.
           </h1>
 
@@ -85,9 +85,9 @@ function Booking() {
           }}
         >
           {[
-            ['766', 'routes', 'var(--color-spectrum-teal)'],
-            ['481', 'destinations', 'var(--color-spectrum-amber)'],
-            ['712', 'aircraft', 'var(--color-spectrum-rose)'],
+            ['803', 'routes', 'var(--color-spectrum-teal)'],
+            ['507', 'destinations', 'var(--color-spectrum-amber)'],
+            ['847', 'aircraft', 'var(--color-spectrum-rose)'],
             ['5', 'hubs', 'var(--color-spectrum-violet)'],
           ].map(([n, l, hue]) => (
             <div key={l} className="pt-4" style={{ paddingRight: 24 }}>

@@ -67,7 +67,7 @@ export default function Fleet() {
   // The page is Karination's fleet with FORZA's beneath it, so the two are
   // never mixed into one list. The same aircraft type does different work at
   // each carrier — a 777-300ER is Karination's hardest-worked widebody and
-  // one of nine frames opening Belfast at FORZA — and a combined count would
+  // one of nineteen frames opening Belfast at FORZA — and a combined count would
   // describe neither airline.
   const kx = useMemo(() => (rows ?? []).filter((r) => r.airline_code === 'KX'), [rows])
   const z4 = useMemo(() => (rows ?? []).filter((r) => r.airline_code === 'Z4'), [rows])
@@ -102,7 +102,7 @@ export default function Fleet() {
             className="font-display"
             style={{ fontSize: 'clamp(2rem, 5.5vw, 4rem)', lineHeight: 1.04, color: 'var(--color-paper)', maxWidth: '16ch' }}
           >
-            {total ? count(total) : '712'} aircraft, {types.length || 12} types.
+            {total ? count(total) : '847'} aircraft, {types.length || 12} types.
           </h1>
           <p className="mt-5" style={{ color: '#B9B6D8', maxWidth: '52ch' }}>
             Every airframe below is a real aircraft in our operation, with the

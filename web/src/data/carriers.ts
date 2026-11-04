@@ -53,7 +53,7 @@ export const KARINATION: GroupCarrier = {
   alliance: 'Echo Aegis',
   role: 'The full-service airline of the group',
   blurb:
-    'Karination flies from five hubs along the length of Vietnam to 481 destinations, in four cabins, with a full-flat bed in Business on every long-haul sector — including the narrowbodies, which is unusual.',
+    'Karination flies from five hubs along the length of Vietnam to 507 destinations, in four cabins, with a full-flat bed in Business on every long-haul sector — including the narrowbodies, which is unusual.',
   operatedNote: 'Operated by Karination.',
   hubs: ['SGN', 'HAN', 'DAD', 'CXR', 'PQC'],
   baggageRank: 3,
@@ -81,7 +81,7 @@ export const FORZA: GroupCarrier = {
   alliance: 'Echo Proxima',
   role: 'Lower-cost regional, and a fast-growing long-haul network',
   blurb:
-    'FORZA flies from thirteen provincial airports Karination does not base at, on everything from a Dash 8 to a 787-10. It began as a regional carrier and its long-haul network is growing quickly — the A350s, Dreamliners and A330-900s now reach Europe, Africa, the Pacific and across the Americas to the Caribbean.',
+    'FORZA flies from thirteen provincial airports Karination does not base at, on everything from a Dash 8 to an ultra-long-range A350. It began as a regional carrier and its long-haul network is growing quickly — the A350s, Dreamliners, 777s and A330-900s now reach Europe, Africa, the Pacific and the length of the Americas, from the Caribbean to Tierra del Fuego.',
   operatedNote:
     'This flight is operated by FORZA, a KarinationGroup member of Echo Proxima.',
   hubs: ['CXR', 'DLI', 'PQC', 'DIN', 'HUI', 'VCL', 'UIH', 'CAH', 'PXU', 'VCA', 'VCS', 'BMV', 'HPH'],
@@ -114,7 +114,7 @@ export const SONDER: GroupCarrier = {
   alliance: null,
   role: 'The group’s Korean airline, with K-culture on board',
   blurb:
-    'Sonder is a Korean budget airline that collapsed after the pandemic, rescued by the group and relaunched from Incheon as something louder. Korean food, K-drama and K-pop are the product, on A350-1000s and 787-8s, to a network that looks like no one else’s: Ashgabat and Khartoum, Malta and Port Moresby, Boston and Sacramento.',
+    'Sonder is a Korean budget airline that collapsed after the pandemic, rescued by the group and relaunched from Incheon as something louder. Korean food, K-drama and K-pop are the product, on A350s and 787-8s, to a network that looks like no one else’s: Ashgabat and Khartoum, Malta and Port Moresby, Cayenne and Cochabamba — and, on its ultra-long-range A350s, nonstop from Incheon to the far end of South America.',
   operatedNote: 'This flight is operated by Sonder, a KarinationGroup member.',
   hubs: ['ICN'],
   baggageRank: 2,

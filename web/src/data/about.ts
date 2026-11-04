@@ -135,7 +135,7 @@ export const STORY: Chapter[] = [
     body:
       'We committed to 574 aircraft in 2021, while much of the world was still grounded. It was not a bet. We had just spent two years watching what happened to communities when the link went, and we ordered on the evidence.',
     detail:
-      'The programme runs to 2030 and is still in progress. FORZA’s A350-1000s went from forty aircraft waiting on the register to a hundred and fifty in service, and the six longest flights in the group are now all FORZA’s. Everything this site tells you about our fleet is a snapshot of a company halfway through re-equipping itself.',
+      'The programme runs to 2030 and is still in progress. FORZA’s A350-1000s went from forty aircraft waiting on the register to a hundred and seventy-one in service, Karination’s from twenty-six to a hundred and sixty-one, and the longest flights in the group now belong to a type none of us flew a season ago: the A350-1000ULR. Everything this site tells you about our fleet is a snapshot of a company halfway through re-equipping itself.',
     hue: 'var(--color-spectrum-amber)',
     ink: 'var(--color-spectrum-amber-ink)',
   },
@@ -168,7 +168,7 @@ export const BELIEFS: Belief[] = [
     body:
       'The decision we made in 1994 and have never revisited. We do not compete for the corridor between two capitals; we fly to the places that have one flight a day and would otherwise have none. It costs more to run a network shaped like ours, and it is the only reason we are worth having.',
     evidence:
-      'Four hundred and eighty-one destinations, most of them served by nobody else from Vietnam.',
+      'Five hundred and seven destinations, most of them served by nobody else from Vietnam.',
     evidenceHref: '/network',
     evidenceLabel: 'See the route map',
     hue: 'var(--color-spectrum-amber)',

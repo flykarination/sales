@@ -23,8 +23,8 @@ export const FLEET_NOTES: Record<string, FleetNote> = {
   'Airbus A350-1000': {
     role: 'Ultra-long-haul flagship',
     description:
-      'The furthest-reaching aircraft we own, and the only one that can hold a fifteen-hour sector without thinking about it. Twenty-six frames work a deliberately small list of twenty-one cities, almost all of them the ones nothing else in the fleet can reach. First is an enclosed apartment at 81 inches; the wide suites in Business are the widest seats we fly.',
-    signature: { route: 'Phú Quốc – New Orleans', km: 15296, minutes: 1020 },
+      'The furthest-reaching aircraft we own, and the fleet growing fastest: a hundred and sixty-one frames, up from twenty-six, across fifty-one cities. Most of the new flying is to the Americas — Mexico, Florida and Texas, Havana and the Caribbean, Bermuda — and it reaches Ushuaia at the southern tip of Argentina, the longest Karination flight by time in the air. First is an enclosed apartment at 81 inches on every frame; Business is a wide suite or a staggered suite, depending on the aircraft.',
+    signature: { route: 'Hà Nội – Samaná', km: 15487, minutes: 1080 },
   },
   'Boeing 777-9': {
     role: 'Long-haul backbone',
@@ -106,7 +106,7 @@ export const FLEET_NOTES: Record<string, FleetNote> = {
  * Kept separate rather than merged into FLEET_NOTES because five types are
  * flown by both carriers and they do quite different work at each. A
  * 777-300ER is Karination's hardest-worked widebody; at FORZA it is one of
- * nine frames opening Belfast and Dublin from the Mekong Delta.
+ * nineteen frames opening Belfast and Dublin from the Mekong Delta.
  *
  * Every figure is from the schedule: frames in service, cities reached, and
  * the longest sector each type actually operates.
@@ -139,14 +139,20 @@ export const FORZA_FLEET_NOTES: Record<string, FleetNote> = {
   'Boeing 777-300ER': {
     role: 'Long-haul, high density',
     description:
-      'Nine aircraft doing the heavy lifting on sixteen cities. At Karination this type is a workhorse across fifty-five destinations; here it is a specialist, opening the routes that need the most seats at once — Belfast among them.',
+      'Nineteen aircraft doing the heavy lifting on sixteen cities. At Karination this type is a workhorse across fifty-five destinations; here it is a specialist, opening the routes that need the most seats at once — Belfast among them.',
     signature: { route: 'Cần Thơ – Belfast', km: 10453, minutes: 760 },
   },
   'Airbus A350-1000': {
     role: 'Long-haul flagship',
     description:
-      'A hundred and fifty aircraft, every one of them flying: the largest type in the group and the one doing more of FORZA’s growth than any other, across a hundred and thirty-seven cities. Its longest sector is the longest flight in KarinationGroup by time in the air — Cần Thơ to the southern tip of Argentina, most of a day aloft.',
-    signature: { route: 'Cần Thơ – Ushuaia', km: 15010, minutes: 1185 },
+      'A hundred and eighty-six aircraft, a hundred and seventy-one of them flying: FORZA’s largest fleet by far, across a hundred and fifty-three cities. Cần Thơ to the Turks and Caicos is its longest sector by distance, and Nha Trang to Ushuaia, at the southern tip of Argentina, keeps it in the air for most of a day.',
+    signature: { route: 'Cần Thơ – Providenciales', km: 16466, minutes: 1140 },
+  },
+  'Airbus A350-1000ULR': {
+    role: 'Ultra-long range',
+    description:
+      'Forty aircraft, new this season, and the longest-legged in the group: twenty-one cities, almost all of them in South America, flown nonstop from Nha Trang — São Paulo, Rio, Buenos Aires, Montevideo, Santiago, Medellín, Caracas and more. Nha Trang to Santiago is the longest flight in KarinationGroup by time in the air: more than twenty-three hours, in either direction.',
+    signature: { route: 'Nha Trang – Medellín', km: 17931, minutes: 1255 },
   },
   'Airbus A321neo': {
     role: 'Long, thin, narrowbody',
@@ -188,8 +194,14 @@ export const SONDER_FLEET_NOTES: Record<string, FleetNote> = {
   'Airbus A350-1000': {
     role: 'Long-haul flagship',
     description:
-      'Twenty aircraft across fourteen cities, and most of what Sonder is: Incheon to Boston and three Californian cities, to Paris, Nantes, Geneva and the south of France, to Malta and Sicily, to Ashgabat, and south to Melbourne and Port Moresby. Seoul to Boston is the longest of them, at thirteen hours.',
-    signature: { route: 'Seoul – Boston', km: 10964, minutes: 785 },
+      'Sixty-five aircraft across twenty-nine cities, and most of what Sonder is: Incheon to Boston and three Californian cities, to Paris, Nantes, Geneva and the south of France, Malta and Sicily, Ashgabat, Tokyo, Melbourne and Port Moresby — and now to the Caribbean and the north of South America, from Caracas and Bogotá to Cayenne, the longest of them at nearly eighteen hours.',
+    signature: { route: 'Seoul – Cayenne', km: 15311, minutes: 1075 },
+  },
+  'Airbus A350-1000ULR': {
+    role: 'Ultra-long range',
+    description:
+      'Twenty-two aircraft for the longest flying Sonder does: Incheon nonstop to ten cities, nine of them in South America — Lima, Brasília, Belo Horizonte, Salvador, Recife, Fortaleza, Santa Cruz, Cochabamba and Ushuaia — and Tokyo. Santa Cruz is the longest Sonder flight by time in the air, almost twenty-two hours on the way back to Seoul.',
+    signature: { route: 'Seoul – Belo Horizonte', km: 17825, minutes: 1275 },
   },
   'Boeing 787-8 Dreamliner': {
     role: 'Long-haul, thin routes',

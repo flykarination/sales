@@ -16,7 +16,7 @@
         "aircraftAssignments": {
             "437e2b52-1d85-4515-8d10-c981fbb0d6bd": {
                 "bizPax": 175,
-                "ecoPax": 1512,
+                "ecoPax": 1575,
                 "dowList": [
                     0,
                     1,
@@ -28,11 +28,11 @@
                 ],
                 "bizPrice": 3877,
                 "ecoPrice": 1112,
-                "firstPax": 16,
+                "firstPax": 21,
                 "aircraftId": "437e2b52-1d85-4515-8d10-c981fbb0d6bd",
                 "firstPrice": 6833,
                 "premEcoPax": 46,
-                "flightProfit": 13082,
+                "flightProfit": 13307,
                 "premEcoPrice": 2462
             }
         }
@@ -54,7 +54,7 @@
         "aircraftAssignments": {
             "084472c5-6f99-4feb-9467-938ccf1280b4": {
                 "bizPax": 245,
-                "ecoPax": 1764,
+                "ecoPax": 1827,
                 "dowList": [
                     0,
                     1,
@@ -70,7 +70,7 @@
                 "aircraftId": "084472c5-6f99-4feb-9467-938ccf1280b4",
                 "firstPrice": 7611,
                 "premEcoPax": 196,
-                "flightProfit": 18583,
+                "flightProfit": 18637,
                 "premEcoPrice": 2662
             }
         }
@@ -92,7 +92,7 @@
         "aircraftAssignments": {
             "68bee0b9-b4eb-4945-a769-806b5bbe7bd7": {
                 "bizPax": 294,
-                "ecoPax": 1512,
+                "ecoPax": 1575,
                 "dowList": [
                     0,
                     1,
@@ -108,7 +108,7 @@
                 "aircraftId": "68bee0b9-b4eb-4945-a769-806b5bbe7bd7",
                 "firstPrice": 6892,
                 "premEcoPax": 245,
-                "flightProfit": 17844,
+                "flightProfit": 17812,
                 "premEcoPrice": 2543
             }
         }
@@ -130,7 +130,7 @@
         "aircraftAssignments": {
             "54d9aeac-a8e2-45c4-b151-890ed8dc213b": {
                 "bizPax": 126,
-                "ecoPax": 648,
+                "ecoPax": 675,
                 "dowList": [
                     1,
                     3,
@@ -142,12 +142,12 @@
                 "aircraftId": "54d9aeac-a8e2-45c4-b151-890ed8dc213b",
                 "firstPrice": 4574,
                 "premEcoPax": 105,
-                "flightProfit": 5265,
+                "flightProfit": 5246,
                 "premEcoPrice": 1692
             },
             "d5a52dbe-6a3a-4cf5-a11a-ad74a5e8c12d": {
                 "bizPax": 168,
-                "ecoPax": 864,
+                "ecoPax": 900,
                 "dowList": [
                     0,
                     2,
@@ -160,7 +160,7 @@
                 "aircraftId": "d5a52dbe-6a3a-4cf5-a11a-ad74a5e8c12d",
                 "firstPrice": 4574,
                 "premEcoPax": 140,
-                "flightProfit": 6975,
+                "flightProfit": 6993,
                 "premEcoPrice": 1692
             }
         }
@@ -248,7 +248,7 @@
         "aircraftAssignments": {
             "76eb8e96-0726-4341-aebb-a54893c377f1": {
                 "bizPax": 106,
-                "ecoPax": 1080,
+                "ecoPax": 1125,
                 "dowList": [
                     0,
                     1,
@@ -262,7 +262,7 @@
                 "aircraftId": "76eb8e96-0726-4341-aebb-a54893c377f1",
                 "firstPrice": 9125,
                 "premEcoPax": 50,
-                "flightProfit": 9830,
+                "flightProfit": 9975,
                 "premEcoPrice": 3551
             }
         }
@@ -284,7 +284,7 @@
         "aircraftAssignments": {
             "a2d9f0b0-675e-4b2a-97a9-eaaa2313628c": {
                 "bizPax": 98,
-                "ecoPax": 1504,
+                "ecoPax": 1400,
                 "dowList": [
                     0,
                     1,
@@ -300,7 +300,7 @@
                 "aircraftId": "a2d9f0b0-675e-4b2a-97a9-eaaa2313628c",
                 "firstPrice": 7419,
                 "premEcoPax": 49,
-                "flightProfit": 13453,
+                "flightProfit": 13395,
                 "premEcoPrice": 2671
             }
         }
@@ -322,7 +322,7 @@
         "aircraftAssignments": {
             "18ec5933-6530-4466-ac8c-dbbff9aeeafc": {
                 "bizPax": 245,
-                "ecoPax": 1754,
+                "ecoPax": 1817,
                 "dowList": [
                     0,
                     1,
@@ -338,7 +338,7 @@
                 "aircraftId": "18ec5933-6530-4466-ac8c-dbbff9aeeafc",
                 "firstPrice": 7131,
                 "premEcoPax": 196,
-                "flightProfit": 18352,
+                "flightProfit": 18392,
                 "premEcoPrice": 2631
             }
         }
@@ -360,7 +360,7 @@
         "aircraftAssignments": {
             "2cb2004c-4168-4555-8238-170b5d761145": {
                 "bizPax": 98,
-                "ecoPax": 1512,
+                "ecoPax": 1400,
                 "dowList": [
                     0,
                     1,
@@ -376,7 +376,7 @@
                 "aircraftId": "2cb2004c-4168-4555-8238-170b5d761145",
                 "firstPrice": 7501,
                 "premEcoPax": 49,
-                "flightProfit": 14180,
+                "flightProfit": 14241,
                 "premEcoPrice": 2743
             }
         }
@@ -398,7 +398,7 @@
         "aircraftAssignments": {
             "3e6a34ce-ef6a-4e23-86f3-9769155112ba": {
                 "bizPax": 245,
-                "ecoPax": 1754,
+                "ecoPax": 1817,
                 "dowList": [
                     0,
                     1,
@@ -414,7 +414,7 @@
                 "aircraftId": "3e6a34ce-ef6a-4e23-86f3-9769155112ba",
                 "firstPrice": 7131,
                 "premEcoPax": 196,
-                "flightProfit": 18279,
+                "flightProfit": 18348,
                 "premEcoPrice": 2631
             }
         }
@@ -436,7 +436,7 @@
         "aircraftAssignments": {
             "655fef35-1bd4-4ac1-831d-0a01b2eb8c73": {
                 "bizPax": 97,
-                "ecoPax": 1512,
+                "ecoPax": 1400,
                 "dowList": [
                     0,
                     1,
@@ -452,7 +452,7 @@
                 "aircraftId": "655fef35-1bd4-4ac1-831d-0a01b2eb8c73",
                 "firstPrice": 7611,
                 "premEcoPax": 49,
-                "flightProfit": 13662,
+                "flightProfit": 13610,
                 "premEcoPrice": 2671
             }
         }
@@ -474,7 +474,7 @@
         "aircraftAssignments": {
             "036e4a4e-b542-4fa2-96e7-b3eec10efd56": {
                 "bizPax": 245,
-                "ecoPax": 1754,
+                "ecoPax": 1817,
                 "dowList": [
                     0,
                     1,
@@ -490,7 +490,7 @@
                 "aircraftId": "036e4a4e-b542-4fa2-96e7-b3eec10efd56",
                 "firstPrice": 7131,
                 "premEcoPax": 196,
-                "flightProfit": 18326,
+                "flightProfit": 18398,
                 "premEcoPrice": 2633
             }
         }
@@ -512,7 +512,7 @@
         "aircraftAssignments": {
             "bcb803f1-4fd1-4f03-aed2-b42931c2ba2c": {
                 "bizPax": 294,
-                "ecoPax": 1512,
+                "ecoPax": 1575,
                 "dowList": [
                     0,
                     1,
@@ -528,7 +528,7 @@
                 "aircraftId": "bcb803f1-4fd1-4f03-aed2-b42931c2ba2c",
                 "firstPrice": 6833,
                 "premEcoPax": 245,
-                "flightProfit": 17112,
+                "flightProfit": 17029,
                 "premEcoPrice": 2462
             }
         }
@@ -550,7 +550,7 @@
         "aircraftAssignments": {
             "b0a8f020-5959-44a1-8eb4-c4ab5ace6ed5": {
                 "bizPax": 98,
-                "ecoPax": 1512,
+                "ecoPax": 1400,
                 "dowList": [
                     0,
                     1,
@@ -566,7 +566,7 @@
                 "aircraftId": "b0a8f020-5959-44a1-8eb4-c4ab5ace6ed5",
                 "firstPrice": 7624,
                 "premEcoPax": 49,
-                "flightProfit": 13765,
+                "flightProfit": 13732,
                 "premEcoPrice": 2715
             }
         }
@@ -588,7 +588,7 @@
         "aircraftAssignments": {
             "e29ede7d-f806-4df6-9f17-4e6eeb957177": {
                 "bizPax": 245,
-                "ecoPax": 1764,
+                "ecoPax": 1827,
                 "dowList": [
                     0,
                     1,
@@ -604,7 +604,7 @@
                 "aircraftId": "e29ede7d-f806-4df6-9f17-4e6eeb957177",
                 "firstPrice": 7176,
                 "premEcoPax": 196,
-                "flightProfit": 18322,
+                "flightProfit": 18255,
                 "premEcoPrice": 2586
             }
         }
@@ -626,7 +626,7 @@
         "aircraftAssignments": {
             "8c384973-5771-4644-bf23-da3ae2310e0f": {
                 "bizPax": 245,
-                "ecoPax": 1764,
+                "ecoPax": 1827,
                 "dowList": [
                     0,
                     1,
@@ -642,7 +642,7 @@
                 "aircraftId": "8c384973-5771-4644-bf23-da3ae2310e0f",
                 "firstPrice": 7216,
                 "premEcoPax": 195,
-                "flightProfit": 18135,
+                "flightProfit": 18192,
                 "premEcoPrice": 2638
             }
         }
@@ -664,7 +664,7 @@
         "aircraftAssignments": {
             "fd4237db-7956-4cb8-b0b2-1e83136540e9": {
                 "bizPax": 245,
-                "ecoPax": 1764,
+                "ecoPax": 1827,
                 "dowList": [
                     0,
                     1,
@@ -702,7 +702,7 @@
         "aircraftAssignments": {
             "2b8161c1-98f5-4888-a2d5-89433735e96f": {
                 "bizPax": 126,
-                "ecoPax": 648,
+                "ecoPax": 675,
                 "dowList": [
                     1,
                     3,
@@ -714,12 +714,12 @@
                 "aircraftId": "2b8161c1-98f5-4888-a2d5-89433735e96f",
                 "firstPrice": 4602,
                 "premEcoPax": 105,
-                "flightProfit": 5101,
+                "flightProfit": 5092,
                 "premEcoPrice": 1619
             },
             "b7c3aa44-fdab-46f5-89c7-d190313664c9": {
                 "bizPax": 168,
-                "ecoPax": 864,
+                "ecoPax": 900,
                 "dowList": [
                     0,
                     2,
@@ -732,7 +732,7 @@
                 "aircraftId": "b7c3aa44-fdab-46f5-89c7-d190313664c9",
                 "firstPrice": 4602,
                 "premEcoPax": 140,
-                "flightProfit": 6819,
+                "flightProfit": 6805,
                 "premEcoPrice": 1619
             }
         }
@@ -754,7 +754,7 @@
         "aircraftAssignments": {
             "77566b92-009f-465f-806c-9a947c40155d": {
                 "bizPax": 71,
-                "ecoPax": 1512,
+                "ecoPax": 1400,
                 "dowList": [
                     0,
                     1,
@@ -770,7 +770,7 @@
                 "aircraftId": "77566b92-009f-465f-806c-9a947c40155d",
                 "firstPrice": 6892,
                 "premEcoPax": 46,
-                "flightProfit": 12815,
+                "flightProfit": 12789,
                 "premEcoPrice": 2543
             }
         }
@@ -792,7 +792,7 @@
         "aircraftAssignments": {
             "1a934fcc-a785-42a9-816c-b08fa936c1bc": {
                 "bizPax": 210,
-                "ecoPax": 1080,
+                "ecoPax": 1125,
                 "dowList": [
                     0,
                     1,
@@ -806,12 +806,12 @@
                 "aircraftId": "1a934fcc-a785-42a9-816c-b08fa936c1bc",
                 "firstPrice": 7258,
                 "premEcoPax": 175,
-                "flightProfit": 12916,
+                "flightProfit": 12929,
                 "premEcoPrice": 2577
             },
             "76eb8e96-0726-4341-aebb-a54893c377f1": {
                 "bizPax": 84,
-                "ecoPax": 432,
+                "ecoPax": 450,
                 "dowList": [
                     5,
                     6
@@ -822,7 +822,7 @@
                 "aircraftId": "76eb8e96-0726-4341-aebb-a54893c377f1",
                 "firstPrice": 7258,
                 "premEcoPax": 70,
-                "flightProfit": 5157,
+                "flightProfit": 5174,
                 "premEcoPrice": 2577
             }
         }
@@ -844,7 +844,7 @@
         "aircraftAssignments": {
             "70fde6f8-97c1-4f40-a6cc-5ce4f6c5379a": {
                 "bizPax": 98,
-                "ecoPax": 1512,
+                "ecoPax": 1400,
                 "dowList": [
                     0,
                     1,
@@ -860,7 +860,7 @@
                 "aircraftId": "70fde6f8-97c1-4f40-a6cc-5ce4f6c5379a",
                 "firstPrice": 7216,
                 "premEcoPax": 49,
-                "flightProfit": 13309,
+                "flightProfit": 13279,
                 "premEcoPrice": 2638
             }
         }
@@ -882,7 +882,7 @@
         "aircraftAssignments": {
             "2b8161c1-98f5-4888-a2d5-89433735e96f": {
                 "bizPax": 41,
-                "ecoPax": 216,
+                "ecoPax": 225,
                 "dowList": [
                     6
                 ],
@@ -892,7 +892,7 @@
                 "aircraftId": "2b8161c1-98f5-4888-a2d5-89433735e96f",
                 "firstPrice": 7397,
                 "premEcoPax": 35,
-                "flightProfit": 2599,
+                "flightProfit": 2582,
                 "premEcoPrice": 2651
             }
         }
@@ -914,7 +914,7 @@
         "aircraftAssignments": {
             "47ba150b-fd6d-47c7-b5fb-9dad1018d6b3": {
                 "bizPax": 98,
-                "ecoPax": 1512,
+                "ecoPax": 1400,
                 "dowList": [
                     0,
                     1,
@@ -930,7 +930,7 @@
                 "aircraftId": "47ba150b-fd6d-47c7-b5fb-9dad1018d6b3",
                 "firstPrice": 7501,
                 "premEcoPax": 49,
-                "flightProfit": 13979,
+                "flightProfit": 13962,
                 "premEcoPrice": 2743
             }
         }
@@ -952,7 +952,7 @@
         "aircraftAssignments": {
             "ce93d6cb-bd9e-4863-bc7e-9fd42eaf0ab1": {
                 "bizPax": 245,
-                "ecoPax": 1764,
+                "ecoPax": 1827,
                 "dowList": [
                     0,
                     1,
@@ -968,7 +968,7 @@
                 "aircraftId": "ce93d6cb-bd9e-4863-bc7e-9fd42eaf0ab1",
                 "firstPrice": 7624,
                 "premEcoPax": 196,
-                "flightProfit": 18764,
+                "flightProfit": 18768,
                 "premEcoPrice": 2714
             }
         }
@@ -990,7 +990,7 @@
         "aircraftAssignments": {
             "75857d16-895d-43dd-aff0-05ca49915223": {
                 "bizPax": 98,
-                "ecoPax": 1512,
+                "ecoPax": 1400,
                 "dowList": [
                     0,
                     1,
@@ -1006,7 +1006,7 @@
                 "aircraftId": "75857d16-895d-43dd-aff0-05ca49915223",
                 "firstPrice": 7176,
                 "premEcoPax": 49,
-                "flightProfit": 13433,
+                "flightProfit": 13411,
                 "premEcoPrice": 2638
             }
         }
@@ -1028,7 +1028,7 @@
         "aircraftAssignments": {
             "d7f5a9c7-fa2b-4b05-b546-b8283d705cb8": {
                 "bizPax": 244,
-                "ecoPax": 1764,
+                "ecoPax": 1827,
                 "dowList": [
                     0,
                     1,
@@ -1044,7 +1044,7 @@
                 "aircraftId": "d7f5a9c7-fa2b-4b05-b546-b8283d705cb8",
                 "firstPrice": 7397,
                 "premEcoPax": 196,
-                "flightProfit": 18429,
+                "flightProfit": 18465,
                 "premEcoPrice": 2634
             }
         }
@@ -1066,7 +1066,7 @@
         "aircraftAssignments": {
             "c05c3e76-2352-4dfa-855f-25cf08cce870": {
                 "bizPax": 245,
-                "ecoPax": 1754,
+                "ecoPax": 1817,
                 "dowList": [
                     0,
                     1,
@@ -1082,7 +1082,7 @@
                 "aircraftId": "c05c3e76-2352-4dfa-855f-25cf08cce870",
                 "firstPrice": 7131,
                 "premEcoPax": 196,
-                "flightProfit": 18344,
+                "flightProfit": 18311,
                 "premEcoPrice": 2631
             }
         }
@@ -1104,7 +1104,7 @@
         "aircraftAssignments": {
             "482c82f9-997c-4b56-b448-aae4cad6d61f": {
                 "bizPax": 210,
-                "ecoPax": 1080,
+                "ecoPax": 1125,
                 "dowList": [
                     0,
                     1,
@@ -1118,7 +1118,7 @@
                 "aircraftId": "482c82f9-997c-4b56-b448-aae4cad6d61f",
                 "firstPrice": 7191,
                 "premEcoPax": 175,
-                "flightProfit": 13043,
+                "flightProfit": 13143,
                 "premEcoPrice": 2674
             }
         }
@@ -1186,6 +1186,2664 @@
                 "premEcoPax": 105,
                 "flightProfit": 9506,
                 "premEcoPrice": 3215
+            }
+        }
+    },
+    {
+        "flightId": "6b530d83-41ae-4f5e-b22b-9e01a87bfb4a",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 555,
+        "inboundFlightNumber": 556,
+        "flightString": "ICN-UIO",
+        "originAirport": "ICN",
+        "destinationAirport": "UIO",
+        "departureDailyTimestamp": 63900,
+        "outboundFlightDuration": 1000,
+        "inboundFlightDuration": 1125,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "e8aa34ea-8957-44cc-86ec-55485e9b9403": {
+                "bizPax": 70,
+                "ecoPax": 522,
+                "dowList": [
+                    0,
+                    2
+                ],
+                "bizPrice": 7546,
+                "ecoPrice": 1643,
+                "firstPax": 8,
+                "aircraftId": "e8aa34ea-8957-44cc-86ec-55485e9b9403",
+                "firstPrice": 12473,
+                "premEcoPax": 56,
+                "flightProfit": 8331,
+                "premEcoPrice": 4638
+            },
+            "eaee5896-31a2-4820-b2c9-93c303be4199": {
+                "bizPax": 85,
+                "ecoPax": 783,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7546,
+                "ecoPrice": 1643,
+                "firstPax": 8,
+                "aircraftId": "eaee5896-31a2-4820-b2c9-93c303be4199",
+                "firstPrice": 12473,
+                "premEcoPax": 84,
+                "flightProfit": 11908,
+                "premEcoPrice": 4638
+            }
+        }
+    },
+    {
+        "flightId": "f5c46774-9030-4f1c-96a7-c4a96c3d2c23",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 411,
+        "inboundFlightNumber": 412,
+        "flightString": "ICN-SXM",
+        "originAirport": "ICN",
+        "destinationAirport": "SXM",
+        "departureDailyTimestamp": 12600,
+        "outboundFlightDuration": 955,
+        "inboundFlightDuration": 1075,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "3f38b14c-ef78-490d-b91d-f4594488cb73": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 6451,
+                "ecoPrice": 1514,
+                "firstPax": 12,
+                "aircraftId": "3f38b14c-ef78-490d-b91d-f4594488cb73",
+                "firstPrice": 10847,
+                "premEcoPax": 84,
+                "flightProfit": 11506,
+                "premEcoPrice": 4016
+            },
+            "59e610fd-df87-499d-8720-83221e8a638f": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 6451,
+                "ecoPrice": 1514,
+                "firstPax": 12,
+                "aircraftId": "59e610fd-df87-499d-8720-83221e8a638f",
+                "firstPrice": 10847,
+                "premEcoPax": 84,
+                "flightProfit": 11528,
+                "premEcoPrice": 4016
+            },
+            "9399f426-f9b9-468f-b2d9-6ac7c3d1def0": {
+                "bizPax": 35,
+                "ecoPax": 261,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 6451,
+                "ecoPrice": 1514,
+                "firstPax": 4,
+                "aircraftId": "9399f426-f9b9-468f-b2d9-6ac7c3d1def0",
+                "firstPrice": 10847,
+                "premEcoPax": 28,
+                "flightProfit": 3823,
+                "premEcoPrice": 4016
+            }
+        }
+    },
+    {
+        "flightId": "d80a6f8d-51d1-4933-a0d9-a6a364f05824",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 413,
+        "inboundFlightNumber": 414,
+        "flightString": "ICN-SXM",
+        "originAirport": "ICN",
+        "destinationAirport": "SXM",
+        "departureDailyTimestamp": 57300,
+        "outboundFlightDuration": 955,
+        "inboundFlightDuration": 1075,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "9399f426-f9b9-468f-b2d9-6ac7c3d1def0": {
+                "bizPax": 70,
+                "ecoPax": 522,
+                "dowList": [
+                    0,
+                    2
+                ],
+                "bizPrice": 6451,
+                "ecoPrice": 1514,
+                "firstPax": 8,
+                "aircraftId": "9399f426-f9b9-468f-b2d9-6ac7c3d1def0",
+                "firstPrice": 10847,
+                "premEcoPax": 56,
+                "flightProfit": 7648,
+                "premEcoPrice": 4016
+            },
+            "a1b712cc-c24c-4317-90aa-20b9e7f1a54c": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 6451,
+                "ecoPrice": 1514,
+                "firstPax": 12,
+                "aircraftId": "a1b712cc-c24c-4317-90aa-20b9e7f1a54c",
+                "firstPrice": 10847,
+                "premEcoPax": 84,
+                "flightProfit": 11487,
+                "premEcoPrice": 4016
+            }
+        }
+    },
+    {
+        "flightId": "2e7e5bed-7e62-4e65-8993-a804701b9438",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 683,
+        "inboundFlightNumber": 684,
+        "flightString": "BOG-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BOG",
+        "departureDailyTimestamp": 18000,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "acadc7cc-48ec-4c77-9025-cf07be7e0d9a": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7201,
+                "ecoPrice": 1568,
+                "firstPax": 12,
+                "aircraftId": "acadc7cc-48ec-4c77-9025-cf07be7e0d9a",
+                "firstPrice": 11997,
+                "premEcoPax": 84,
+                "flightProfit": 12265,
+                "premEcoPrice": 4393
+            },
+            "ace50806-3821-4498-8ecd-eabf81f64484": {
+                "bizPax": 35,
+                "ecoPax": 261,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7201,
+                "ecoPrice": 1568,
+                "firstPax": 4,
+                "aircraftId": "ace50806-3821-4498-8ecd-eabf81f64484",
+                "firstPrice": 11997,
+                "premEcoPax": 28,
+                "flightProfit": 4079,
+                "premEcoPrice": 4393
+            },
+            "b4d9ec46-f9c2-4000-9e55-85cea1a04978": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7201,
+                "ecoPrice": 1568,
+                "firstPax": 12,
+                "aircraftId": "b4d9ec46-f9c2-4000-9e55-85cea1a04978",
+                "firstPrice": 11997,
+                "premEcoPax": 84,
+                "flightProfit": 12271,
+                "premEcoPrice": 4393
+            }
+        }
+    },
+    {
+        "flightId": "16b8dfdc-7c74-4067-b424-bafb88ff2f4b",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 685,
+        "inboundFlightNumber": 686,
+        "flightString": "BOG-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BOG",
+        "departureDailyTimestamp": 68400,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "ace50806-3821-4498-8ecd-eabf81f64484": {
+                "bizPax": 70,
+                "ecoPax": 522,
+                "dowList": [
+                    0,
+                    2
+                ],
+                "bizPrice": 7201,
+                "ecoPrice": 1568,
+                "firstPax": 8,
+                "aircraftId": "ace50806-3821-4498-8ecd-eabf81f64484",
+                "firstPrice": 11997,
+                "premEcoPax": 56,
+                "flightProfit": 8222,
+                "premEcoPrice": 4393
+            },
+            "b520ffc2-9e56-4b69-8046-19f47a6c3991": {
+                "bizPax": 89,
+                "ecoPax": 783,
+                "dowList": [
+                    1,
+                    4,
+                    6
+                ],
+                "bizPrice": 7201,
+                "ecoPrice": 1568,
+                "firstPax": 9,
+                "aircraftId": "b520ffc2-9e56-4b69-8046-19f47a6c3991",
+                "firstPrice": 11997,
+                "premEcoPax": 84,
+                "flightProfit": 11918,
+                "premEcoPrice": 4393
+            }
+        }
+    },
+    {
+        "flightId": "c0cea477-7afc-4fc0-a842-898c0d122ced",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 553,
+        "inboundFlightNumber": 554,
+        "flightString": "ICN-UIO",
+        "originAirport": "ICN",
+        "destinationAirport": "UIO",
+        "departureDailyTimestamp": 13500,
+        "outboundFlightDuration": 1000,
+        "inboundFlightDuration": 1125,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "3c4b21a7-7e1a-4703-8e93-55d1ac174f38": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7546,
+                "ecoPrice": 1643,
+                "firstPax": 12,
+                "aircraftId": "3c4b21a7-7e1a-4703-8e93-55d1ac174f38",
+                "firstPrice": 12473,
+                "premEcoPax": 84,
+                "flightProfit": 12523,
+                "premEcoPrice": 4638
+            },
+            "5a4a8a7f-18a9-4bef-ac58-88167786b5a3": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7546,
+                "ecoPrice": 1643,
+                "firstPax": 12,
+                "aircraftId": "5a4a8a7f-18a9-4bef-ac58-88167786b5a3",
+                "firstPrice": 12473,
+                "premEcoPax": 84,
+                "flightProfit": 12481,
+                "premEcoPrice": 4638
+            },
+            "e8aa34ea-8957-44cc-86ec-55485e9b9403": {
+                "bizPax": 35,
+                "ecoPax": 261,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7546,
+                "ecoPrice": 1643,
+                "firstPax": 4,
+                "aircraftId": "e8aa34ea-8957-44cc-86ec-55485e9b9403",
+                "firstPrice": 12473,
+                "premEcoPax": 28,
+                "flightProfit": 4170,
+                "premEcoPrice": 4638
+            }
+        }
+    },
+    {
+        "flightId": "8ac08e1a-b543-48b0-9df1-af7e661690a0",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 561,
+        "inboundFlightNumber": 562,
+        "flightString": "CCS-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CCS",
+        "departureDailyTimestamp": 32400,
+        "outboundFlightDuration": 990,
+        "inboundFlightDuration": 1110,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "ace50806-3821-4498-8ecd-eabf81f64484": {
+                "bizPax": 17,
+                "ecoPax": 261,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 7054,
+                "ecoPrice": 1603,
+                "firstPax": 1,
+                "aircraftId": "ace50806-3821-4498-8ecd-eabf81f64484",
+                "firstPrice": 11543,
+                "premEcoPax": 28,
+                "flightProfit": 3389,
+                "premEcoPrice": 4370
+            }
+        }
+    },
+    {
+        "flightId": "6da2d67f-868b-4640-a3e1-d83f344647f3",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 551,
+        "inboundFlightNumber": 552,
+        "flightString": "CCS-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CCS",
+        "departureDailyTimestamp": 17100,
+        "outboundFlightDuration": 990,
+        "inboundFlightDuration": 1110,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "23a8bff4-5704-4cce-808e-b978a147d152": {
+                "bizPax": 35,
+                "ecoPax": 261,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7054,
+                "ecoPrice": 1603,
+                "firstPax": 4,
+                "aircraftId": "23a8bff4-5704-4cce-808e-b978a147d152",
+                "firstPrice": 11543,
+                "premEcoPax": 28,
+                "flightProfit": 4019,
+                "premEcoPrice": 4370
+            },
+            "2ea42d7f-acd1-435c-bf9e-77683a7835cb": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7054,
+                "ecoPrice": 1603,
+                "firstPax": 12,
+                "aircraftId": "2ea42d7f-acd1-435c-bf9e-77683a7835cb",
+                "firstPrice": 11543,
+                "premEcoPax": 84,
+                "flightProfit": 12015,
+                "premEcoPrice": 4370
+            },
+            "d9b0429b-c1ce-4e9e-9738-f07cbc9e57f3": {
+                "bizPax": 105,
+                "ecoPax": 783,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7054,
+                "ecoPrice": 1603,
+                "firstPax": 12,
+                "aircraftId": "d9b0429b-c1ce-4e9e-9738-f07cbc9e57f3",
+                "firstPrice": 11543,
+                "premEcoPax": 84,
+                "flightProfit": 12030,
+                "premEcoPrice": 4370
+            }
+        }
+    },
+    {
+        "flightId": "cc6b0aed-faab-414b-86e3-0a4d3625eacf",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 557,
+        "inboundFlightNumber": 558,
+        "flightString": "CCS-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CCS",
+        "departureDailyTimestamp": 66000,
+        "outboundFlightDuration": 990,
+        "inboundFlightDuration": 1110,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "23a8bff4-5704-4cce-808e-b978a147d152": {
+                "bizPax": 70,
+                "ecoPax": 522,
+                "dowList": [
+                    0,
+                    2
+                ],
+                "bizPrice": 7054,
+                "ecoPrice": 1603,
+                "firstPax": 8,
+                "aircraftId": "23a8bff4-5704-4cce-808e-b978a147d152",
+                "firstPrice": 11543,
+                "premEcoPax": 56,
+                "flightProfit": 8071,
+                "premEcoPrice": 4370
+            }
+        }
+    },
+    {
+        "flightId": "0ce2394d-2be8-4556-817a-3f335a74937d",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 559,
+        "inboundFlightNumber": 560,
+        "flightString": "CCS-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CCS",
+        "departureDailyTimestamp": 50100,
+        "outboundFlightDuration": 990,
+        "inboundFlightDuration": 1110,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "9399f426-f9b9-468f-b2d9-6ac7c3d1def0": {
+                "bizPax": 35,
+                "ecoPax": 261,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 7054,
+                "ecoPrice": 1603,
+                "firstPax": 4,
+                "aircraftId": "9399f426-f9b9-468f-b2d9-6ac7c3d1def0",
+                "firstPrice": 11543,
+                "premEcoPax": 28,
+                "flightProfit": 4030,
+                "premEcoPrice": 4370
+            }
+        }
+    },
+    {
+        "flightId": "1cf4cf5f-4bf6-45b3-9658-85ba9e6e119c",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 99,
+        "inboundFlightNumber": 100,
+        "flightString": "CAY-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CAY",
+        "departureDailyTimestamp": 76500,
+        "outboundFlightDuration": 1075,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "7b86fb40-b28d-4f1f-a5f6-4c6dc5f10bc2": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7333,
+                "ecoPrice": 1621,
+                "firstPax": 12,
+                "aircraftId": "7b86fb40-b28d-4f1f-a5f6-4c6dc5f10bc2",
+                "firstPrice": 12279,
+                "premEcoPax": 84,
+                "flightProfit": 12477,
+                "premEcoPrice": 4554
+            },
+            "7d4268df-cfc8-43ac-ac2f-74ed8c68290f": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7333,
+                "ecoPrice": 1621,
+                "firstPax": 12,
+                "aircraftId": "7d4268df-cfc8-43ac-ac2f-74ed8c68290f",
+                "firstPrice": 12279,
+                "premEcoPax": 84,
+                "flightProfit": 12515,
+                "premEcoPrice": 4554
+            },
+            "fb6ceddb-d905-49e9-b32d-65bc213f3115": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7333,
+                "ecoPrice": 1621,
+                "firstPax": 4,
+                "aircraftId": "fb6ceddb-d905-49e9-b32d-65bc213f3115",
+                "firstPrice": 12279,
+                "premEcoPax": 28,
+                "flightProfit": 4137,
+                "premEcoPrice": 4554
+            }
+        }
+    },
+    {
+        "flightId": "f2f8a463-fbe6-45df-a014-065f58863087",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 101,
+        "inboundFlightNumber": 102,
+        "flightString": "CAY-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CAY",
+        "departureDailyTimestamp": 44700,
+        "outboundFlightDuration": 1075,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "e8aa34ea-8957-44cc-86ec-55485e9b9403": {
+                "bizPax": 35,
+                "ecoPax": 261,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 7333,
+                "ecoPrice": 1621,
+                "firstPax": 4,
+                "aircraftId": "e8aa34ea-8957-44cc-86ec-55485e9b9403",
+                "firstPrice": 12279,
+                "premEcoPax": 28,
+                "flightProfit": 4194,
+                "premEcoPrice": 4554
+            },
+            "fb6ceddb-d905-49e9-b32d-65bc213f3115": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 7333,
+                "ecoPrice": 1621,
+                "firstPax": 8,
+                "aircraftId": "fb6ceddb-d905-49e9-b32d-65bc213f3115",
+                "firstPrice": 12279,
+                "premEcoPax": 56,
+                "flightProfit": 8338,
+                "premEcoPrice": 4554
+            }
+        }
+    },
+    {
+        "flightId": "122de20b-7e9e-4a70-8a52-6c3a95d5aa40",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 103,
+        "inboundFlightNumber": 104,
+        "flightString": "CAY-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CAY",
+        "departureDailyTimestamp": 12900,
+        "outboundFlightDuration": 1075,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "fb6ceddb-d905-49e9-b32d-65bc213f3115": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    5
+                ],
+                "bizPrice": 7333,
+                "ecoPrice": 1621,
+                "firstPax": 1,
+                "aircraftId": "fb6ceddb-d905-49e9-b32d-65bc213f3115",
+                "firstPrice": 12279,
+                "premEcoPax": 28,
+                "flightProfit": 4000,
+                "premEcoPrice": 4554
+            }
+        }
+    },
+    {
+        "flightId": "555e8b1f-02eb-4d08-b9d3-abd9be357816",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 9,
+        "inboundFlightNumber": 10,
+        "flightString": "GYE-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "GYE",
+        "departureDailyTimestamp": 82800,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1130,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "d1289a96-ac72-4ec6-9f72-8f529a2cd9db": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 6862,
+                "ecoPrice": 1548,
+                "firstPax": 4,
+                "aircraftId": "d1289a96-ac72-4ec6-9f72-8f529a2cd9db",
+                "firstPrice": 11506,
+                "premEcoPax": 28,
+                "flightProfit": 3818,
+                "premEcoPrice": 4095
+            }
+        }
+    },
+    {
+        "flightId": "ebec1119-2110-4818-91c4-32f48b642973",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 13,
+        "inboundFlightNumber": 14,
+        "flightString": "GYE-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "GYE",
+        "departureDailyTimestamp": 2400,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1130,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "e3f6fa73-e1b8-4de4-97d4-e37d212f60f8": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 6862,
+                "ecoPrice": 1548,
+                "firstPax": 8,
+                "aircraftId": "e3f6fa73-e1b8-4de4-97d4-e37d212f60f8",
+                "firstPrice": 11506,
+                "premEcoPax": 56,
+                "flightProfit": 7744,
+                "premEcoPrice": 4095
+            }
+        }
+    },
+    {
+        "flightId": "6b796473-5e01-485e-9d9a-4751d1ef8636",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 11,
+        "inboundFlightNumber": 12,
+        "flightString": "GYE-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "GYE",
+        "departureDailyTimestamp": 37800,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1130,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "2aeb9a2a-a515-46d4-ba1e-627268e7f865": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7475,
+                "ecoPrice": 1657,
+                "firstPax": 12,
+                "aircraftId": "2aeb9a2a-a515-46d4-ba1e-627268e7f865",
+                "firstPrice": 12548,
+                "premEcoPax": 84,
+                "flightProfit": 12499,
+                "premEcoPrice": 4585
+            },
+            "8b852d73-ac9e-47e3-aa43-f5bb814c7897": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7475,
+                "ecoPrice": 1657,
+                "firstPax": 12,
+                "aircraftId": "8b852d73-ac9e-47e3-aa43-f5bb814c7897",
+                "firstPrice": 12548,
+                "premEcoPax": 84,
+                "flightProfit": 12505,
+                "premEcoPrice": 4585
+            },
+            "e3f6fa73-e1b8-4de4-97d4-e37d212f60f8": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7475,
+                "ecoPrice": 1657,
+                "firstPax": 4,
+                "aircraftId": "e3f6fa73-e1b8-4de4-97d4-e37d212f60f8",
+                "firstPrice": 12548,
+                "premEcoPax": 28,
+                "flightProfit": 4147,
+                "premEcoPrice": 4585
+            }
+        }
+    },
+    {
+        "flightId": "92b996e6-2657-4ba0-8844-805bcd864356",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 401,
+        "inboundFlightNumber": 402,
+        "flightString": "ICN-PBM",
+        "originAirport": "ICN",
+        "destinationAirport": "PBM",
+        "departureDailyTimestamp": 67500,
+        "outboundFlightDuration": 1060,
+        "inboundFlightDuration": 1115,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "1236a707-b276-4318-8428-f249f3acec07": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7428,
+                "ecoPrice": 1660,
+                "firstPax": 4,
+                "aircraftId": "1236a707-b276-4318-8428-f249f3acec07",
+                "firstPrice": 11989,
+                "premEcoPax": 28,
+                "flightProfit": 4146,
+                "premEcoPrice": 4555
+            },
+            "7f82a6a6-23b9-4363-85cb-eb35e385eb48": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7428,
+                "ecoPrice": 1660,
+                "firstPax": 12,
+                "aircraftId": "7f82a6a6-23b9-4363-85cb-eb35e385eb48",
+                "firstPrice": 11989,
+                "premEcoPax": 84,
+                "flightProfit": 12413,
+                "premEcoPrice": 4555
+            },
+            "a343fe43-e57f-4988-8c1f-0cf33e040d05": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7428,
+                "ecoPrice": 1660,
+                "firstPax": 12,
+                "aircraftId": "a343fe43-e57f-4988-8c1f-0cf33e040d05",
+                "firstPrice": 11989,
+                "premEcoPax": 84,
+                "flightProfit": 12472,
+                "premEcoPrice": 4555
+            }
+        }
+    },
+    {
+        "flightId": "98ba1105-445d-4d19-994e-d2bda38d6637",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 403,
+        "inboundFlightNumber": 404,
+        "flightString": "ICN-PBM",
+        "originAirport": "ICN",
+        "destinationAirport": "PBM",
+        "departureDailyTimestamp": 34500,
+        "outboundFlightDuration": 1060,
+        "inboundFlightDuration": 1115,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "1236a707-b276-4318-8428-f249f3acec07": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 7428,
+                "ecoPrice": 1660,
+                "firstPax": 8,
+                "aircraftId": "1236a707-b276-4318-8428-f249f3acec07",
+                "firstPrice": 11989,
+                "premEcoPax": 56,
+                "flightProfit": 8272,
+                "premEcoPrice": 4555
+            },
+            "9832b972-7095-433b-8fd9-1f92b7a9ed28": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    0,
+                    5
+                ],
+                "bizPrice": 7428,
+                "ecoPrice": 1660,
+                "firstPax": 4,
+                "aircraftId": "9832b972-7095-433b-8fd9-1f92b7a9ed28",
+                "firstPrice": 11989,
+                "premEcoPax": 56,
+                "flightProfit": 8154,
+                "premEcoPrice": 4555
+            }
+        }
+    },
+    {
+        "flightId": "30685761-aa52-4505-99a1-f176dba4f198",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 835,
+        "inboundFlightNumber": 836,
+        "flightString": "GEO-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "GEO",
+        "departureDailyTimestamp": 1500,
+        "outboundFlightDuration": 1050,
+        "inboundFlightDuration": 1165,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "1236a707-b276-4318-8428-f249f3acec07": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    5
+                ],
+                "bizPrice": 7452,
+                "ecoPrice": 1563,
+                "firstPax": 4,
+                "aircraftId": "1236a707-b276-4318-8428-f249f3acec07",
+                "firstPrice": 12038,
+                "premEcoPax": 28,
+                "flightProfit": 4064,
+                "premEcoPrice": 4332
+            },
+            "9832b972-7095-433b-8fd9-1f92b7a9ed28": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    2
+                ],
+                "bizPrice": 7452,
+                "ecoPrice": 1563,
+                "firstPax": 4,
+                "aircraftId": "9832b972-7095-433b-8fd9-1f92b7a9ed28",
+                "firstPrice": 12038,
+                "premEcoPax": 28,
+                "flightProfit": 4069,
+                "premEcoPrice": 4332
+            }
+        }
+    },
+    {
+        "flightId": "af35db4a-1263-44ae-9c1c-2c68dc949f35",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 837,
+        "inboundFlightNumber": 838,
+        "flightString": "GEO-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "GEO",
+        "departureDailyTimestamp": 57600,
+        "outboundFlightDuration": 1050,
+        "inboundFlightDuration": 1165,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "af7550c2-d8a5-40de-b438-0971ed219932": {
+                "bizPax": 84,
+                "ecoPax": 863,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7492,
+                "ecoPrice": 1652,
+                "firstPax": 12,
+                "aircraftId": "af7550c2-d8a5-40de-b438-0971ed219932",
+                "firstPrice": 12302,
+                "premEcoPax": 84,
+                "flightProfit": 12465,
+                "premEcoPrice": 4571
+            },
+            "d1289a96-ac72-4ec6-9f72-8f529a2cd9db": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7492,
+                "ecoPrice": 1652,
+                "firstPax": 4,
+                "aircraftId": "d1289a96-ac72-4ec6-9f72-8f529a2cd9db",
+                "firstPrice": 12302,
+                "premEcoPax": 28,
+                "flightProfit": 4123,
+                "premEcoPrice": 4571
+            },
+            "edaf8150-5b78-44ce-b9fe-358624da6b14": {
+                "bizPax": 84,
+                "ecoPax": 863,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7492,
+                "ecoPrice": 1652,
+                "firstPax": 12,
+                "aircraftId": "edaf8150-5b78-44ce-b9fe-358624da6b14",
+                "firstPrice": 12302,
+                "premEcoPax": 84,
+                "flightProfit": 12416,
+                "premEcoPrice": 4571
+            }
+        }
+    },
+    {
+        "flightId": "2db2d5cf-f5f9-409d-9aeb-832d4e97d4b1",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 839,
+        "inboundFlightNumber": 840,
+        "flightString": "GEO-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "GEO",
+        "departureDailyTimestamp": 27000,
+        "outboundFlightDuration": 1050,
+        "inboundFlightDuration": 1165,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "d1289a96-ac72-4ec6-9f72-8f529a2cd9db": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 7452,
+                "ecoPrice": 1563,
+                "firstPax": 3,
+                "aircraftId": "d1289a96-ac72-4ec6-9f72-8f529a2cd9db",
+                "firstPrice": 12038,
+                "premEcoPax": 56,
+                "flightProfit": 7854,
+                "premEcoPrice": 4332
+            }
+        }
+    },
+    {
+        "flightId": "c752afe8-fac2-494e-8bdf-7021b1e780ac",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 901,
+        "inboundFlightNumber": 902,
+        "flightString": "CLO-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CLO",
+        "departureDailyTimestamp": 45900,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "04d03cba-1a7a-4724-ad1c-dd47f73a5836": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7344,
+                "ecoPrice": 1625,
+                "firstPax": 12,
+                "aircraftId": "04d03cba-1a7a-4724-ad1c-dd47f73a5836",
+                "firstPrice": 12471,
+                "premEcoPax": 84,
+                "flightProfit": 12252,
+                "premEcoPrice": 4502
+            },
+            "66c3d648-ec30-4fd4-ae70-b31d0b4a3049": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7344,
+                "ecoPrice": 1625,
+                "firstPax": 12,
+                "aircraftId": "66c3d648-ec30-4fd4-ae70-b31d0b4a3049",
+                "firstPrice": 12471,
+                "premEcoPax": 84,
+                "flightProfit": 12239,
+                "premEcoPrice": 4502
+            },
+            "d2ca783c-53ed-4951-bf54-ba06406b5af9": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7344,
+                "ecoPrice": 1625,
+                "firstPax": 4,
+                "aircraftId": "d2ca783c-53ed-4951-bf54-ba06406b5af9",
+                "firstPrice": 12471,
+                "premEcoPax": 28,
+                "flightProfit": 4062,
+                "premEcoPrice": 4502
+            }
+        }
+    },
+    {
+        "flightId": "9b86d655-fd2a-4f39-b713-f0a15e36dcce",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 903,
+        "inboundFlightNumber": 904,
+        "flightString": "CLO-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CLO",
+        "departureDailyTimestamp": 9900,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "3d934483-81e9-4a07-94aa-e77944309a2b": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    0,
+                    5
+                ],
+                "bizPrice": 7344,
+                "ecoPrice": 1625,
+                "firstPax": 5,
+                "aircraftId": "3d934483-81e9-4a07-94aa-e77944309a2b",
+                "firstPrice": 12471,
+                "premEcoPax": 56,
+                "flightProfit": 8024,
+                "premEcoPrice": 4502
+            },
+            "d2ca783c-53ed-4951-bf54-ba06406b5af9": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 7344,
+                "ecoPrice": 1625,
+                "firstPax": 8,
+                "aircraftId": "d2ca783c-53ed-4951-bf54-ba06406b5af9",
+                "firstPrice": 12471,
+                "premEcoPax": 56,
+                "flightProfit": 8182,
+                "premEcoPrice": 4502
+            }
+        }
+    },
+    {
+        "flightId": "a996c18e-5bd3-4c29-83df-6293b3687de5",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 715,
+        "inboundFlightNumber": 716,
+        "flightString": "ICN-MDE",
+        "originAirport": "ICN",
+        "destinationAirport": "MDE",
+        "departureDailyTimestamp": 60300,
+        "outboundFlightDuration": 995,
+        "inboundFlightDuration": 1105,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "3d934483-81e9-4a07-94aa-e77944309a2b": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    1
+                ],
+                "bizPrice": 6538,
+                "ecoPrice": 1401,
+                "firstPax": 4,
+                "aircraftId": "3d934483-81e9-4a07-94aa-e77944309a2b",
+                "firstPrice": 11906,
+                "premEcoPax": 28,
+                "flightProfit": 3565,
+                "premEcoPrice": 4107
+            },
+            "9832b972-7095-433b-8fd9-1f92b7a9ed28": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    3
+                ],
+                "bizPrice": 6538,
+                "ecoPrice": 1401,
+                "firstPax": 4,
+                "aircraftId": "9832b972-7095-433b-8fd9-1f92b7a9ed28",
+                "firstPrice": 11906,
+                "premEcoPax": 28,
+                "flightProfit": 3589,
+                "premEcoPrice": 4107
+            },
+            "e3f6fa73-e1b8-4de4-97d4-e37d212f60f8": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 6538,
+                "ecoPrice": 1401,
+                "firstPax": 4,
+                "aircraftId": "e3f6fa73-e1b8-4de4-97d4-e37d212f60f8",
+                "firstPrice": 11906,
+                "premEcoPax": 28,
+                "flightProfit": 3565,
+                "premEcoPrice": 4107
+            }
+        }
+    },
+    {
+        "flightId": "6203462d-7bb7-4470-b0cc-42da779a5b87",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 717,
+        "inboundFlightNumber": 718,
+        "flightString": "ICN-MDE",
+        "originAirport": "ICN",
+        "destinationAirport": "MDE",
+        "departureDailyTimestamp": 45900,
+        "outboundFlightDuration": 995,
+        "inboundFlightDuration": 1105,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "31c8971d-b605-4b42-a26c-f298feddb683": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7289,
+                "ecoPrice": 1608,
+                "firstPax": 4,
+                "aircraftId": "31c8971d-b605-4b42-a26c-f298feddb683",
+                "firstPrice": 11906,
+                "premEcoPax": 28,
+                "flightProfit": 4025,
+                "premEcoPrice": 4473
+            },
+            "6d4eff56-8cec-46ad-9945-70b9a9af18dc": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7289,
+                "ecoPrice": 1608,
+                "firstPax": 12,
+                "aircraftId": "6d4eff56-8cec-46ad-9945-70b9a9af18dc",
+                "firstPrice": 11906,
+                "premEcoPax": 84,
+                "flightProfit": 12022,
+                "premEcoPrice": 4473
+            },
+            "80cf60ae-e3b0-4a42-9972-be770b969060": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7289,
+                "ecoPrice": 1608,
+                "firstPax": 12,
+                "aircraftId": "80cf60ae-e3b0-4a42-9972-be770b969060",
+                "firstPrice": 11906,
+                "premEcoPax": 84,
+                "flightProfit": 11987,
+                "premEcoPrice": 4473
+            }
+        }
+    },
+    {
+        "flightId": "85e400a6-f869-4af7-a178-8ed4de9aea3e",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 719,
+        "inboundFlightNumber": 720,
+        "flightString": "ICN-MDE",
+        "originAirport": "ICN",
+        "destinationAirport": "MDE",
+        "departureDailyTimestamp": 8400,
+        "outboundFlightDuration": 995,
+        "inboundFlightDuration": 1105,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "31c8971d-b605-4b42-a26c-f298feddb683": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    1
+                ],
+                "bizPrice": 6538,
+                "ecoPrice": 1401,
+                "firstPax": 1,
+                "aircraftId": "31c8971d-b605-4b42-a26c-f298feddb683",
+                "firstPrice": 11906,
+                "premEcoPax": 28,
+                "flightProfit": 3423,
+                "premEcoPrice": 4107
+            }
+        }
+    },
+    {
+        "flightId": "4c3cb08d-9a4a-4659-a98e-f0e45b3dcd8b",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 193,
+        "inboundFlightNumber": 194,
+        "flightString": "ICN-POS",
+        "originAirport": "ICN",
+        "destinationAirport": "POS",
+        "departureDailyTimestamp": 57300,
+        "outboundFlightDuration": 1010,
+        "inboundFlightDuration": 1130,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "31c8971d-b605-4b42-a26c-f298feddb683": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    2,
+                    4
+                ],
+                "bizPrice": 7097,
+                "ecoPrice": 1418,
+                "firstPax": 8,
+                "aircraftId": "31c8971d-b605-4b42-a26c-f298feddb683",
+                "firstPrice": 12014,
+                "premEcoPax": 56,
+                "flightProfit": 7388,
+                "premEcoPrice": 3875
+            }
+        }
+    },
+    {
+        "flightId": "51ea8c4d-908f-4377-89ac-0fc0e8d058f3",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 197,
+        "inboundFlightNumber": 198,
+        "flightString": "ICN-POS",
+        "originAirport": "ICN",
+        "destinationAirport": "POS",
+        "departureDailyTimestamp": 63900,
+        "outboundFlightDuration": 1010,
+        "inboundFlightDuration": 1130,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "5d58e311-5222-4e48-b5a2-d1480a0371ee": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    0,
+                    2
+                ],
+                "bizPrice": 7097,
+                "ecoPrice": 1418,
+                "firstPax": 4,
+                "aircraftId": "5d58e311-5222-4e48-b5a2-d1480a0371ee",
+                "firstPrice": 12014,
+                "premEcoPax": 56,
+                "flightProfit": 7148,
+                "premEcoPrice": 3875
+            }
+        }
+    },
+    {
+        "flightId": "985279cc-d210-4e28-9a0a-c8912982610d",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 195,
+        "inboundFlightNumber": 196,
+        "flightString": "ICN-POS",
+        "originAirport": "ICN",
+        "destinationAirport": "POS",
+        "departureDailyTimestamp": 12600,
+        "outboundFlightDuration": 1010,
+        "inboundFlightDuration": 1130,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "5d58e311-5222-4e48-b5a2-d1480a0371ee": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7227,
+                "ecoPrice": 1609,
+                "firstPax": 4,
+                "aircraftId": "5d58e311-5222-4e48-b5a2-d1480a0371ee",
+                "firstPrice": 12014,
+                "premEcoPax": 28,
+                "flightProfit": 4013,
+                "premEcoPrice": 4422
+            },
+            "de6289f4-1c3c-400b-aa48-2b11f3e2a9f6": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7227,
+                "ecoPrice": 1609,
+                "firstPax": 12,
+                "aircraftId": "de6289f4-1c3c-400b-aa48-2b11f3e2a9f6",
+                "firstPrice": 12014,
+                "premEcoPax": 84,
+                "flightProfit": 12041,
+                "premEcoPrice": 4422
+            },
+            "e13df625-dded-4c5e-ba7d-11681bc514d0": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7227,
+                "ecoPrice": 1609,
+                "firstPax": 12,
+                "aircraftId": "e13df625-dded-4c5e-ba7d-11681bc514d0",
+                "firstPrice": 12014,
+                "premEcoPax": 84,
+                "flightProfit": 12041,
+                "premEcoPrice": 4422
+            }
+        }
+    },
+    {
+        "flightId": "7fcc175d-a193-44a3-9607-4ff2834ba618",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 921,
+        "inboundFlightNumber": 922,
+        "flightString": "BLA-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BLA",
+        "departureDailyTimestamp": 28800,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "5d58e311-5222-4e48-b5a2-d1480a0371ee": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 6308,
+                "ecoPrice": 1499,
+                "firstPax": 4,
+                "aircraftId": "5d58e311-5222-4e48-b5a2-d1480a0371ee",
+                "firstPrice": 11558,
+                "premEcoPax": 28,
+                "flightProfit": 3693,
+                "premEcoPrice": 4082
+            }
+        }
+    },
+    {
+        "flightId": "6c40c6a5-9c34-4848-9b87-f953d7331de0",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 923,
+        "inboundFlightNumber": 924,
+        "flightString": "BLA-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BLA",
+        "departureDailyTimestamp": 60300,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "d2ca783c-53ed-4951-bf54-ba06406b5af9": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 6308,
+                "ecoPrice": 1499,
+                "firstPax": 4,
+                "aircraftId": "d2ca783c-53ed-4951-bf54-ba06406b5af9",
+                "firstPrice": 11558,
+                "premEcoPax": 28,
+                "flightProfit": 3714,
+                "premEcoPrice": 4082
+            }
+        }
+    },
+    {
+        "flightId": "022faaaa-a963-455c-b761-c65b37ab8fdd",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 927,
+        "inboundFlightNumber": 928,
+        "flightString": "BLA-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BLA",
+        "departureDailyTimestamp": 42300,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "436220bc-524b-4d96-910c-0e7c54d5d5aa": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7150,
+                "ecoPrice": 1605,
+                "firstPax": 12,
+                "aircraftId": "436220bc-524b-4d96-910c-0e7c54d5d5aa",
+                "firstPrice": 11558,
+                "premEcoPax": 84,
+                "flightProfit": 12055,
+                "premEcoPrice": 4329
+            },
+            "6b6810d8-8e6c-4656-b954-fcfb66579ee0": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7150,
+                "ecoPrice": 1605,
+                "firstPax": 11,
+                "aircraftId": "6b6810d8-8e6c-4656-b954-fcfb66579ee0",
+                "firstPrice": 11558,
+                "premEcoPax": 84,
+                "flightProfit": 12057,
+                "premEcoPrice": 4329
+            },
+            "a34a824d-47dc-4a6a-bb2f-e6b86f4b5beb": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7150,
+                "ecoPrice": 1605,
+                "firstPax": 0,
+                "aircraftId": "a34a824d-47dc-4a6a-bb2f-e6b86f4b5beb",
+                "firstPrice": 11558,
+                "premEcoPax": 28,
+                "flightProfit": 3762,
+                "premEcoPrice": 4329
+            }
+        }
+    },
+    {
+        "flightId": "4567c9f8-74b8-4c66-b0dd-5bd2ef5c2ac1",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 925,
+        "inboundFlightNumber": 926,
+        "flightString": "BLA-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BLA",
+        "departureDailyTimestamp": 45900,
+        "outboundFlightDuration": 1005,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "23a8bff4-5704-4cce-808e-b978a147d152": {
+                "bizPax": 35,
+                "ecoPax": 261,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 6308,
+                "ecoPrice": 1499,
+                "firstPax": 4,
+                "aircraftId": "23a8bff4-5704-4cce-808e-b978a147d152",
+                "firstPrice": 11558,
+                "premEcoPax": 28,
+                "flightProfit": 3739,
+                "premEcoPrice": 4082
+            },
+            "3d934483-81e9-4a07-94aa-e77944309a2b": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    3
+                ],
+                "bizPrice": 6308,
+                "ecoPrice": 1499,
+                "firstPax": 4,
+                "aircraftId": "3d934483-81e9-4a07-94aa-e77944309a2b",
+                "firstPrice": 11558,
+                "premEcoPax": 28,
+                "flightProfit": 3689,
+                "premEcoPrice": 4082
+            }
+        }
+    },
+    {
+        "flightId": "f1ea655f-07ea-4658-a256-56cd12aab1da",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 491,
+        "inboundFlightNumber": 492,
+        "flightString": "BON-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BON",
+        "departureDailyTimestamp": 6300,
+        "outboundFlightDuration": 980,
+        "inboundFlightDuration": 1095,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "a34a824d-47dc-4a6a-bb2f-e6b86f4b5beb": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 6151,
+                "ecoPrice": 1349,
+                "firstPax": 8,
+                "aircraftId": "a34a824d-47dc-4a6a-bb2f-e6b86f4b5beb",
+                "firstPrice": 10677,
+                "premEcoPax": 56,
+                "flightProfit": 6817,
+                "premEcoPrice": 4290
+            }
+        }
+    },
+    {
+        "flightId": "44316963-7db5-4b85-8e5c-39802452fe4c",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 493,
+        "inboundFlightNumber": 494,
+        "flightString": "BON-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BON",
+        "departureDailyTimestamp": 53700,
+        "outboundFlightDuration": 980,
+        "inboundFlightDuration": 1095,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "a34a824d-47dc-4a6a-bb2f-e6b86f4b5beb": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    4
+                ],
+                "bizPrice": 6151,
+                "ecoPrice": 1349,
+                "firstPax": 4,
+                "aircraftId": "a34a824d-47dc-4a6a-bb2f-e6b86f4b5beb",
+                "firstPrice": 10677,
+                "premEcoPax": 28,
+                "flightProfit": 3406,
+                "premEcoPrice": 4290
+            }
+        }
+    },
+    {
+        "flightId": "4c52e55d-6588-4911-a88b-354328c83804",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 495,
+        "inboundFlightNumber": 496,
+        "flightString": "BON-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BON",
+        "departureDailyTimestamp": 23400,
+        "outboundFlightDuration": 980,
+        "inboundFlightDuration": 1095,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "2a91586a-a350-4ccf-963a-640c885b235e": {
+                "bizPax": 28,
+                "ecoPax": 288,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 7028,
+                "ecoPrice": 1549,
+                "firstPax": 4,
+                "aircraftId": "2a91586a-a350-4ccf-963a-640c885b235e",
+                "firstPrice": 12062,
+                "premEcoPax": 28,
+                "flightProfit": 3944,
+                "premEcoPrice": 4290
+            },
+            "444e3085-cef8-4499-a68c-636a76b390bc": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 7028,
+                "ecoPrice": 1549,
+                "firstPax": 12,
+                "aircraftId": "444e3085-cef8-4499-a68c-636a76b390bc",
+                "firstPrice": 12062,
+                "premEcoPax": 84,
+                "flightProfit": 11772,
+                "premEcoPrice": 4290
+            },
+            "faf54946-7d2d-40a8-931e-36ad7d37a25b": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 7028,
+                "ecoPrice": 1549,
+                "firstPax": 11,
+                "aircraftId": "faf54946-7d2d-40a8-931e-36ad7d37a25b",
+                "firstPrice": 12062,
+                "premEcoPax": 84,
+                "flightProfit": 11779,
+                "premEcoPrice": 4290
+            }
+        }
+    },
+    {
+        "flightId": "18e5fdce-249a-4608-bbbc-495138129cde",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 737,
+        "inboundFlightNumber": 738,
+        "flightString": "ICN-TAB",
+        "originAirport": "ICN",
+        "destinationAirport": "TAB",
+        "departureDailyTimestamp": 36900,
+        "outboundFlightDuration": 1010,
+        "inboundFlightDuration": 1125,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "2a91586a-a350-4ccf-963a-640c885b235e": {
+                "bizPax": 56,
+                "ecoPax": 576,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 6611,
+                "ecoPrice": 1364,
+                "firstPax": 8,
+                "aircraftId": "2a91586a-a350-4ccf-963a-640c885b235e",
+                "firstPrice": 11657,
+                "premEcoPax": 56,
+                "flightProfit": 6997,
+                "premEcoPrice": 3844
+            },
+            "a63cc5dc-6134-4d2c-bb6d-1bd5041b7af9": {
+                "bizPax": 84,
+                "ecoPax": 864,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 6611,
+                "ecoPrice": 1364,
+                "firstPax": 12,
+                "aircraftId": "a63cc5dc-6134-4d2c-bb6d-1bd5041b7af9",
+                "firstPrice": 11657,
+                "premEcoPax": 84,
+                "flightProfit": 10398,
+                "premEcoPrice": 3844
+            }
+        }
+    },
+    {
+        "flightId": "90e18500-4b56-478f-85a7-5c99e578e456",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 473,
+        "inboundFlightNumber": 474,
+        "flightString": "ICN-VVI",
+        "originAirport": "ICN",
+        "destinationAirport": "VVI",
+        "departureDailyTimestamp": 77100,
+        "outboundFlightDuration": 1190,
+        "inboundFlightDuration": 1305,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "2e8051de-0134-43d6-86b2-ac589492125e": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    0
+                ],
+                "bizPrice": 9090,
+                "ecoPrice": 1886,
+                "firstPax": 4,
+                "aircraftId": "2e8051de-0134-43d6-86b2-ac589492125e",
+                "firstPrice": 15357,
+                "premEcoPax": 56,
+                "flightProfit": 5031,
+                "premEcoPrice": 5485
+            }
+        }
+    },
+    {
+        "flightId": "52c50e7b-9f0f-418c-a62e-e3958f12e994",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 471,
+        "inboundFlightNumber": 472,
+        "flightString": "ICN-VVI",
+        "originAirport": "ICN",
+        "destinationAirport": "VVI",
+        "departureDailyTimestamp": 4500,
+        "outboundFlightDuration": 1190,
+        "inboundFlightDuration": 1305,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "2e8051de-0134-43d6-86b2-ac589492125e": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 9090,
+                "ecoPrice": 1886,
+                "firstPax": 4,
+                "aircraftId": "2e8051de-0134-43d6-86b2-ac589492125e",
+                "firstPrice": 15357,
+                "premEcoPax": 56,
+                "flightProfit": 5013,
+                "premEcoPrice": 5485
+            },
+            "82ea160a-3f4d-42c9-ad56-ba4ab18c0eb9": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 9090,
+                "ecoPrice": 1886,
+                "firstPax": 12,
+                "aircraftId": "82ea160a-3f4d-42c9-ad56-ba4ab18c0eb9",
+                "firstPrice": 15357,
+                "premEcoPax": 168,
+                "flightProfit": 15074,
+                "premEcoPrice": 5485
+            },
+            "c22b1b5a-9bf5-4caa-8703-c0e1a6246712": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 9090,
+                "ecoPrice": 1886,
+                "firstPax": 12,
+                "aircraftId": "c22b1b5a-9bf5-4caa-8703-c0e1a6246712",
+                "firstPrice": 15357,
+                "premEcoPax": 168,
+                "flightProfit": 15094,
+                "premEcoPrice": 5485
+            }
+        }
+    },
+    {
+        "flightId": "bbf2fc87-afbf-49fd-98a5-092a9aeb6cb9",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 297,
+        "inboundFlightNumber": 298,
+        "flightString": "CNF-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CNF",
+        "departureDailyTimestamp": 63300,
+        "outboundFlightDuration": 1275,
+        "inboundFlightDuration": 1185,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "2e8051de-0134-43d6-86b2-ac589492125e": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    2
+                ],
+                "bizPrice": 8288,
+                "ecoPrice": 1657,
+                "firstPax": 4,
+                "aircraftId": "2e8051de-0134-43d6-86b2-ac589492125e",
+                "firstPrice": 13742,
+                "premEcoPax": 56,
+                "flightProfit": 4436,
+                "premEcoPrice": 5058
+            }
+        }
+    },
+    {
+        "flightId": "dbe2bc28-f055-4ac4-b9f3-08a7da60a303",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 35,
+        "inboundFlightNumber": 36,
+        "flightString": "ICN-USH",
+        "originAirport": "ICN",
+        "destinationAirport": "USH",
+        "departureDailyTimestamp": 40800,
+        "outboundFlightDuration": 1205,
+        "inboundFlightDuration": 1265,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "1b2bd31b-ccc1-4f24-b11e-925bc6a37fdc": {
+                "bizPax": 112,
+                "ecoPax": 287,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 9142,
+                "ecoPrice": 1901,
+                "firstPax": 8,
+                "aircraftId": "1b2bd31b-ccc1-4f24-b11e-925bc6a37fdc",
+                "firstPrice": 15449,
+                "premEcoPax": 112,
+                "flightProfit": 10082,
+                "premEcoPrice": 5458
+            }
+        }
+    },
+    {
+        "flightId": "ce1afe20-cda2-4165-b504-ea3c3b3e3857",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 299,
+        "inboundFlightNumber": 300,
+        "flightString": "CNF-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CNF",
+        "departureDailyTimestamp": 56700,
+        "outboundFlightDuration": 1275,
+        "inboundFlightDuration": 1185,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "1b2bd31b-ccc1-4f24-b11e-925bc6a37fdc": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 9276,
+                "ecoPrice": 1888,
+                "firstPax": 4,
+                "aircraftId": "1b2bd31b-ccc1-4f24-b11e-925bc6a37fdc",
+                "firstPrice": 14866,
+                "premEcoPax": 56,
+                "flightProfit": 5018,
+                "premEcoPrice": 5571
+            },
+            "81264667-fe4e-44d7-b9b6-91831e819e74": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 9276,
+                "ecoPrice": 1888,
+                "firstPax": 12,
+                "aircraftId": "81264667-fe4e-44d7-b9b6-91831e819e74",
+                "firstPrice": 14866,
+                "premEcoPax": 168,
+                "flightProfit": 15046,
+                "premEcoPrice": 5571
+            },
+            "81fe76c1-b438-43fe-9e5c-69497aa85957": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 9276,
+                "ecoPrice": 1888,
+                "firstPax": 12,
+                "aircraftId": "81fe76c1-b438-43fe-9e5c-69497aa85957",
+                "firstPrice": 14866,
+                "premEcoPax": 168,
+                "flightProfit": 14991,
+                "premEcoPrice": 5571
+            }
+        }
+    },
+    {
+        "flightId": "6bba0e38-802b-4b29-af97-2e916d9f4f18",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 37,
+        "inboundFlightNumber": 38,
+        "flightString": "ICN-USH",
+        "originAirport": "ICN",
+        "destinationAirport": "USH",
+        "departureDailyTimestamp": 9900,
+        "outboundFlightDuration": 1205,
+        "inboundFlightDuration": 1265,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "4860ad5a-4b78-4535-9b67-35fc077eace2": {
+                "bizPax": 168,
+                "ecoPax": 431,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 9248,
+                "ecoPrice": 1899,
+                "firstPax": 12,
+                "aircraftId": "4860ad5a-4b78-4535-9b67-35fc077eace2",
+                "firstPrice": 15449,
+                "premEcoPax": 168,
+                "flightProfit": 15070,
+                "premEcoPrice": 5540
+            },
+            "bb403f0b-bf35-4bf1-8f4c-25745cbea739": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 9248,
+                "ecoPrice": 1899,
+                "firstPax": 4,
+                "aircraftId": "bb403f0b-bf35-4bf1-8f4c-25745cbea739",
+                "firstPrice": 15449,
+                "premEcoPax": 56,
+                "flightProfit": 5046,
+                "premEcoPrice": 5540
+            },
+            "e7ac56dc-31c2-442a-8bff-42e24fbea337": {
+                "bizPax": 168,
+                "ecoPax": 431,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 9248,
+                "ecoPrice": 1899,
+                "firstPax": 12,
+                "aircraftId": "e7ac56dc-31c2-442a-8bff-42e24fbea337",
+                "firstPrice": 15449,
+                "premEcoPax": 168,
+                "flightProfit": 15133,
+                "premEcoPrice": 5540
+            }
+        }
+    },
+    {
+        "flightId": "f8985822-a120-45f5-8f5c-68069cfda957",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 281,
+        "inboundFlightNumber": 282,
+        "flightString": "BSB-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BSB",
+        "departureDailyTimestamp": 81000,
+        "outboundFlightDuration": 1240,
+        "inboundFlightDuration": 1190,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "0392d906-f17b-4e39-9a3f-518d15fc9594": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 8934,
+                "ecoPrice": 1702,
+                "firstPax": 12,
+                "aircraftId": "0392d906-f17b-4e39-9a3f-518d15fc9594",
+                "firstPrice": 13426,
+                "premEcoPax": 168,
+                "flightProfit": 13760,
+                "premEcoPrice": 4676
+            }
+        }
+    },
+    {
+        "flightId": "86e4bb84-8e64-45bc-a676-13ddd710adff",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 283,
+        "inboundFlightNumber": 284,
+        "flightString": "BSB-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "BSB",
+        "departureDailyTimestamp": 81600,
+        "outboundFlightDuration": 1240,
+        "inboundFlightDuration": 1190,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "bb403f0b-bf35-4bf1-8f4c-25745cbea739": {
+                "bizPax": 112,
+                "ecoPax": 288,
+                "dowList": [
+                    0,
+                    2
+                ],
+                "bizPrice": 8934,
+                "ecoPrice": 1702,
+                "firstPax": 8,
+                "aircraftId": "bb403f0b-bf35-4bf1-8f4c-25745cbea739",
+                "firstPrice": 13426,
+                "premEcoPax": 112,
+                "flightProfit": 9131,
+                "premEcoPrice": 4676
+            }
+        }
+    },
+    {
+        "flightId": "8fefe819-3bc4-481d-ad8e-fbad108e4525",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 829,
+        "inboundFlightNumber": 830,
+        "flightString": "CBB-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CBB",
+        "departureDailyTimestamp": 67500,
+        "outboundFlightDuration": 1155,
+        "inboundFlightDuration": 1280,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "2be200f4-6d8f-4d6c-ae17-1a755f9845c8": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 9035,
+                "ecoPrice": 1868,
+                "firstPax": 12,
+                "aircraftId": "2be200f4-6d8f-4d6c-ae17-1a755f9845c8",
+                "firstPrice": 14749,
+                "premEcoPax": 168,
+                "flightProfit": 14806,
+                "premEcoPrice": 5439
+            },
+            "5909f9d4-00c5-488c-afe6-addf34c46f53": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 9035,
+                "ecoPrice": 1868,
+                "firstPax": 12,
+                "aircraftId": "5909f9d4-00c5-488c-afe6-addf34c46f53",
+                "firstPrice": 14749,
+                "premEcoPax": 168,
+                "flightProfit": 14889,
+                "premEcoPrice": 5439
+            },
+            "ba3796d8-1645-435d-bb89-1c7a7e7400ca": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 9035,
+                "ecoPrice": 1868,
+                "firstPax": 4,
+                "aircraftId": "ba3796d8-1645-435d-bb89-1c7a7e7400ca",
+                "firstPrice": 14749,
+                "premEcoPax": 56,
+                "flightProfit": 4921,
+                "premEcoPrice": 5439
+            }
+        }
+    },
+    {
+        "flightId": "b04f969d-94fd-411a-8c85-e76daf135731",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 831,
+        "inboundFlightNumber": 832,
+        "flightString": "CBB-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "CBB",
+        "departureDailyTimestamp": 50100,
+        "outboundFlightDuration": 1155,
+        "inboundFlightDuration": 1280,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "ba3796d8-1645-435d-bb89-1c7a7e7400ca": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    1
+                ],
+                "bizPrice": 9035,
+                "ecoPrice": 1868,
+                "firstPax": 4,
+                "aircraftId": "ba3796d8-1645-435d-bb89-1c7a7e7400ca",
+                "firstPrice": 14749,
+                "premEcoPax": 56,
+                "flightProfit": 4962,
+                "premEcoPrice": 5439
+            }
+        }
+    },
+    {
+        "flightId": "b7b88782-49d7-4d78-a2a2-93b6b9e6a3fa",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 659,
+        "inboundFlightNumber": 660,
+        "flightString": "ICN-SSA",
+        "originAirport": "ICN",
+        "destinationAirport": "SSA",
+        "departureDailyTimestamp": 69300,
+        "outboundFlightDuration": 1215,
+        "inboundFlightDuration": 1120,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "939d3df8-042f-4519-ac4a-170c1d4d99bc": {
+                "bizPax": 55,
+                "ecoPax": 117,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 8806,
+                "ecoPrice": 1803,
+                "firstPax": 8,
+                "aircraftId": "939d3df8-042f-4519-ac4a-170c1d4d99bc",
+                "firstPrice": 14512,
+                "premEcoPax": 55,
+                "flightProfit": 4762,
+                "premEcoPrice": 5281
+            },
+            "d91ec7fd-4eb3-4151-a42b-6794cbd73097": {
+                "bizPax": 164,
+                "ecoPax": 351,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 8806,
+                "ecoPrice": 1803,
+                "firstPax": 24,
+                "aircraftId": "d91ec7fd-4eb3-4151-a42b-6794cbd73097",
+                "firstPrice": 14512,
+                "premEcoPax": 166,
+                "flightProfit": 14272,
+                "premEcoPrice": 5281
+            },
+            "e2cd61fc-9a4e-4cf0-9f2e-6f1ef75e2e4e": {
+                "bizPax": 164,
+                "ecoPax": 351,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 8806,
+                "ecoPrice": 1803,
+                "firstPax": 24,
+                "aircraftId": "e2cd61fc-9a4e-4cf0-9f2e-6f1ef75e2e4e",
+                "firstPrice": 14512,
+                "premEcoPax": 166,
+                "flightProfit": 14310,
+                "premEcoPrice": 5281
+            }
+        }
+    },
+    {
+        "flightId": "fd5f580b-1513-451f-b314-14d26ae2541b",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 571,
+        "inboundFlightNumber": 572,
+        "flightString": "ICN-LIM",
+        "originAirport": "ICN",
+        "destinationAirport": "LIM",
+        "departureDailyTimestamp": 57600,
+        "outboundFlightDuration": 1080,
+        "inboundFlightDuration": 1195,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "9e350c05-2432-467a-811e-b72730c55e1f": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 8193,
+                "ecoPrice": 1791,
+                "firstPax": 4,
+                "aircraftId": "9e350c05-2432-467a-811e-b72730c55e1f",
+                "firstPrice": 13866,
+                "premEcoPax": 56,
+                "flightProfit": 4608,
+                "premEcoPrice": 5029
+            },
+            "c581489a-f004-4e01-b1e0-51273414d63d": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 8193,
+                "ecoPrice": 1791,
+                "firstPax": 12,
+                "aircraftId": "c581489a-f004-4e01-b1e0-51273414d63d",
+                "firstPrice": 13866,
+                "premEcoPax": 168,
+                "flightProfit": 13784,
+                "premEcoPrice": 5029
+            },
+            "fa5aaa52-7a1e-407f-99ad-9e11a88c353d": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 8193,
+                "ecoPrice": 1791,
+                "firstPax": 12,
+                "aircraftId": "fa5aaa52-7a1e-407f-99ad-9e11a88c353d",
+                "firstPrice": 13866,
+                "premEcoPax": 168,
+                "flightProfit": 13841,
+                "premEcoPrice": 5029
+            }
+        }
+    },
+    {
+        "flightId": "6af5cfe6-d8ea-427f-a458-85f29b95dcde",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 573,
+        "inboundFlightNumber": 574,
+        "flightString": "ICN-LIM",
+        "originAirport": "ICN",
+        "destinationAirport": "LIM",
+        "departureDailyTimestamp": 32700,
+        "outboundFlightDuration": 1080,
+        "inboundFlightDuration": 1195,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "ba3796d8-1645-435d-bb89-1c7a7e7400ca": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    3
+                ],
+                "bizPrice": 8193,
+                "ecoPrice": 1791,
+                "firstPax": 4,
+                "aircraftId": "ba3796d8-1645-435d-bb89-1c7a7e7400ca",
+                "firstPrice": 13866,
+                "premEcoPax": 56,
+                "flightProfit": 4625,
+                "premEcoPrice": 5029
+            }
+        }
+    },
+    {
+        "flightId": "29ea54c5-09b9-446f-a274-a5f65e1a5005",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 745,
+        "inboundFlightNumber": 746,
+        "flightString": "ICN-REC",
+        "originAirport": "ICN",
+        "destinationAirport": "REC",
+        "departureDailyTimestamp": 5700,
+        "outboundFlightDuration": 1170,
+        "inboundFlightDuration": 1075,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "ba3796d8-1645-435d-bb89-1c7a7e7400ca": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    5
+                ],
+                "bizPrice": 7432,
+                "ecoPrice": 1666,
+                "firstPax": 4,
+                "aircraftId": "ba3796d8-1645-435d-bb89-1c7a7e7400ca",
+                "firstPrice": 12838,
+                "premEcoPax": 56,
+                "flightProfit": 4136,
+                "premEcoPrice": 4427
+            }
+        }
+    },
+    {
+        "flightId": "bb6acd5d-acf8-480f-9d13-b3c580ece410",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 565,
+        "inboundFlightNumber": 566,
+        "flightString": "FOR-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "FOR",
+        "departureDailyTimestamp": 36000,
+        "outboundFlightDuration": 1145,
+        "inboundFlightDuration": 1070,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "0bda89c8-12e2-44b3-9a87-1cebaba17bba": {
+                "bizPax": 109,
+                "ecoPax": 213,
+                "dowList": [
+                    1,
+                    3
+                ],
+                "bizPrice": 8026,
+                "ecoPrice": 1760,
+                "firstPax": 8,
+                "aircraftId": "0bda89c8-12e2-44b3-9a87-1cebaba17bba",
+                "firstPrice": 13091,
+                "premEcoPax": 112,
+                "flightProfit": 8639,
+                "premEcoPrice": 4920
+            }
+        }
+    },
+    {
+        "flightId": "55d8e0ec-3ceb-4e05-8f16-e8eb28f936bb",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 563,
+        "inboundFlightNumber": 564,
+        "flightString": "FOR-ICN",
+        "originAirport": "ICN",
+        "destinationAirport": "FOR",
+        "departureDailyTimestamp": 66600,
+        "outboundFlightDuration": 1145,
+        "inboundFlightDuration": 1070,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "0bda89c8-12e2-44b3-9a87-1cebaba17bba": {
+                "bizPax": 56,
+                "ecoPax": 144,
+                "dowList": [
+                    6
+                ],
+                "bizPrice": 8026,
+                "ecoPrice": 1760,
+                "firstPax": 4,
+                "aircraftId": "0bda89c8-12e2-44b3-9a87-1cebaba17bba",
+                "firstPrice": 13091,
+                "premEcoPax": 56,
+                "flightProfit": 4517,
+                "premEcoPrice": 4920
+            },
+            "670f87f3-53a3-476a-bb52-95cf7e6d9812": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    0,
+                    2,
+                    4
+                ],
+                "bizPrice": 8026,
+                "ecoPrice": 1760,
+                "firstPax": 12,
+                "aircraftId": "670f87f3-53a3-476a-bb52-95cf7e6d9812",
+                "firstPrice": 13091,
+                "premEcoPax": 167,
+                "flightProfit": 13506,
+                "premEcoPrice": 4920
+            },
+            "69f4c3ea-f084-49c8-b285-90e93cc542d1": {
+                "bizPax": 168,
+                "ecoPax": 432,
+                "dowList": [
+                    1,
+                    3,
+                    5
+                ],
+                "bizPrice": 8026,
+                "ecoPrice": 1760,
+                "firstPax": 12,
+                "aircraftId": "69f4c3ea-f084-49c8-b285-90e93cc542d1",
+                "firstPrice": 13091,
+                "premEcoPax": 167,
+                "flightProfit": 13548,
+                "premEcoPrice": 4920
+            }
+        }
+    },
+    {
+        "flightId": "c27764b4-ac25-47c3-8d71-15a2848d859d",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 9505,
+        "inboundFlightNumber": 9506,
+        "flightString": "ICN-NRT",
+        "originAirport": "ICN",
+        "destinationAirport": "NRT",
+        "departureDailyTimestamp": 30600,
+        "outboundFlightDuration": 105,
+        "inboundFlightDuration": 125,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "9e350c05-2432-467a-811e-b72730c55e1f": {
+                "bizPax": 336,
+                "ecoPax": 864,
+                "dowList": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                ],
+                "bizPrice": 607,
+                "ecoPrice": 275,
+                "firstPax": 24,
+                "aircraftId": "9e350c05-2432-467a-811e-b72730c55e1f",
+                "firstPrice": 1199,
+                "premEcoPax": 336,
+                "flightProfit": 3032,
+                "premEcoPrice": 444
+            },
+            "d5a52dbe-6a3a-4cf5-a11a-ad74a5e8c12d": {
+                "bizPax": 42,
+                "ecoPax": 225,
+                "dowList": [
+                    0
+                ],
+                "bizPrice": 607,
+                "ecoPrice": 275,
+                "firstPax": 4,
+                "aircraftId": "d5a52dbe-6a3a-4cf5-a11a-ad74a5e8c12d",
+                "firstPrice": 1199,
+                "premEcoPax": 35,
+                "flightProfit": 514,
+                "premEcoPrice": 444
+            }
+        }
+    },
+    {
+        "flightId": "b3c528e4-5a49-4160-a7c6-8326c9a0f812",
+        "uid": "13fc8eed-3dfd-4e22-927e-00bd28cc61f4",
+        "outboundFlightNumber": 9507,
+        "inboundFlightNumber": 9508,
+        "flightString": "ICN-NRT",
+        "originAirport": "ICN",
+        "destinationAirport": "NRT",
+        "departureDailyTimestamp": 45900,
+        "outboundFlightDuration": 105,
+        "inboundFlightDuration": 125,
+        "turnaroundOffset": 0,
+        "isStopover": "FALSE",
+        "childStopoverFlightId": null,
+        "aircraftAssignments": {
+            "939d3df8-042f-4519-ac4a-170c1d4d99bc": {
+                "bizPax": 336,
+                "ecoPax": 702,
+                "dowList": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                ],
+                "bizPrice": 607,
+                "ecoPrice": 275,
+                "firstPax": 48,
+                "aircraftId": "939d3df8-042f-4519-ac4a-170c1d4d99bc",
+                "firstPrice": 1199,
+                "premEcoPax": 336,
+                "flightProfit": 3005,
+                "premEcoPrice": 444
             }
         }
     }

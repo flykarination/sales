@@ -355,6 +355,7 @@ export const REGION_BY_COUNTRY: Record<string, RegionKey> = {
   AU: 'OCEANIA', FJ: 'OCEANIA', GU: 'OCEANIA', KI: 'OCEANIA', NC: 'OCEANIA',
   NZ: 'OCEANIA', PG: 'OCEANIA', SB: 'OCEANIA', VU: 'OCEANIA',
   PF: 'OCEANIA', TO: 'OCEANIA', WS: 'OCEANIA',
+  MP: 'OCEANIA',
 
   // Americas: North America
   AR: 'AMERICAS', US: 'AMERICAS',
