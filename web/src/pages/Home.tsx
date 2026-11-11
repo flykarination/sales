@@ -2,7 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { searchQueryString } from '@/booking/slices'
 import { SearchPanel, type SearchValues } from '@/components/SearchPanel'
-import { Slideshow } from '@/components/Slideshow'
+import { NightSky } from '@/components/v2/NightSky'
+import { HeroGallery } from '@/components/v2/HeroGallery'
+import { DotMatrix, FluoroText } from '@/components/v2/Type'
+import { NextDeparture } from '@/components/v2/NextDeparture'
+import { Marquee } from '@/components/v2/Marquee'
 import { listRoutes, type RouteRow } from '@/lib/queries'
 import { Link } from 'react-router-dom'
 import photos from '@/data/destination-photos.json'
@@ -22,8 +26,10 @@ export default function Home() {
 }
 
 /* ------------------------------------------------------------------ */
-/* The top. Compact: a passenger came here to find a flight, so the    */
-/* search panel is the largest thing on the screen, not the branding.  */
+/* The top, v2: the night. The aircraft and the photographs rotate in   */
+/* a window, the headline is lit by the fluoro, and the search panel is */
+/* a day card at the bottom edge -- where the night ends, the booking   */
+/* begins, and the rest of the funnel stays in daylight.                */
 /* ------------------------------------------------------------------ */
 function Booking() {
   const navigate = useNavigate()
@@ -44,69 +50,65 @@ function Booking() {
   }
 
   return (
-    <section id="book" className="kx-hero px-5 py-10 md:px-8 md:py-14">
-      {/* photographs fill the band under the header and frame the panel */}
-      <Slideshow />
+    <>
+      <section className="kx-night" aria-labelledby="hero-title">
+        <NightSky />
 
-      <div className="relative mx-auto max-w-5xl" style={{ zIndex: 1 }}>
-        <div className="kx-hero-card">
-          {/* The tagline artwork itself, on paper, exactly as painted — it is
-              the loudest thing on the page and everything else stays quiet. */}
-          <img
-            src={assetUrl('/brand/tagline.png')}
-            alt="Colour your dreams"
-            className="block w-full"
-            style={{ maxWidth: 'min(560px, 82vw)', height: 'auto' }}
-            fetchPriority="high"
-          />
-          <h1
-            className="mt-5"
-            style={{
-              fontSize: 'clamp(1.25rem, 2.4vw, 1.65rem)',
-              fontWeight: 400,
-              lineHeight: 1.35,
-              color: 'var(--color-ink-mute)',
-              maxWidth: '34ch',
-            }}
-          >
-            Fly to <strong style={{ fontWeight: 600, color: 'var(--color-ink)' }}>507 destinations</strong> from
-            TP Hồ Chí Minh, Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc.
+        <div className="mx-auto max-w-[1400px] px-5 pt-10 md:px-10 md:pt-16">
+          <DotMatrix size="clamp(1rem, 1.7vw, 1.35rem)">30 years of colour · <span style={{ whiteSpace: 'nowrap' }}>1996 – 2026</span></DotMatrix>
+
+          <h1 id="hero-title" className="kx-mega relative z-10 mt-5">
+            <span className="block">Colour your</span>
+            <FluoroText className="block">dreams</FluoroText>
           </h1>
 
-          <SearchPanel onSearch={go} initialOrigin={fromParam} initialDestination={toParam} />
+          <div className="mt-8 grid grid-cols-1 gap-10 lg:mt-[-2.6rem] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end">
+            <div className="lg:pb-16">
+              <p style={{ fontSize: 'var(--text-lead)', color: 'var(--color-starlight-mute)', maxWidth: '36ch', lineHeight: 1.5 }}>
+                <strong style={{ color: 'var(--color-starlight)', fontWeight: 600 }}>507 destinations</strong> from
+                TP Hồ Chí Minh, Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc.
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a href="#book" className="kx-cta-night">Find a flight <span aria-hidden>↓</span></a>
+                <Link to="/network" className="kx-cta-ghost">The route map</Link>
+              </div>
+              <div className="mt-9">
+                <NextDeparture />
+              </div>
+            </div>
+
+            <HeroGallery className="lg:-mr-4" />
+          </div>
         </div>
 
-        {/* the network, as a ruled rail rather than three floating numbers */}
-        <dl
-          className="mt-8 grid grid-cols-2 sm:grid-cols-4"
-          style={{
-            borderTop: '1px solid rgba(255,255,255,.22)',
-            background: 'transparent',
-          }}
-        >
+        <dl className="mx-auto mt-14 grid max-w-[1400px] grid-cols-2 gap-y-6 px-5 sm:grid-cols-4 md:px-10">
           {[
-            ['803', 'routes', 'var(--color-spectrum-teal)'],
-            ['507', 'destinations', 'var(--color-spectrum-amber)'],
-            ['847', 'aircraft', 'var(--color-spectrum-rose)'],
-            ['5', 'hubs', 'var(--color-spectrum-violet)'],
-          ].map(([n, l, hue]) => (
-            <div key={l} className="pt-4" style={{ paddingRight: 24 }}>
-              <span aria-hidden className="mb-3 block" style={{ width: 24, height: 2, background: hue }} />
-              <dd className="tnum font-mono"
-                  style={{ fontSize: '1.6rem', fontWeight: 500, lineHeight: 1, color: 'var(--color-paper)' }}>{n}</dd>
-              <dt
-                className="mt-1 font-mono uppercase"
-                style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.16em', color: '#B9B6D8' }}
-              >
-                {l}
-              </dt>
+            ['803', 'routes'], ['507', 'destinations'], ['847', 'aircraft'], ['5', 'hubs'],
+          ].map(([n, l]) => (
+            <div key={l} className="flex flex-col-reverse">
+              <dt className="kx-eyebrow mt-1" style={{ color: 'var(--color-starlight-mute)' }}>{l}</dt>
+              <dd className="tnum kx-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 3rem)' }}>{n}</dd>
             </div>
           ))}
         </dl>
 
+        <div className="mt-14">
+          <Marquee />
+        </div>
 
-      </div>
-    </section>
+        {/* the night carries on behind the top of the day card */}
+        <div aria-hidden style={{ height: 150 }} />
+      </section>
+
+      <section id="book" className="relative px-4 md:px-8" style={{ marginTop: -130, scrollMarginTop: 90 }}>
+        <div className="kx-dayfall mx-auto max-w-5xl px-5 pb-7 pt-8 md:px-9">
+          <h2 className="kx-headline mb-5" style={{ fontSize: 'clamp(1.5rem, 2.6vw, 2.2rem)', color: 'var(--color-ink)' }}>
+            Where to?
+          </h2>
+          <SearchPanel onSearch={go} initialOrigin={fromParam} initialDestination={toParam} />
+        </div>
+      </section>
+    </>
   )
 }
 

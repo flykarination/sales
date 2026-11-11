@@ -86,8 +86,9 @@ export const FORZA: GroupCarrier = {
     'This flight is operated by FORZA, a KarinationGroup member of Echo Proxima.',
   hubs: ['CXR', 'DLI', 'PQC', 'DIN', 'HUI', 'VCL', 'UIH', 'CAH', 'PXU', 'VCA', 'VCS', 'BMV', 'HPH'],
   baggageRank: 1,
-  accent: 'var(--color-spectrum-amber)',
-  accentInk: 'var(--color-spectrum-amber-ink)',
+  // purple-black since v2; amber stays a cabin colour (Premium Economy)
+  accent: 'var(--color-forza)',
+  accentInk: 'var(--color-forza-ink)',
   baggage: {
     FIRST: { checked: '2 × 32 kg', hand: '2 pieces, 10 kg' },
     BUSINESS: { checked: '2 × 25 kg', hand: '1 piece, 10 kg' },

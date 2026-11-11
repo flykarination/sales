@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import './styles/fonts.css';
 @import './styles/theme.css';
+@import '@fontsource-variable/mona-sans/standard.css';
+@import './styles/v2.css';
 
 @layer base {
   html { -webkit-text-size-adjust: 100%; }

@@ -42,9 +42,10 @@ export const CABINS: Record<CabinCode, Cabin> = {
     code: 'BUSINESS',
     name: 'Business',
     longName: 'Business Class',
-    hue: 'var(--color-spectrum-violet)',
-    ink: 'var(--color-spectrum-violet-ink)',
-    wash: 'color-mix(in oklab, var(--color-spectrum-violet) 12%, transparent)',
+    // ultramarine since v2, from the wordmark; violet is FORZA's now
+    hue: 'var(--color-cabin-business)',
+    ink: 'var(--color-cabin-business-ink)',
+    wash: 'color-mix(in oklab, var(--color-cabin-business) 10%, transparent)',
     order: 2,
   },
   PREMIUM_ECONOMY: {
@@ -77,8 +78,8 @@ export function cabin(code: string | null | undefined): Cabin {
 /**
  * Region hues for the route map, drawn from the same six-hue spectrum as the
  * cabins so the whole site shares one colour vocabulary, plus the turquoise
- * for Oceania and sky blue for the Americas: eight regions need eight hues,
- * and until sky blue the Americas shared rose with the Middle East.
+ * for Oceania, sky blue for the Americas and coral for Europe: eight regions
+ * need eight hues. Europe moved from violet to coral when FORZA took purple.
  */
 export type RegionKey =
   | 'SEA' | 'EASTASIA' | 'SOUTHASIA' | 'MIDEAST'
@@ -89,7 +90,7 @@ export const REGION_STYLE: Record<RegionKey, { label: string; hue: string; ink: 
   EASTASIA:  { label: 'East Asia',      hue: 'var(--color-spectrum-lime)',    ink: 'var(--color-spectrum-lime-ink)' },
   SOUTHASIA: { label: 'South Asia',     hue: 'var(--color-spectrum-amber)',   ink: 'var(--color-spectrum-amber-ink)' },
   MIDEAST:   { label: 'Middle East',    hue: 'var(--color-spectrum-rose)',    ink: 'var(--color-spectrum-rose-ink)' },
-  EUROPE:    { label: 'Europe',         hue: 'var(--color-spectrum-violet)',  ink: 'var(--color-spectrum-violet-ink)' },
+  EUROPE:    { label: 'Europe',         hue: 'var(--color-coral)',            ink: 'var(--color-coral-ink)' },
   AFRICA:    { label: 'Africa',         hue: 'var(--color-spectrum-magenta)', ink: 'var(--color-spectrum-magenta-ink)' },
   OCEANIA:   { label: 'Oceania',        hue: 'var(--color-aqua-mid)',         ink: 'var(--color-aqua-deep)' },
   AMERICAS:  { label: 'The Americas',   hue: 'var(--color-skyblue)',          ink: 'var(--color-skyblue-ink)' },

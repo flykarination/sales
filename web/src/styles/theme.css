@@ -60,11 +60,43 @@
   --color-skyblue:     #4F9DFF;
   --color-skyblue-ink: #1754A1;
 
+  /* ==== v2 (November 2026) ======================================== */
+  /* The night canvas: the livery's own backdrop, sampled from
+     kx_livery_v2.jpeg, so the aircraft artwork sits on it seamlessly.
+     Text on night: starlight 15:1, starlight-mute 9.6:1. */
+  --color-night:          #021C41;
+  --color-night-deep:     #010B1E;
+  --color-night-glow:     #0B2D63;
+  --color-starlight:      #F4F7FF;
+  --color-starlight-mute: #B7C3E0;
+
+  /* The wordmark's two ends, sampled from kx_text.png. */
+  --color-ultramarine:    #120077;
+  --color-signal:         #E7000C;
+
+  /* Business and Europe moved here when FORZA took purple. Measured, not
+     eyeballed (CIEDE2000, WCAG):
+       business  #4636FF  6.2:1 on paper; 16 dE from FORZA violet
+       europe    #F2603F  3.1:1 on paper; 21.5 dE from the error red,
+                          the nearest colour to it on any screen
+     Each -ink is the text-safe partner: 15.6:1 and 7.0:1 on paper. */
+  --color-business:       #4636FF;
+  --color-business-ink:   #120077;
+  --color-coral:          #F2603F;
+  --color-coral-ink:      #9E2E17;
+
+  /* Group carriers. FORZA's world is purple-black; Sonder's is pink. */
+  --color-forza:          var(--color-spectrum-violet);
+  --color-forza-ink:      var(--color-spectrum-violet-ink);
+  --color-forza-night:    #120A1F;
+  --color-sonder:         var(--color-spectrum-rose);
+  --color-sonder-ink:     var(--color-spectrum-rose-ink);
+
   /* ---- cabin = hue. the whole point of the system --------------- */
   --color-cabin-first:     var(--color-spectrum-magenta);
   --color-cabin-first-ink: var(--color-spectrum-magenta-ink);
-  --color-cabin-business:     var(--color-spectrum-violet);
-  --color-cabin-business-ink: var(--color-spectrum-violet-ink);
+  --color-cabin-business:     var(--color-business);
+  --color-cabin-business-ink: var(--color-business-ink);
   --color-cabin-premium:      var(--color-spectrum-amber);
   --color-cabin-premium-ink:  var(--color-spectrum-amber-ink);
   --color-cabin-economy:      var(--color-spectrum-teal);
@@ -86,6 +118,11 @@
      Geist Mono: every time, price and flight number, so columns lock.
      JetBrains Mono backs it up for the diacritics Geist lacks. */
   --font-display: 'Playfair Display', 'Be Vietnam Pro', Georgia, serif;
+  /* v2 headlines: Mona Sans at its expanded width echoes the wide v2
+     wordmark, and it carries a full Vietnamese subset, so HÀ NỘI sets in
+     the face rather than falling back mid-word. Weight 200-900, width
+     75-125%, self-hosted from @fontsource-variable/mona-sans. */
+  --font-head:    'Mona Sans Variable', 'Be Vietnam Pro', system-ui, sans-serif;
   --font-sans:    'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
   --font-mono:    'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
 
@@ -97,6 +134,9 @@
   --text-time:     1.75rem;     /* the departure time; largest thing in a row */
   --text-display:  clamp(2.5rem, 7vw, 5.5rem);
   --text-hero:     clamp(3rem, 11vw, 9rem);
+  /* v2: the landonorris-scale headline, and the size beneath it */
+  --text-mega:     clamp(3.1rem, 10.5vw, 10.5rem);
+  --text-headline: clamp(2rem, 5.2vw, 4.6rem);
 
   /* ---- structure ------------------------------------------------ */
   /* near-square. an airline's world is rules and ruled lines, not
@@ -109,6 +149,7 @@
   --rule-ink:      1px solid color-mix(in oklab, var(--color-ink) 14%, transparent);
 
   --ease-paint:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-glide:    cubic-bezier(0.65, 0, 0.35, 1);   /* v2: in-and-out, for things that travel */
 }
 
 /* ---------------------------------------------------------------- */
@@ -125,6 +166,16 @@
       var(--color-spectrum-rose) 55%,
       var(--color-spectrum-magenta) 76%,
       var(--color-spectrum-violet) 100%
+    );
+  }
+
+  /* v2: the fluoro as a gradient, sampled every eighth of the way along
+     fluoro.png's centre band -- for places the image itself cannot go. */
+  :root {
+    --paint-fluoro: linear-gradient(
+      90deg,
+      #FAF4F7 0%, #FABFC4 12%, #FB9F23 25%, #FCE10C 38%,
+      #5CF459 50%, #01DAEA 62%, #0068E1 75%, #007BF6 88%, #01052E 100%
     );
   }
 

@@ -1,14 +1,46 @@
 ---
 name: motion-design
-description: How motion works on the Karination site - the one signature moment, the small set of sanctioned transitions, the Motion library patterns to use, and the performance and reduced-motion rules. Use whenever adding or reviewing any animation, transition or loading state.
+description: How motion works on the Karination site - v2 "kinetic light" outside the booking funnel, the calm sanctioned set inside it, the Motion library patterns to use, and the performance and reduced-motion rules. Use whenever adding or reviewing any animation, transition or loading state.
 ---
 
 # Motion
 
 The library is `motion` (motion.dev), already installed. Import from
-`motion/react`.
+`motion/react` -- but **not on the home page or anything it imports**: any
+`motion.*` element pulls the whole animation engine into the first-load
+bundle (+136 kB, measured November 2026). Use CSS animations, a passive
+scroll listener, or `@/lib/useReducedMotion` there.
 
-## The budget
+## Two territories (v2, November 2026)
+
+The owner chose "kinetic light" for the v2 rebrand: **outside the booking
+funnel, motion is the brand.** The night sky (stars, rainbow auroras, a
+shooting star), the fluoro streak sliding through headline letters as you
+scroll, the aircraft crossing the hero, destinations sliding past in a
+marquee -- all sanctioned on marketing pages (home, destinations, fleet,
+About, RainbowOne, news). See `web/src/styles/v2.css` and
+`web/src/components/v2/`.
+
+**Inside the funnel** (search results, passengers, payment, confirmation,
+manage booking, check-in), the rules below still hold: one signature moment,
+everything else under 200ms. The fluoro may appear there only as a still edge
+light (`.kx-dayfall::before`), never moving behind text someone is reading.
+
+Wherever it is, ambient motion must:
+
+- move by `transform` and `opacity` only (the fluoro text's
+  `background-position` on a few words is the one exception);
+- pause when its section is off screen (`data-paused` on `.kx-night`) and
+  when the tab is hidden;
+- have a sensible final frame, because `index.css` snaps every CSS animation
+  to its end under `prefers-reduced-motion`;
+- if it advances content (the hero gallery), stop on hover and focus, offer
+  a pause button (WCAG 2.2.2), and never auto-advance under reduced motion.
+
+The "Never" list below applies in full inside the funnel. Outside it, the
+first two items are relaxed for the v2 effects listed above, and only them.
+
+## The budget (inside the funnel)
 
 **One signature moment. Everything else is under 200ms and unnoticeable.**
 

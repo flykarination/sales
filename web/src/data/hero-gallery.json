@@ -1,0 +1,35 @@
+[
+  {
+    "source": "Three_airplanes_parked_on_tarmac_c157c2fc_2K.jpg",
+    "src": "/v2/hero/three-airplanes-parked-on-tarmac-2400.webp",
+    "srcSmall": "/v2/hero/three-airplanes-parked-on-tarmac-1280.webp",
+    "width": 2752,
+    "height": 1536,
+    "alt": "Three Karination A321s in the new rainbow livery, parked on a moonlit apron among glowing dragonflies.",
+    "caption": "After dark · three A321s in the new colours",
+    "fit": "cover",
+    "position": "45% 62%"
+  },
+  {
+    "source": "Gemini_Generated_Image_rw4ngrw4ngrw4ngr.jpeg",
+    "src": "/v2/hero/gemini-generated-image-rw4ngrw4ngrw4ngr-2400.webp",
+    "srcSmall": "/v2/hero/gemini-generated-image-rw4ngrw4ngrw4ngr-1280.webp",
+    "width": 3968,
+    "height": 1088,
+    "alt": "A Karination Airbus A321XLR lifting off in daylight, its fuselage washed in rainbow colour and its tail black with a dotted sphere.",
+    "caption": "Rotate · an A321XLR leaving in the new livery",
+    "fit": "contain",
+    "position": "50% 50%"
+  },
+  {
+    "source": "Plane_taxiing_past_rice_paddies_f83b82db_2K.jpg",
+    "src": "/v2/hero/plane-taxiing-past-rice-paddies-2400.webp",
+    "srcSmall": "/v2/hero/plane-taxiing-past-rice-paddies-1280.webp",
+    "width": 2750,
+    "height": 1536,
+    "alt": "A Karination A350 in the rainbow livery taxis past green rice paddies while villagers wave from the field edge.",
+    "caption": "Taxiing out past the paddies",
+    "fit": "cover",
+    "position": "48% 55%"
+  }
+]

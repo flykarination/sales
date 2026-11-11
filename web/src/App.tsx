@@ -7,6 +7,7 @@ import { AuthProvider } from '@/auth/AuthContext'
 import Home from '@/pages/Home'
 
 const Results = lazy(() => import('@/pages/Results'))
+const Brand = lazy(() => import('@/pages/Brand'))
 const Passengers = lazy(() => import('@/pages/Passengers'))
 const Payment = lazy(() => import('@/pages/Payment'))
 const Confirmation = lazy(() => import('@/pages/Confirmation'))
@@ -70,6 +71,7 @@ export default function App() {
           <Suspense fallback={<PageLoading />}>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/brand" element={<Brand />} />
               <Route path="/search" element={<Results />} />
               <Route path="/passengers" element={<Passengers />} />
               <Route path="/payment" element={<Payment />} />

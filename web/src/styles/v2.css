@@ -1,0 +1,350 @@
+/* =====================================================================
+   v2 -- "kinetic light" (November 2026)
+
+   Outside the booking funnel, motion is the brand: a night sky with stars
+   and rainbow auroras, the fluoro streak as the light source, headlines
+   set huge in Mona Sans at its expanded width. The funnel turns to day.
+
+   Rules carried over from the motion skill, because they are about
+   performance and people rather than taste:
+     * transform and opacity only -- nothing here animates layout or paint
+       except the fluoro text's background position, on a few words;
+     * every looping animation pauses when its section is off screen
+       ([data-paused]) and under prefers-reduced-motion, where index.css
+       already snaps each one to its final frame -- so every final frame
+       below is a sensible still;
+     * colour still means something: cabin and region colours only ever
+       sit on solid surfaces, never on the fluoro or an aurora.
+   ===================================================================== */
+
+@layer components {
+  /* ---- the canvas ---------------------------------------------------- */
+  .kx-night {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    background: var(--color-night);
+    color: var(--color-starlight);
+  }
+  .kx-night [data-paused] *,
+  .kx-night[data-paused] * { animation-play-state: paused !important; }
+
+  .kx-sky {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 70% at 72% -10%, var(--color-night-glow) 0%, transparent 60%),
+      radial-gradient(90% 60% at 10% 110%, #04122E 0%, transparent 70%),
+      linear-gradient(180deg, var(--color-night-deep) 0%, var(--color-night) 55%, var(--color-night) 100%);
+  }
+
+  /* Auroras: soft ribbons of the spectrum hanging in the upper sky. Blurred
+     once, then only moved, so the GPU composites them rather than
+     re-blurring every frame. */
+  .kx-aurora {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    mix-blend-mode: screen;
+    opacity: 0.34;
+    will-change: transform;
+    animation: kx-aurora-drift var(--d, 36s) var(--ease-glide) infinite alternate;
+  }
+  @keyframes kx-aurora-drift {
+    from { transform: translate3d(0, 0, 0) rotate(var(--r0, -8deg)) scale(1); }
+    to   { transform: translate3d(var(--dx, 6%), var(--dy, 4%), 0) rotate(var(--r1, 6deg)) scale(var(--s, 1.12)); }
+  }
+
+  /* Stars: a 1px dot whose box-shadow is the whole field (see NightSky). */
+  .kx-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    border-radius: 50%;
+    background: transparent;
+  }
+  .kx-stars[data-twinkle] { animation: kx-twinkle var(--d, 5s) ease-in-out infinite alternate; }
+  @keyframes kx-twinkle { from { opacity: 0.25; } to { opacity: 1; } }
+
+  .kx-shooting {
+    position: absolute;
+    top: 12%;
+    left: 62%;
+    width: 140px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.9));
+    transform: rotate(-24deg) translateX(0);
+    opacity: 0;
+    animation: kx-shoot 13s ease-in 4s infinite;
+  }
+  @keyframes kx-shoot {
+    0%, 93%  { opacity: 0; transform: rotate(-24deg) translateX(0); }
+    95%      { opacity: 1; }
+    100%     { opacity: 0; transform: rotate(-24deg) translateX(-420px); }
+  }
+
+  /* ---- type ------------------------------------------------------------ */
+  /* The landonorris register: huge, tight, all caps. Line height leaves
+     room for stacked Vietnamese marks (Ộ, Ẫ) on the line below. */
+  .kx-mega, .kx-headline {
+    font-family: var(--font-head);
+    font-weight: 820;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.035em;
+    line-height: 0.9;
+    text-wrap: balance;
+  }
+  .kx-mega     { font-size: var(--text-mega); }
+  .kx-headline { font-size: var(--text-headline); line-height: 0.95; }
+
+  .kx-eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  /* Emphasis words filled with the fluoro itself. The image is wider than
+     the word, so scrolling slides the streak through the letters. */
+  .kx-fluoro-text {
+    background-image: url('/v2/fluoro.webp');
+    background-size: 240% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* light leaks round the letters, as a lit sign does */
+    filter: drop-shadow(0 0 18px rgba(120, 200, 255, 0.28));
+  }
+
+  /* The LED display on the engine: real text, masked to a dot screen. */
+  .kx-dotmatrix {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    /* the fluoro without its last, near-black eighth, so the end stays legible */
+    background: var(--paint-fluoro) left / 118% 100% no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-mask-image: radial-gradient(circle, #000 1.15px, transparent 1.45px);
+    mask-image: radial-gradient(circle, #000 1.15px, transparent 1.45px);
+    -webkit-mask-size: 3px 3px;
+    mask-size: 3px 3px;
+  }
+
+  /* ---- buttons on the night ------------------------------------------- */
+  .kx-cta-night, .kx-cta-ghost {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 24px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: transform 160ms var(--ease-paint), box-shadow 200ms ease-out, background 200ms ease-out;
+  }
+  .kx-cta-night { background: var(--color-starlight); color: var(--color-night); font-weight: 600; }
+  /* the fluoro as a ring of light around the main action */
+  .kx-cta-night::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--paint-fluoro);
+    filter: blur(8px);
+    opacity: 0.55;
+    transition: opacity 200ms ease-out;
+  }
+  .kx-cta-night:hover::before { opacity: 0.95; }
+  .kx-cta-night:hover, .kx-cta-ghost:hover { transform: translateY(-1px); }
+  .kx-cta-ghost {
+    color: var(--color-starlight);
+    border: 1px solid color-mix(in oklab, var(--color-starlight) 30%, transparent);
+  }
+  .kx-cta-ghost:hover { background: color-mix(in oklab, var(--color-starlight) 8%, transparent); }
+  .kx-night :focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 3px; }
+
+  /* ---- the window: the gallery's frame ---------------------------------- */
+  .kx-window {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    background: var(--color-night);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-starlight) 14%, transparent),
+      0 40px 120px -40px rgba(0, 0, 0, 0.8),
+      0 0 80px -30px rgba(80, 160, 255, 0.35);
+  }
+  .kx-slide-v2 {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.06);
+    transition: opacity 900ms ease-out, transform 7600ms linear;
+  }
+  .kx-slide-v2[data-on] { opacity: 1; transform: scale(1); }
+  .kx-slide-v2 img.kx-cover { width: 100%; height: 100%; object-fit: cover; }
+  .kx-slide-v2 img.kx-contain { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .kx-slide-v2 img.kx-blurfill {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; filter: blur(28px) saturate(1.2); transform: scale(1.2); opacity: 0.75;
+  }
+  .kx-window-scrim {
+    position: absolute; inset: auto 0 0 0; height: 38%; pointer-events: none;
+    background: linear-gradient(to top, rgba(1, 11, 30, 0.72), transparent);
+  }
+
+  /* progress: one segment per slide; the live one fills with fluoro */
+  .kx-progress { position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; gap: 6px; z-index: 2; }
+  .kx-progress button { position: relative; flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.28); overflow: hidden; }
+  .kx-progress button::before { content: ''; position: absolute; inset: -12px 0; }   /* a real pointer target */
+  .kx-progress-fill { position: absolute; inset: 0; background: var(--paint-fluoro); transform-origin: left; transform: scaleX(0); }
+  .kx-progress button[data-done] .kx-progress-fill { transform: scaleX(1); }
+  .kx-progress button[data-on] .kx-progress-fill { animation: kx-fill var(--dwell, 7s) linear forwards; }
+  .kx-progress button[data-on][data-still] .kx-progress-fill { animation: none; transform: scaleX(1); }
+  @keyframes kx-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  .kx-roundbtn {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--color-starlight);
+    border: 1px solid color-mix(in oklab, var(--color-starlight) 28%, transparent);
+    transition: background 160ms ease-out;
+  }
+  .kx-roundbtn:hover { background: color-mix(in oklab, var(--color-starlight) 10%, transparent); }
+
+  /* ---- the flight slide: the v2 aircraft crossing the sky -------------- */
+  .kx-flight { position: absolute; inset: 0; background: #021C41; overflow: hidden; }
+  .kx-flight-stars { position: absolute; inset: 0; animation: kx-starscroll 60s linear infinite; }
+  @keyframes kx-starscroll { from { transform: translateX(0); } to { transform: translateX(8%); } }
+  .kx-flight-craft {
+    position: absolute;
+    left: 4%;
+    top: 50%;
+    width: 58%;
+    aspect-ratio: 1068 / 292;
+    translate: 0 -50%;
+    animation: kx-cruise 16s var(--ease-glide) infinite alternate;
+  }
+  @keyframes kx-cruise {
+    from { transform: translate3d(3%, 1.5%, 0) rotate(0.4deg); }
+    to   { transform: translate3d(-3%, -1.5%, 0) rotate(-0.4deg); }
+  }
+  /* the plane's own backdrop is this navy, so "lighten" dissolves its
+     rectangle and lets the stars show through around the aircraft */
+  .kx-flight-plane { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: lighten; }
+  /* The jet: the fluoro squeezed into a thin, tapering streak from the tail.
+     Two masks intersect -- one fades it out along its length, the other
+     pinches it top and bottom -- so the white-hot core reads as a line of
+     light rather than the block the raw image would make. */
+  .kx-flight-trail {
+    position: absolute;
+    left: 93%;
+    top: 46%;
+    width: 80%;           /* the whole spectrum fits between tail and frame */
+    height: 34%;
+    background: url('/v2/fluoro.webp') left center / 100% 260% no-repeat;
+    mix-blend-mode: screen;
+    -webkit-mask-image:
+      linear-gradient(90deg, rgba(0,0,0,0.95) 0%, #000 30%, rgba(0,0,0,0.75) 75%, transparent 100%),
+      radial-gradient(130% 50% at 0% 50%, #000 0%, #000 22%, transparent 70%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, rgba(0,0,0,0.95) 0%, #000 30%, rgba(0,0,0,0.75) 75%, transparent 100%),
+      radial-gradient(130% 50% at 0% 50%, #000 0%, #000 22%, transparent 70%);
+    mask-composite: intersect;
+    transform-origin: left center;
+    animation: kx-trail 2.8s ease-in-out infinite alternate;
+  }
+  @keyframes kx-trail {
+    from { transform: scaleX(0.94) scaleY(0.9); opacity: 0.85; }
+    to   { transform: scaleX(1.04) scaleY(1.04); opacity: 1; }
+  }
+
+  /* ---- glass card on the night (next departure) ------------------------ */
+  .kx-glass {
+    border-radius: 16px;
+    background: color-mix(in oklab, var(--color-night-deep) 55%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-starlight) 14%, transparent);
+    backdrop-filter: blur(14px);
+  }
+  .kx-live-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #5CF459; box-shadow: 0 0 0 0 rgba(92, 244, 89, 0.6);
+    animation: kx-live 2s ease-out infinite;
+  }
+  @keyframes kx-live {
+    from { box-shadow: 0 0 0 0 rgba(92, 244, 89, 0.55); }
+    to   { box-shadow: 0 0 0 10px rgba(92, 244, 89, 0); }
+  }
+
+  /* ---- destinations, sliding past like a departure board --------------- */
+  .kx-marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .kx-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: kx-marquee var(--d, 70s) linear infinite;
+  }
+  .kx-marquee:hover .kx-marquee-track { animation-play-state: paused; }
+  @keyframes kx-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .kx-marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding-right: 0.45em;
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    font-size: clamp(2.4rem, 6.5vw, 6rem);
+    line-height: 1.1;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--color-starlight) 38%, transparent);
+  }
+  .kx-marquee-item[data-lit] { -webkit-text-stroke: 0; }
+  .kx-marquee-sep { width: 0.32em; height: 0.32em; border-radius: 50%; background: var(--paint-fluoro); flex: none; }
+
+  /* ---- where the night ends: the search card begins the day ------------ */
+  .kx-dayfall {
+    position: relative;
+    z-index: 2;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-radius: 24px;
+    box-shadow: 0 40px 90px -40px rgba(1, 11, 30, 0.9);
+    overflow: hidden;
+  }
+  /* the fluoro carries on into the day, as the edge light of checkout */
+  .kx-dayfall::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--paint-fluoro);
+  }
+
+  /* ---- header on the night --------------------------------------------- */
+  .kx-header-night {
+    background: color-mix(in oklab, var(--color-night-deep) 78%, transparent) !important;
+    border-bottom-color: color-mix(in oklab, var(--color-starlight) 10%, transparent) !important;
+  }
+}

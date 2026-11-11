@@ -92,10 +92,15 @@ export function SiteHeader() {
   const { user } = useAuth()
   const { pathname } = useLocation()
   const active = sectionFor(pathname)
+  // v2: the home page is night, so its header is too. The rest of the site
+  // keeps the day header until it is rebuilt; menus open as day panels on both.
+  const night = pathname === '/'
+  const ink = night ? 'var(--color-starlight)' : 'var(--color-ink)'
+  const mute = night ? 'var(--color-starlight-mute)' : 'var(--color-ink-mute)'
 
   return (
     <header
-      className="sticky top-0 z-30"
+      className={`sticky top-0 z-30${night ? ' kx-header-night' : ''}`}
       style={{
         background: 'color-mix(in oklab, var(--color-paper) 92%, transparent)',
         backdropFilter: 'blur(10px)',
@@ -104,7 +109,15 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex max-w-6xl items-center gap-6 px-5 py-3 md:px-8">
         <Link to="/" className="flex-none" aria-label="Karination, home">
-          <img src={assetUrl('/brand/wordmark.png')} alt="Karination" style={{ height: 22, width: 'auto' }} />
+          {/* v2 wordmark: white on the night, where its ultramarine end would
+              vanish into the navy; the gradient original on the day. */}
+          <img
+            src={assetUrl(night ? '/brand/v2/kx-wordmark-white.png' : '/brand/v2/kx-wordmark.png')}
+            alt="Karination"
+            width={1571}
+            height={171}
+            style={{ height: 17, width: 'auto' }}
+          />
         </Link>
 
         <nav aria-label="Main" className="ml-auto hidden md:block">
@@ -120,7 +133,7 @@ export function SiteHeader() {
                     aria-haspopup={hasMenu || undefined}
                     style={{
                       fontSize: 'var(--text-small)',
-                      color: on ? 'var(--color-ink)' : 'var(--color-ink-mute)',
+                      color: on ? ink : mute,
                       fontWeight: on ? 600 : 400,
                     }}
                   >
@@ -165,8 +178,9 @@ export function SiteHeader() {
           to={user ? '/account' : '/manage'}
           className="ml-auto md:ml-0"
           style={{
-            fontSize: 'var(--text-small)', fontWeight: 600, color: 'var(--color-ink)',
-            border: '1px solid var(--color-paper-edge)', borderRadius: 'var(--radius-edge)',
+            fontSize: 'var(--text-small)', fontWeight: 600, color: ink,
+            border: night ? '1px solid rgba(244, 247, 255, 0.28)' : '1px solid var(--color-paper-edge)',
+            borderRadius: night ? 999 : 'var(--radius-edge)',
             padding: '9px 14px', minHeight: 40, display: 'inline-flex', alignItems: 'center',
           }}
         >
