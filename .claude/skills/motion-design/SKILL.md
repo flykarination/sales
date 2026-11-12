@@ -26,6 +26,15 @@ manage booking, check-in), the rules below still hold: one signature moment,
 everything else under 200ms. The fluoro may appear there only as a still edge
 light (`.kx-dayfall::before`), never moving behind text someone is reading.
 
+The territory is set on `<html data-territory="night|day">` (by
+`components/v2/SiteEffects.tsx`, and before first paint by a script in
+`index.html` -- keep their route lists in step). Night pages get the fixed
+sky, a light sweep through each `h1.font-display`, sections that lift into
+view (`[data-reveal]`, never a section containing a form), pointer glow on
+`.kx-card` / `.kx-glow`, and a streak across the screen on navigation.
+Restyle through the theme variables `v2-site.css` redefines per territory,
+not page by page.
+
 Wherever it is, ambient motion must:
 
 - move by `transform` and `opacity` only (the fluoro text's

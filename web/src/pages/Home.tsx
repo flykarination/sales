@@ -4,7 +4,8 @@ import { searchQueryString } from '@/booking/slices'
 import { SearchPanel, type SearchValues } from '@/components/SearchPanel'
 import { NightSky } from '@/components/v2/NightSky'
 import { HeroGallery } from '@/components/v2/HeroGallery'
-import { DotMatrix, FluoroText } from '@/components/v2/Type'
+import { DotMatrix } from '@/components/v2/Type'
+import { RotatingCity } from '@/components/v2/RotatingCity'
 import { NextDeparture } from '@/components/v2/NextDeparture'
 import { Marquee } from '@/components/v2/Marquee'
 import { listRoutes, type RouteRow } from '@/lib/queries'
@@ -57,9 +58,11 @@ function Booking() {
         <div className="mx-auto max-w-[1400px] px-5 pt-10 md:px-10 md:pt-16">
           <DotMatrix size="clamp(1rem, 1.7vw, 1.35rem)">30 years of colour · <span style={{ whiteSpace: 'nowrap' }}>1996 – 2026</span></DotMatrix>
 
-          <h1 id="hero-title" className="kx-mega relative z-10 mt-5">
-            <span className="block">Colour your</span>
-            <FluoroText className="block">dreams</FluoroText>
+          {/* v2: the destinations are the headline. The visible city
+              changes; the accessible name is the sentence it stands for. */}
+          <h1 id="hero-title" className="kx-mega relative z-10 mt-5" aria-label="Fly to 507 destinations">
+            <span className="block" aria-hidden>Fly to</span>
+            <RotatingCity still="507 cities" />
           </h1>
 
           <div className="mt-8 grid grid-cols-1 gap-10 lg:mt-[-2.6rem] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end">
@@ -101,7 +104,7 @@ function Booking() {
       </section>
 
       <section id="book" className="relative px-4 md:px-8" style={{ marginTop: -130, scrollMarginTop: 90 }}>
-        <div className="kx-dayfall mx-auto max-w-5xl px-5 pb-7 pt-8 md:px-9">
+        <div className="kx-dayfall kx-daylight mx-auto max-w-5xl px-5 pb-7 pt-8 md:px-9">
           <h2 className="kx-headline mb-5" style={{ fontSize: 'clamp(1.5rem, 2.6vw, 2.2rem)', color: 'var(--color-ink)' }}>
             Where to?
           </h2>
@@ -282,7 +285,7 @@ function Destinations() {
                       one way from {card.from}
                     </span>
                   </span>
-                  <span className="mt-0.5 block" style={{ color: '#6B6790', fontSize: 'var(--text-micro)' }}>
+                  <span className="mt-0.5 block" style={{ color: '#8E9CC2', fontSize: 'var(--text-micro)' }}>
                     {duration(card.minutes)} · {card.weekly}× weekly
                   </span>
                 </Link>

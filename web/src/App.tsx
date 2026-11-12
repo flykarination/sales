@@ -5,6 +5,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { BookingProvider } from '@/booking/BookingContext'
 import { AuthProvider } from '@/auth/AuthContext'
 import Home from '@/pages/Home'
+import { SiteEffects } from '@/components/v2/SiteEffects'
 
 const Results = lazy(() => import('@/pages/Results'))
 const Brand = lazy(() => import('@/pages/Brand'))
@@ -65,6 +66,7 @@ export default function App() {
       <AuthProvider>
       <BookingProvider>
         <RouteChange />
+        <SiteEffects />
         <a href="#main" className="kx-skip">Skip to content</a>
         <SiteHeader />
         <main id="main">

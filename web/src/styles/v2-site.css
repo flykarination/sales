@@ -1,0 +1,393 @@
+/* =====================================================================
+   v2 across the whole site.
+
+   Two territories, set on <html data-territory> by App.tsx:
+     night  everything outside the booking funnel
+     day    search results, passengers, payment, confirmation, manage
+            booking, check-in -- where people read and type carefully
+
+   Every page colours itself through the theme variables (--color-ink,
+   --color-paper, --rule ...), so the night is made by redefining those
+   variables for the page rather than restyling thirty pages one by one.
+   Text colours were measured against the night and its panels: each one
+   clears 5:1 on both.
+   ===================================================================== */
+
+@layer components {
+  html[data-territory='night'] {
+    --color-paper:      #021C41;
+    --color-paper-sunk: #0A2752;
+    --color-paper-edge: rgba(244, 247, 255, 0.16);
+    --color-ink:        #F4F7FF;
+    --color-ink-mute:   #B7C3E0;
+    --color-ink-faint:  #8E9CC2;
+    --rule:             1px solid rgba(244, 247, 255, 0.13);
+    --rule-ink:         1px solid rgba(244, 247, 255, 0.22);
+
+    /* the -ink partners turn light: colour still means something at night */
+    --color-spectrum-teal-ink:    #3FBFA8;
+    --color-spectrum-lime-ink:    #9BD64A;
+    --color-spectrum-amber-ink:   #F0A020;
+    --color-spectrum-rose-ink:    #F080A0;
+    --color-spectrum-magenta-ink: #F25BD7;
+    --color-spectrum-violet-ink:  #B380F3;
+    --color-business-ink:         #948AFF;
+    --color-coral-ink:            #F37052;
+    --color-skyblue-ink:          #4F9DFF;
+    --color-aqua-deep:            #35C6D2;
+    --color-ok:                   #3FBFA8;
+    --color-warn:                 #F0A020;
+    --color-danger:               #FF5A5F;
+
+    background: var(--color-night);
+    color-scheme: dark;
+  }
+
+  /* A day island inside the night: the home page's search card, and any
+     panel a traveller has to read closely. Derived tokens are restated,
+     because a variable built from another resolves where it is declared. */
+  html[data-territory='night'] .kx-daylight {
+    --color-paper:      #FBFAF7;
+    --color-paper-sunk: #F2F0EA;
+    --color-paper-edge: #E4E1D8;
+    --color-ink:        #171850;
+    --color-ink-mute:   #6B6790;
+    --color-ink-faint:  #726E96;
+    --rule:             1px solid #E4E1D8;
+    --rule-ink:         1px solid color-mix(in oklab, #171850 14%, transparent);
+    --color-spectrum-teal-ink:    #14675A;
+    --color-spectrum-lime-ink:    #4A6B14;
+    --color-spectrum-amber-ink:   #7A4E00;
+    --color-spectrum-rose-ink:    #9B2247;
+    --color-spectrum-magenta-ink: #8E1279;
+    --color-spectrum-violet-ink:  #5B1DA8;
+    --color-business-ink:         #120077;
+    --color-coral-ink:            #9E2E17;
+    --color-skyblue-ink:          #1754A1;
+    --color-aqua-deep:            #0B6E78;
+    --color-ok:                   #14675A;
+    --color-warn:                 #B45309;
+    --color-danger:               #B4232F;
+    --color-cabin-first-ink:      #8E1279;
+    --color-cabin-business-ink:   #120077;
+    --color-cabin-premium-ink:    #7A4E00;
+    --color-cabin-economy-ink:    #14675A;
+    color: var(--color-ink);
+    color-scheme: light;
+  }
+
+  /* v1's dark bands become windows onto the sky. Their text was already
+     light; only the background goes, and the ink they lean on stays dark. */
+  html[data-territory='night'] .on-ink {
+    background: transparent !important;
+    --color-ink: #010B1E;
+    --color-paper: #F4F7FF;
+  }
+
+  /* The night is painted by <html> alone. A body background would paint
+     above the fixed sky (z-index -1) and hide it: in a stacking context,
+     in-flow block backgrounds draw after negative-z layers. */
+  html[data-territory='night'] body { background: transparent; }
+
+  /* The sky behind every night page, fixed so the stars stay put while the
+     page moves over them -- the parallax a night flight has. */
+  .kx-backdrop { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+  .kx-backdrop .kx-aurora { opacity: 0.22; }
+
+  /* ---- headings, everywhere ---------------------------------------- */
+  .font-display {
+    font-weight: 800;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+  /* A light sweep runs through every page title now and then: white, then
+     the fluoro's colours passing through, then white again. */
+  html[data-territory='night'] main h1.font-display:not(.kx-mega) {
+    background-image: linear-gradient(100deg,
+      #F4F7FF 0%, #F4F7FF 40%, #FCE10C 45%, #5CF459 48%, #01DAEA 51%, #4F9DFF 54%, #F4F7FF 59%, #F4F7FF 100%);
+    background-size: 280% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: kx-sweep 8s var(--ease-glide) 0.6s infinite;
+  }
+  @keyframes kx-sweep {
+    0%        { background-position: 100% 0; }
+    32%, 100% { background-position: 0% 0; }
+  }
+
+  /* ---- buttons: pills with a fluoro ring on hover -------------------- */
+  .kx-cta {
+    border-radius: 999px !important;
+    isolation: isolate;
+    transition: transform 160ms var(--ease-paint), box-shadow 200ms ease-out;
+  }
+  .kx-cta::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--paint-fluoro);
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  .kx-cta:hover { transform: translateY(-1px); }
+  .kx-cta:hover::before { opacity: 0.8; }
+
+  /* ---- cards glow where the pointer is -------------------------------- */
+  html[data-territory='night'] .kx-card,
+  html[data-territory='night'] .kx-glow {
+    position: relative;
+    isolation: isolate;
+  }
+  html[data-territory='night'] .kx-card::after,
+  html[data-territory='night'] .kx-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(120, 245, 251, 0.16), rgba(160, 96, 240, 0.08) 40%, transparent 70%);
+    opacity: 0;
+    transition: opacity 240ms ease-out;
+  }
+  html[data-territory='night'] .kx-card:hover::after,
+  html[data-territory='night'] .kx-glow:hover::after { opacity: 1; }
+
+  /* ---- sections rise into view on the night ---------------------------- */
+  html[data-territory='night'] [data-reveal] {
+    transition: opacity 700ms ease-out, transform 900ms var(--ease-paint);
+  }
+  html[data-territory='night'] [data-reveal]:not([data-in]) {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+
+  /* ---- a streak of light crosses the screen on navigation ------------- */
+  .kx-warp {
+    position: fixed;
+    left: 0;
+    top: 46%;
+    z-index: 60;
+    width: 70vw;
+    height: 3px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, #FAF4F7 30%, #FCE10C 45%, #5CF459 58%, #01DAEA 72%, #4F9DFF 86%, transparent);
+    filter: drop-shadow(0 0 10px rgba(1, 218, 234, 0.8));
+    transform: translateX(-75vw) scaleY(1);
+    animation: kx-warp 650ms var(--ease-glide) forwards;
+  }
+  @keyframes kx-warp {
+    0%   { transform: translateX(-75vw) scaleY(1); opacity: 0; }
+    15%  { opacity: 1; }
+    100% { transform: translateX(110vw) scaleY(0.4); opacity: 0; }
+  }
+
+  /* ---- the header: solid night everywhere, strong contrast ------------- */
+  .kx-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: #010B1E;
+    color: #FFFFFF;
+    box-shadow: 0 1px 0 rgba(244, 247, 255, 0.10);
+  }
+  /* the fluoro runs along the header's lower edge */
+  .kx-header::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    background: var(--paint-fluoro);
+    opacity: 0.9;
+  }
+  .kx-header-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--text-small);
+    font-weight: 600;
+    color: #FFFFFF;
+    letter-spacing: 0.01em;
+  }
+  .kx-header-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--paint-fluoro);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms var(--ease-paint);
+  }
+  .kx-header-link:hover::after,
+  .kx-header-link[data-on]::after { transform: scaleX(1); }
+  .kx-header-link:focus-visible { outline: 2px solid #78F5FB; outline-offset: 2px; }
+  .kx-header-cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    color: #010B1E;
+    font-size: var(--text-small);
+    font-weight: 700;
+    transition: box-shadow 200ms ease-out;
+  }
+  .kx-header-cta:hover { box-shadow: 0 0 0 3px rgba(120, 245, 251, 0.45); }
+
+  /* the drop-down menus open as night panels */
+  .kx-header .kx-menu-panel {
+    background: #021C41 !important;
+    border: 1px solid rgba(244, 247, 255, 0.16) !important;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7) !important;
+    border-radius: 16px !important;
+  }
+  .kx-header .kx-menulink { color: #D6DEF2 !important; border-radius: 10px; }
+  .kx-header .kx-menulink:hover { background: rgba(244, 247, 255, 0.08); color: #FFFFFF !important; }
+  .kx-header .kx-menulink[data-here] { color: #FFFFFF !important; }
+
+  /* ---- the phone menu: the whole screen, in huge type ------------------ */
+  .kx-mobilemenu {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    overflow-y: auto;
+    background: #010B1E;
+    color: #FFFFFF;
+    padding: 84px 20px 40px;
+  }
+  .kx-mobilemenu a.kx-mm-big {
+    display: block;
+    font-family: var(--font-head);
+    font-weight: 800;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    font-size: clamp(2rem, 9vw, 3.2rem);
+    line-height: 1.05;
+    padding: 6px 0;
+    opacity: 0;
+    transform: translateX(-24px);
+    animation: kx-mm-in 420ms var(--ease-paint) forwards;
+  }
+  @keyframes kx-mm-in { to { opacity: 1; transform: none; } }
+
+  /* ---- footer ------------------------------------------------------------ */
+  .kx-footer-giant {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0.1;
+    margin-top: 48px;
+  }
+
+  /* ---- FORZA: a purple-black universe of triangles ---------------------- */
+  .kx-forza-universe {
+    position: relative;
+    isolation: isolate;
+    background:
+      radial-gradient(80% 120% at 85% 0%, rgba(160, 96, 240, 0.32), transparent 60%),
+      #120A1F;
+    overflow: hidden;
+  }
+  .kx-forza-universe::before {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    z-index: -1;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='56' viewBox='0 0 64 56'%3E%3Cg fill='none' stroke='%23A060F0' stroke-width='1' stroke-opacity='.5'%3E%3Cpath d='M32 4 60 52H4Z'/%3E%3Cpath d='M0 4 14 28 -14 28Z' stroke-opacity='.25'/%3E%3C/g%3E%3Cpath d='M32 20 44 41H20Z' fill='%23A060F0' fill-opacity='.18'/%3E%3C/svg%3E");
+    background-size: 64px 56px;
+    animation: kx-forza-drift 40s linear infinite;
+  }
+  @keyframes kx-forza-drift { to { transform: translate3d(64px, -56px, 0); } }
+
+  /* ---- Sonder: pink audio waveforms ------------------------------------- */
+  .kx-sonder-wave {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 34px;
+  }
+  .kx-sonder-wave span {
+    width: 3px;
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(180deg, #F080A0, #F040D0);
+    transform-origin: center;
+    animation: kx-eq var(--d, 1.1s) ease-in-out var(--delay, 0s) infinite alternate;
+  }
+  @keyframes kx-eq { from { transform: scaleY(0.18); } to { transform: scaleY(1); } }
+
+  /* ---- day: the funnel's own v2 dressing --------------------------------- */
+  html[data-territory='day'] body { background: var(--color-paper); }
+  .kx-funnel-sheet {
+    position: relative;
+    border-radius: 24px;
+    background: var(--color-paper);
+  }
+  /* the fluoro, still, as the funnel's edge light */
+  .kx-funnel-edge {
+    height: 4px;
+    border-radius: 4px;
+    background: var(--paint-fluoro);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-territory='night'] [data-reveal]:not([data-in]) { opacity: 1; transform: none; }
+  .kx-warp { display: none; }
+}
+
+@layer components {
+  /* the home headline's changing destination */
+  .kx-ticker { position: relative; overflow: hidden; padding-bottom: 0.08em; }
+  .kx-ticker-word {
+    /* a block, not an inline-block: an inline-block sits on the line's
+       baseline and the clipping box above hid all but its top edge */
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    line-height: inherit;
+    transform-origin: 50% 100%;
+    animation: kx-flap 620ms var(--ease-paint) both;
+  }
+  @keyframes kx-flap {
+    from { transform: translateY(70%) rotateX(-70deg); opacity: 0; filter: blur(6px); }
+    to   { transform: none; opacity: 1; filter: none; }
+  }
+}
+
+@layer components {
+  /* FORZA's and Sonder's sections on the fleet page and About */
+  .kx-universe.kx-carrier { border-top: 0; border-radius: var(--radius-soft); padding: 0 22px 22px; margin-top: 40px; }
+  .kx-sonder-universe {
+    background:
+      radial-gradient(70% 120% at 90% 0%, rgba(240, 128, 160, 0.22), transparent 60%),
+      color-mix(in oklab, var(--color-paper-sunk) 92%, #F080A0);
+  }
+}
+
+@layer components {
+  /* fleet page: the v2 trio after dark, dissolving into the sky */
+  .kx-fleet-night { position: relative; overflow: hidden; height: clamp(240px, 38vw, 520px); }
+  .kx-fleet-night img {
+    width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 72%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 72%, transparent 100%);
+  }
+}

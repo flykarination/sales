@@ -102,7 +102,7 @@ export default function CheckIn() {
               >
                 <div className="flex flex-wrap items-baseline gap-x-4 px-5 py-3"
                      style={{ background: 'var(--color-ink)', color: 'var(--color-paper)' }}>
-                  <img src={assetUrl('/brand/wordmark-light.png')} alt="Karination" style={{ height: 15, width: 'auto' }} />
+                  <img src={assetUrl('/brand/v2/kx-wordmark-white.png')} alt="Karination" width={1571} height={171} style={{ height: 13, width: 'auto' }} />
                   <span className="font-mono uppercase"
                         style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: 'var(--color-aqua)' }}>
                     Boarding pass

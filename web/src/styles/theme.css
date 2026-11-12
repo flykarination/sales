@@ -4,7 +4,8 @@
    Every colour here is sampled from the real brand assets in
    /web-assets, not invented: the indigo is the tail field, the
    turquoise is the engine cowling, the rainbow is lifted hue by hue
-   from the "Colour Your Dreams" brush lettering.
+   from the v1 brush lettering (retired in v2; the hues stay,
+   because each one means a cabin or a region).
 
    The rule the palette enforces: indigo and turquoise are the
    interface, and the rainbow is never decoration -- a hue always
@@ -24,7 +25,7 @@
   --color-ink-2:        #262464;  /* between tail and wordmark */
   --color-ink-3:        #383167;  /* the wordmark itself */
   --color-ink-mute:     #6B6790;  /* secondary text on paper */
-  --color-ink-faint:    #9A97B4;
+  --color-ink-faint:    #726E96;  /* v2: 4.6:1 on paper; v1's #9A97B4 was 2.7:1 */
 
   /* ---- turquoise: the engine cowling --------------------------- */
   /* the bright one is only legible ON indigo; it fails 4.5:1 on paper,
@@ -117,7 +118,9 @@
      properly rather than falling back mid-word.
      Geist Mono: every time, price and flight number, so columns lock.
      JetBrains Mono backs it up for the diacritics Geist lacks. */
-  --font-display: 'Playfair Display', 'Be Vietnam Pro', Georgia, serif;
+  /* v2: Mona Sans for every display heading on the site (styled in v2.css:
+     expanded, heavy, tight capitals). Playfair retired with the brush tagline. */
+  --font-display: 'Mona Sans Variable', 'Be Vietnam Pro', system-ui, sans-serif;
   /* v2 headlines: Mona Sans at its expanded width echoes the wide v2
      wordmark, and it carries a full Vietnamese subset, so HÀ NỘI sets in
      the face rather than falling back mid-word. Weight 200-900, width
@@ -141,8 +144,9 @@
   /* ---- structure ------------------------------------------------ */
   /* near-square. an airline's world is rules and ruled lines, not
      pill-shaped cards -- but 2px keeps it from feeling brutalist */
-  --radius-edge:   2px;
-  --radius-soft:   6px;
+  /* v2: softer, more modern corners; the near-square v1 rules are gone */
+  --radius-edge:   10px;
+  --radius-soft:   18px;
   --radius-round:  999px;
 
   --rule:          1px solid var(--color-paper-edge);

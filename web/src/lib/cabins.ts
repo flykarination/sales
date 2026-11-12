@@ -1,8 +1,8 @@
 /**
  * Cabin = hue.
  *
- * This is the load-bearing idea of the whole interface. Karination's promise
- * is "Colour Your Dreams", so colour is not decoration here — it is the
+ * This is the load-bearing idea of the whole interface. Karination is an
+ * airline of colour, so colour is not decoration here — it is the
  * information architecture. A traveller learns four hues once and then reads
  * every fare table, every map arc and every boarding pass by colour alone.
  *

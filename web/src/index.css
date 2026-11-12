@@ -3,6 +3,7 @@
 @import './styles/theme.css';
 @import '@fontsource-variable/mona-sans/standard.css';
 @import './styles/v2.css';
+@import './styles/v2-site.css';
 
 @layer base {
   html { -webkit-text-size-adjust: 100%; }

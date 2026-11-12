@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
+import { SonderWave } from '@/components/v2/Universes'
 import { Link } from 'react-router-dom'
 import { listGroupCarriers, listHubs, type AirlineRow, type AirlineStatsRow, type HubRow } from '@/lib/queries'
 import { count } from '@/lib/format'
 import { CABIN_ORDER, CABINS } from '@/lib/cabins'
-import { assetUrl } from '@/lib/assets'
 import { carrierByCode } from '@/data/carriers'
 import { MISSION } from '@/data/about'
 
@@ -164,11 +164,15 @@ export default function About() {
               return (
                 <article
                   key={c.uid}
+                  className={`kx-glow kx-universe${c.airline_code === 'Z4' ? ' kx-forza-universe' : ''}${c.airline_code === 'SD' ? ' kx-sonder-universe' : ''}`}
                   style={{
                     borderTop: `3px solid ${carrierByCode(c.airline_code)?.accent ?? 'var(--color-ink)'}`,
-                    paddingTop: 16,
+                    padding: 20,
+                    borderRadius: 'var(--radius-soft)',
+                    background: c.airline_code === 'Z4' ? undefined : 'var(--color-paper-sunk)',
                   }}
                 >
+                  {c.airline_code === 'SD' && <div className="mb-3"><SonderWave bars={26} height={26} /></div>}
                   <div className="flex items-baseline gap-3">
                     <span className="font-mono" style={{ color: 'var(--color-aqua-deep)', fontWeight: 600 }}>
                       {c.airline_code}
@@ -237,21 +241,13 @@ export default function About() {
         </div>
       </section>
 
+      {/* v2: the brush tagline is retired; the page closes on the action */}
       <section className="px-5 py-16 md:px-8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-6">
-          <img src={assetUrl('/brand/tagline.png')} alt="Colour your dreams" style={{ maxWidth: 320, height: 'auto' }} />
-          <Link
-            to="/"
-            className="ml-auto font-mono uppercase"
-            style={{
-              background: 'var(--color-ink)', color: 'var(--color-paper)',
-              padding: '14px 22px', minHeight: 52, letterSpacing: '0.16em',
-              fontSize: 'var(--text-small)', borderRadius: 'var(--radius-edge)',
-              display: 'inline-flex', alignItems: 'center',
-            }}
-          >
-            Find a flight
-          </Link>
+          <p className="kx-headline" style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)' }}>
+            Thirty years of colour, and counting.
+          </p>
+          <Link to="/" className="kx-cta-night ml-auto">Find a flight</Link>
         </div>
       </section>
     </div>

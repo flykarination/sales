@@ -4,8 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Karination — Colour Your Dreams</title>
-    <meta name="description" content="Karination flies 766 routes from five Vietnamese hubs. Search fares, book a seat, colour your dreams." />
+    <title>Karination</title>
+    <!-- v2: the territory (night outside the booking funnel, day inside it)
+         is known from the address alone, so set it before the first paint;
+         otherwise a night page flashes light while the app loads. Keep the
+         list in step with DAY in src/components/v2/SiteEffects.tsx. -->
+    <script>
+      (function () {
+        var p = location.pathname.replace(/^\/sales/, '') || '/';
+        var day = ['/search', '/passengers', '/payment', '/confirmation', '/manage', '/checkin'];
+        var isDay = day.some(function (d) { return p === d || p.indexOf(d + '/') === 0; });
+        document.documentElement.setAttribute('data-territory', isDay ? 'day' : 'night');
+        document.documentElement.style.background = isDay ? '#FBFAF7' : '#021C41';
+      })();
+    </script>
+    <meta name="description" content="Karination flies to 507 destinations from five Vietnamese hubs. Thirty years of colour. Search fares and book a seat." />
     <!-- Single Page Apps for GitHub Pages: restore redirected path -->
     <script type="text/javascript">
       (function(l) {

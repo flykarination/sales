@@ -215,7 +215,7 @@ export default function FlightStatus() {
                             {dayOffset(isDep ? r.arrival_days_after_departure : -r.arrival_days_after_departure)}
                           </sup>
                         )}
-                        <span style={{ color: '#6B6790', fontSize: 'var(--text-micro)' }}> {duration(r.duration_minutes)}</span>
+                        <span style={{ color: '#8E9CC2', fontSize: 'var(--text-micro)' }}> {duration(r.duration_minutes)}</span>
                       </td>
                       <td style={{ color: '#8F8CB4', fontSize: 'var(--text-small)' }}>{r.aircraft_model}</td>
                       <td className="uppercase"
@@ -227,7 +227,7 @@ export default function FlightStatus() {
                 })}
               </tbody>
             </table>
-            <p className="mt-5" style={{ color: '#6B6790', fontSize: 'var(--text-micro)' }}>
+            <p className="mt-5" style={{ color: '#8E9CC2', fontSize: 'var(--text-micro)' }}>
               {rolledOver
                 ? `Nothing further today — showing tomorrow's first ${board}.`
                 : `Next ${rows.length} ${board} from ${clock}.`}{' '}

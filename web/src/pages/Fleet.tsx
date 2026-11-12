@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { SonderWave } from '@/components/v2/Universes'
 import { Link } from 'react-router-dom'
 import { listFleet, type FleetRow } from '@/lib/queries'
 import { count, duration } from '@/lib/format'
@@ -120,20 +121,19 @@ export default function Fleet() {
         </div>
       </section>
 
-      {/* The line at the delivery centre, bled to both edges and faded up into
-          the indigo so the join reads as one surface rather than a pasted-in
-          picture. Decorative on its own, but it is the fleet, so it carries an
-          alt text. */}
-      <div className="kx-fleet-band" style={{ background: 'var(--color-ink)' }}>
+      {/* v2: the new colours after dark, bled to both edges and faded into the
+          night above and below so it reads as part of the sky. It is the
+          fleet, so it carries an alt text. */}
+      <div className="kx-fleet-night">
         <img
-          src={assetUrl('/brand/777x-lineup.jpg')}
-          alt="Karination 777-9s lined up nose-to-tail at the delivery centre"
-          width={1077}
-          height={252}
+          src={assetUrl('/v2/hero/three-airplanes-parked-on-tarmac-2400.webp')}
+          srcSet={`${assetUrl('/v2/hero/three-airplanes-parked-on-tarmac-1280.webp')} 1280w, ${assetUrl('/v2/hero/three-airplanes-parked-on-tarmac-2400.webp')} 2400w`}
+          sizes="100vw"
+          alt="Three Karination A321s in the new rainbow livery, parked on a moonlit apron."
+          width={2752}
+          height={1536}
           loading="eager"
-          className="kx-fleet-band-img"
         />
-        <span aria-hidden className="kx-fleet-band-veil" />
       </div>
 
       <section className="px-5 py-14 md:px-8">
@@ -171,12 +171,13 @@ export default function Fleet() {
               of what an aircraft is for. Closed by default: most people on
               this page came to read about Karination. */}
           {subsidiaries.map((s) => (
-            <details key={s.carrier.code} className="kx-carrier">
+            <details key={s.carrier.code} className={`kx-carrier kx-universe${s.carrier.code === 'Z4' ? ' kx-forza-universe' : ''}${s.carrier.code === 'SD' ? ' kx-sonder-universe' : ''}`}>
               <summary className="kx-carrier-summary">
                 <span aria-hidden className="kx-carrier-mark" style={{ background: s.carrier.accent }} />
                 <span className="min-w-0 flex-1">
                   <span className="kx-carrier-name">{s.carrier.name}</span>
                   <span className="kx-carrier-role">{s.carrier.role}</span>
+                  {s.carrier.code === 'SD' && <span className="mt-2 block"><SonderWave bars={22} height={22} /></span>}
                 </span>
                 <span className="tnum font-mono kx-carrier-count">
                   {count(s.aircraft)} aircraft · {s.types.length} {s.types.length === 1 ? 'type' : 'types'}

@@ -4,7 +4,6 @@ import { listEarnRates, listTiers, type EarnRateRow, type TierRow } from '@/lib/
 import { useAuth } from '@/auth/AuthContext'
 import { CABINS, type CabinCode } from '@/lib/cabins'
 import { count } from '@/lib/format'
-import { assetUrl } from '@/lib/assets'
 
 export default function RainbowOne() {
   const [tiers, setTiers] = useState<TierRow[]>([])
@@ -171,8 +170,8 @@ export default function RainbowOne() {
 
       <section className="px-5 py-16 md:px-8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-6">
-          <img src={assetUrl('/brand/tagline.png')} alt="Colour your dreams" style={{ maxWidth: 300, height: 'auto' }} />
-          {!user && <Link to="/join" className="kx-cta ml-auto">Join RainbowOne free</Link>}
+          <p className="kx-headline" style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)' }}>Every colour, rewarded.</p>
+          {!user && <Link to="/join" className="kx-cta-night ml-auto">Join RainbowOne free</Link>}
         </div>
       </section>
     </div>

@@ -14,37 +14,48 @@ const STEPS = [
   { path: '/confirmation', label: 'Confirmed' },
 ]
 
-/** Where the traveller is, and how far is left. Visible on every funnel page. */
+/**
+ * Where the traveller is, and how far is left. Visible on every funnel page.
+ *
+ * v2: a progress line in four segments. Done and current segments carry the
+ * fluoro, still -- the funnel's edge light, never moving behind the form.
+ */
 export function StepIndicator() {
   const { pathname } = useLocation()
   const current = Math.max(0, STEPS.findIndex((s) => s.path === pathname))
 
   return (
     <nav aria-label="Booking progress" className="mb-8">
-      <ol className="flex flex-wrap gap-x-2 gap-y-2">
+      <ol className="grid grid-cols-4 gap-2">
         {STEPS.map((s, i) => {
           const done = i < current
           const here = i === current
           return (
-            <li key={s.path} className="flex items-center gap-2">
+            <li key={s.path} aria-current={here ? 'step' : undefined}>
               <span
-                className="font-mono uppercase"
-                aria-current={here ? 'step' : undefined}
+                aria-hidden
+                className="block"
+                style={{
+                  height: 4,
+                  borderRadius: 4,
+                  background: done || here ? 'var(--paint-fluoro)' : 'var(--color-paper-edge)',
+                  backgroundSize: '400% 100%',
+                  backgroundPosition: `${(i / (STEPS.length - 1)) * 100}% 0`,
+                  opacity: here || done ? 1 : 0.9,
+                }}
+              />
+              <span
+                className="mt-2 block font-mono uppercase"
                 style={{
                   fontSize: 'var(--text-micro)',
                   letterSpacing: '0.14em',
-                  padding: '5px 10px',
-                  borderRadius: 'var(--radius-edge)',
-                  background: here ? 'var(--color-ink)' : 'transparent',
-                  color: here ? 'var(--color-paper)' : done ? 'var(--color-ink)' : 'var(--color-ink-faint)',
-                  border: done ? '1px solid var(--color-paper-edge)' : '1px solid transparent',
+                  color: here ? 'var(--color-ink)' : done ? 'var(--color-ink-mute)' : 'var(--color-ink-faint)',
+                  fontWeight: here ? 700 : 400,
                 }}
               >
                 {done ? '✓ ' : ''}{s.label}
+                {here && <span className="sr-only"> (current step)</span>}
               </span>
-              {i < STEPS.length - 1 && (
-                <span aria-hidden style={{ color: 'var(--color-ink-faint)' }}>·</span>
-              )}
             </li>
           )
         })}

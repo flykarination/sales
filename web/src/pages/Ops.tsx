@@ -74,7 +74,7 @@ export default function Ops() {
           <h1 className="font-mono uppercase" style={{ letterSpacing: '0.2em', color: 'var(--color-aqua)', fontSize: 'var(--text-small)' }}>
             Operations · dev only
           </h1>
-          <span style={{ color: '#6B6790', fontSize: 'var(--text-micro)' }}>
+          <span style={{ color: '#8E9CC2', fontSize: 'var(--text-micro)' }}>
             {at ? `updated ${at.toLocaleTimeString()}` : 'loading…'} · refreshes every 30s
           </span>
           <button onClick={load} className="ml-auto" style={{ color: 'var(--color-aqua)', fontSize: 'var(--text-small)', minHeight: 44 }}>
@@ -101,7 +101,7 @@ export default function Ops() {
               <dd className="tnum font-mono" style={{ color: 'var(--color-paper)', fontSize: 'clamp(1.2rem, 2.6vw, 1.7rem)', fontWeight: 500 }}>
                 {value}
               </dd>
-              <dt className="font-mono uppercase" style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.14em', color: '#6B6790' }}>
+              <dt className="font-mono uppercase" style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.14em', color: '#8E9CC2' }}>
                 {label}
               </dt>
             </div>
@@ -113,7 +113,7 @@ export default function Ops() {
             <table className="tnum w-full font-mono" style={{ fontSize: 'var(--text-small)', minWidth: 520 }}>
               <caption className="sr-only">Load factor by carrier and date</caption>
               <thead>
-                <tr style={{ color: '#6B6790' }}>
+                <tr style={{ color: '#8E9CC2' }}>
                   {['Date', 'Deps', 'Offered', 'Sold', 'Real', 'LF', 'Revenue'].map((h) => (
                     <th key={h} scope="col" className="py-2 text-left font-normal uppercase" style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.12em' }}>
                       {h}
@@ -128,7 +128,7 @@ export default function Ops() {
                     <td>{count(r.departures)}</td>
                     <td>{count(r.seats_offered)}</td>
                     <td>{count(r.seats_sold)}</td>
-                    <td style={{ color: r.seats_sold_to_real_customers > 0 ? 'var(--color-aqua)' : '#6B6790' }}>
+                    <td style={{ color: r.seats_sold_to_real_customers > 0 ? 'var(--color-aqua)' : '#8E9CC2' }}>
                       {count(r.seats_sold_to_real_customers)}
                     </td>
                     <td>
@@ -147,7 +147,7 @@ export default function Ops() {
           </div>
 
           <aside>
-            <h2 className="mb-3 font-mono uppercase" style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: '#6B6790' }}>
+            <h2 className="mb-3 font-mono uppercase" style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.18em', color: '#8E9CC2' }}>
               Just sold
             </h2>
             <ul>
@@ -165,7 +165,7 @@ export default function Ops() {
                 </li>
               ))}
               {sales.length === 0 && !error && (
-                <li style={{ color: '#6B6790', fontSize: 'var(--text-small)' }}>
+                <li style={{ color: '#8E9CC2', fontSize: 'var(--text-small)' }}>
                   Nothing in the last few hours. Run <code>select public.simulate_bookings();</code>
                 </li>
               )}
