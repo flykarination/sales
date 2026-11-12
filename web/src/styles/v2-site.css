@@ -401,6 +401,12 @@
   @property --kx-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
   .kx-booking {
     position: relative;
+    /* Its popups (the calendar, the airport lists, the passenger panel) open
+       downward out of the box, over whatever comes next -- the gallery, and
+       the scrolling destinations, whose animated transform gives them a
+       layer that paints above anything earlier and unranked. So the box
+       takes a rank of its own: above its neighbours, below the header (30). */
+    z-index: 20;
     isolation: isolate;
     border-radius: 26px;
     background: color-mix(in oklab, var(--color-night-deep) 70%, transparent);
@@ -567,4 +573,16 @@
     to   { opacity: 1; transform: none; }
   }
   .kx-expand-summary:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 4px; border-radius: 12px; }
+}
+
+@layer components {
+  /* Each page's heading is focused on arrival, for screen-reader users, via
+     tabindex="-1". It is not a control, nothing can be done to it, and the
+     browser's focus ring around a page title just looks like a stray box.
+     Controls keep their rings; only programmatic, non-interactive focus
+     targets lose theirs. */
+  main [tabindex='-1']:focus,
+  main [tabindex='-1']:focus-visible,
+  #main:focus,
+  #main:focus-visible { outline: none; }
 }

@@ -59,7 +59,8 @@ function Booking() {
 
         {/* v2: the destinations are the headline. The visible city
             changes; the accessible name is the sentence it stands for. */}
-        <h1 id="hero-title" className="kx-mega kx-mega-hero relative z-10 mt-4" aria-label="Fly to 507 destinations">
+        {/* rank 25: above the booking box's glow (box 20), below the header (30) */}
+        <h1 id="hero-title" className="kx-mega kx-mega-hero relative z-[25] mt-4" aria-label="Fly to 507 destinations">
           <span className="block" aria-hidden>Fly to</span>
           <RotatingCity still="507 cities" />
         </h1>
