@@ -97,6 +97,28 @@ export function SiteEffects() {
     return () => { document.removeEventListener('pointermove', onMove); if (frame) cancelAnimationFrame(frame) }
   }, [territory])
 
+  // Rows that carry a coloured label (the small square marking a topic, a
+  // cabin, a region or an airline) fade to that label's colour on hover. The
+  // colour is read from the marker itself, so every such list on the site
+  // does this without being edited -- and stays right if a colour changes.
+  useEffect(() => {
+    const onOver = (e: PointerEvent) => {
+      const row = (e.target as Element | null)?.closest?.('a, button, li, label') as HTMLElement | null
+      if (!row || row.dataset.hued !== undefined) return
+      const marker = [...row.querySelectorAll<HTMLElement>('span[aria-hidden]')].find((m) => {
+        const r = m.getBoundingClientRect()
+        const bg = getComputedStyle(m).backgroundColor
+        return r.width > 0 && r.width <= 16 && r.height <= 16 && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent'
+      })
+      // a marker is a label, not a background: ignore rows the size of a card
+      if (!marker || row.getBoundingClientRect().height > 160) { row.dataset.hued = ''; return }
+      row.style.setProperty('--hue', getComputedStyle(marker).backgroundColor)
+      row.dataset.hued = 'yes'
+    }
+    document.addEventListener('pointerover', onOver, { passive: true })
+    return () => document.removeEventListener('pointerover', onOver)
+  }, [])
+
   return (
     <>
       {territory === 'night' && (

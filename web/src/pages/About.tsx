@@ -37,82 +37,64 @@ export default function About() {
 
   return (
     <div>
-      {/* ---- opening ------------------------------------------------- */}
-      <section className="on-ink px-5 py-16 md:px-8 md:py-24" style={{ background: 'var(--color-ink)' }}>
+      {/* ---- opening: a headline, then the page in boxes ----------------- */}
+      <section className="px-5 pb-10 pt-14 md:px-8 md:pt-20">
         <div className="mx-auto max-w-6xl">
-          <p
-            className="mb-6 font-mono uppercase"
-            style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.24em', color: 'var(--color-aqua)' }}
-          >
-            About Karination
-          </p>
-          <h1
-            className="font-display"
-            style={{ fontSize: 'clamp(2.2rem, 6vw, 4.5rem)', lineHeight: 1.02, color: 'var(--color-paper)', maxWidth: '18ch' }}
-          >
+          <p className="kx-eyebrow mb-5" style={{ color: 'var(--color-aqua-deep)' }}>About Karination</p>
+          <h1 className="font-display" style={{ fontSize: 'clamp(2.2rem, 5.4vw, 4.4rem)', maxWidth: '20ch' }}>
             A Vietnamese airline with a colour for every cabin.
           </h1>
-          <p
-            className="mt-6 font-display"
-            style={{ color: 'var(--color-paper)', fontSize: 'clamp(1.3rem, 2.8vw, 1.9rem)', lineHeight: 1.25, maxWidth: '26ch' }}
-          >
-            {MISSION}
-          </p>
-          <p className="mt-6" style={{ color: '#B9B6D8', fontSize: 'var(--text-lead)', maxWidth: '58ch' }}>
-            Karination flies from five hubs along the length of Vietnam — TP Hồ Chí Minh,
-            Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc — to{' '}
-            {kxStats ? count(kxStats.num_routes) : '803'} routes across Asia, the
-            Middle East, Europe, Africa, Oceania and the Americas. It is the
-            largest of the KarinationGroup airlines, and the one this site is
-            about.
-          </p>
-        </div>
-      </section>
 
-      <section className="on-ink px-5 pb-14 md:px-8" style={{ background: 'var(--color-ink)' }}>
-        <div className="mx-auto flex max-w-6xl flex-wrap gap-x-8 gap-y-3">
-          <Link to="/about/our-story" className="kx-navlink" style={{ color: 'var(--color-aqua)' }}>
-            Our story — thirty-eight years →
-          </Link>
-          <Link to="/about/what-we-believe" className="kx-navlink" style={{ color: 'var(--color-aqua)' }}>
-            What we believe →
-          </Link>
-        </div>
-      </section>
+          <div className="mt-10 grid gap-4 md:grid-cols-6">
+            {/* the mission, as a statement */}
+            <blockquote className="kx-box kx-box-statement md:col-span-4">
+              <span className="kx-eyebrow mb-4 block" style={{ color: 'var(--color-ink-mute)' }}>What we are for</span>
+              <p className="font-display" style={{ fontSize: 'clamp(1.35rem, 2.6vw, 2.1rem)', lineHeight: 1.05 }}>
+                {MISSION}
+              </p>
+            </blockquote>
 
-      {/* ---- the numbers, straight from the schedule ------------------ */}
-      <section className="px-5 py-14 md:px-8">
-        <div className="mx-auto max-w-6xl">
-          <dl className="grid grid-cols-2 gap-x-8 gap-y-8 md:grid-cols-4">
+            {/* the facts */}
+            <div className="kx-box md:col-span-2">
+              <span className="kx-eyebrow mb-4 block" style={{ color: 'var(--color-ink-mute)' }}>Where we fly</span>
+              <p style={{ color: 'var(--color-ink-mute)', lineHeight: 1.55 }}>
+                From five hubs along the length of Vietnam &mdash; TP Hồ Chí Minh, Hà Nội,
+                Đà Nẵng, Nha Trang and Phú Quốc &mdash; to{' '}
+                <strong style={{ color: 'var(--color-ink)' }}>{kxStats ? count(kxStats.num_routes) : '803'} routes</strong>{' '}
+                across Asia, the Middle East, Europe, Africa, Oceania and the Americas.
+              </p>
+            </div>
+
+            {/* the two longer reads, as doors */}
+            <Link to="/about/our-story" className="kx-box kx-card kx-box-door md:col-span-3">
+              <span className="kx-eyebrow block" style={{ color: 'var(--color-ink-mute)' }}>Thirty-eight years</span>
+              <span className="kx-headline mt-3 block" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>Our story &rarr;</span>
+            </Link>
+            <Link to="/about/what-we-believe" className="kx-box kx-card kx-box-door md:col-span-3">
+              <span className="kx-eyebrow block" style={{ color: 'var(--color-ink-mute)' }}>Three convictions</span>
+              <span className="kx-headline mt-3 block" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>What we believe &rarr;</span>
+            </Link>
+
+            {/* the numbers, straight from the schedule */}
             {[
               ['Aircraft', kxStats ? count(kxStats.num_aircraft) : '847', 'var(--color-spectrum-teal)'],
               ['Routes', kxStats ? count(kxStats.num_routes) : '803', 'var(--color-spectrum-amber)'],
               ['Flight pairs', kxStats ? count(kxStats.num_flights) : '1,409', 'var(--color-spectrum-rose)'],
-              ['Flagship', kxStats?.flagship_aircraft_model ?? 'Airbus A321XLR', 'var(--color-spectrum-violet)'],
             ].map(([label, value, hue]) => (
-              <div key={label}>
-                <span aria-hidden className="mb-3 block" style={{ width: 28, height: 2, background: hue }} />
-                <dd className="tnum font-mono" style={{ fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 500, lineHeight: 1.1 }}>
-                  {value}
-                </dd>
-                <dt
-                  className="mt-1 font-mono uppercase"
-                  style={{ fontSize: 'var(--text-micro)', letterSpacing: '0.16em', color: 'var(--color-ink-faint)' }}
-                >
-                  {label}
-                </dt>
+              <div key={label} className="kx-box md:col-span-2" style={{ borderTop: `3px solid ${hue}` }}>
+                <span className="tnum kx-headline block" style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}>{value}</span>
+                <span className="kx-eyebrow mt-1 block" style={{ color: 'var(--color-ink-mute)' }}>{label}</span>
               </div>
             ))}
-          </dl>
+          </div>
         </div>
       </section>
 
-      {/* ---- cabins --------------------------------------------------- */}
-      <section className="px-5 pb-14 md:px-8">
+      {/* ---- cabins: an expandable section ------------------------------ */}
+      <section className="px-5 md:px-8">
         <div className="mx-auto max-w-6xl">
-          <h2 className="font-display mb-2" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)' }}>
-            Four cabins, four colours
-          </h2>
+          <Expandable index="01" title="Four cabins, four colours"
+                      teaser="One price per cabin, per passenger. No fare classes, no add-ons.">
           <p className="mb-8" style={{ color: 'var(--color-ink-mute)', maxWidth: '54ch' }}>
             Every cabin owns a colour, and it follows you from the search results
             to the boarding pass. There are no fare classes and no add-ons: one
@@ -135,15 +117,15 @@ export default function About() {
               )
             })}
           </ul>
+          </Expandable>
         </div>
       </section>
 
-      {/* ---- the group ------------------------------------------------ */}
-      <section className="px-5 py-14 md:px-8" style={{ background: 'var(--color-paper-sunk)' }}>
+      {/* ---- the group: an expandable section ---------------------------- */}
+      <section className="px-5 pb-6 md:px-8">
         <div className="mx-auto max-w-6xl">
-          <h2 className="font-display mb-2" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)' }}>
-            KarinationGroup
-          </h2>
+          <Expandable index="02" title="KarinationGroup"
+                      teaser="Three airlines, one booking: Karination, FORZA and Sonder, each with its own fleet and hubs.">
           <p className="mb-8" style={{ color: 'var(--color-ink-mute)', maxWidth: '58ch' }}>
             Karination is the airline you are booking with, and the one the rest
             of this page is about. It is one of three carriers in the group, each
@@ -238,6 +220,7 @@ export default function About() {
               Sonder: an all new Hallyu experience, flown the KarinationGroup way
             </Link>
           </p>
+          </Expandable>
         </div>
       </section>
 
@@ -251,5 +234,31 @@ export default function About() {
         </div>
       </section>
     </div>
+  )
+}
+
+/**
+ * A dramatic expandable section: an oversized numbered title with a
+ * one-line teaser, opening with a rise. A real <details>, so it works with
+ * keyboard, find-in-page and screen readers without any script.
+ */
+function Expandable({ index, title, teaser, children }: {
+  index: string
+  title: string
+  teaser: string
+  children: React.ReactNode
+}) {
+  return (
+    <details className="kx-expand">
+      <summary className="kx-expand-summary">
+        <span className="tnum kx-eyebrow kx-expand-index">{index}</span>
+        <span className="min-w-0 flex-1">
+          <span className="kx-expand-title">{title}</span>
+          <span className="kx-expand-teaser">{teaser}</span>
+        </span>
+        <span aria-hidden className="kx-expand-plus" />
+      </summary>
+      <div className="kx-expand-body">{children}</div>
+    </details>
   )
 }

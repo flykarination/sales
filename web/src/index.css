@@ -685,7 +685,8 @@
     top: 26px;
     z-index: 5;
   }
-  @media (min-width: 640px) {
+  /* follows the search panel's own width (it is a container), not the window's */
+  @container (min-width: 36rem) {
     .kx-swap-slot {
       left: 50%;
       right: auto;

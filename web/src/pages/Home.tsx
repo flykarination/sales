@@ -51,67 +51,61 @@ function Booking() {
   }
 
   return (
-    <>
-      <section className="kx-night" aria-labelledby="hero-title">
-        <NightSky />
+    <section className="kx-night" aria-labelledby="hero-title">
+      <NightSky />
 
-        <div className="mx-auto max-w-[1400px] px-5 pt-10 md:px-10 md:pt-16">
-          <DotMatrix size="clamp(1rem, 1.7vw, 1.35rem)">30 years of colour · <span style={{ whiteSpace: 'nowrap' }}>1996 – 2026</span></DotMatrix>
+      <div className="mx-auto max-w-[1400px] px-5 pt-8 md:px-10 md:pt-12">
+        <DotMatrix size="clamp(1rem, 1.7vw, 1.35rem)">30 years of colour · <span style={{ whiteSpace: 'nowrap' }}>1996 – 2026</span></DotMatrix>
 
-          {/* v2: the destinations are the headline. The visible city
-              changes; the accessible name is the sentence it stands for. */}
-          <h1 id="hero-title" className="kx-mega relative z-10 mt-5" aria-label="Fly to 507 destinations">
-            <span className="block" aria-hidden>Fly to</span>
-            <RotatingCity still="507 cities" />
-          </h1>
+        {/* v2: the destinations are the headline. The visible city
+            changes; the accessible name is the sentence it stands for. */}
+        <h1 id="hero-title" className="kx-mega kx-mega-hero relative z-10 mt-4" aria-label="Fly to 507 destinations">
+          <span className="block" aria-hidden>Fly to</span>
+          <RotatingCity still="507 cities" />
+        </h1>
 
-          <div className="mt-8 grid grid-cols-1 gap-10 lg:mt-[-2.6rem] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-end">
-            <div className="lg:pb-16">
-              <p style={{ fontSize: 'var(--text-lead)', color: 'var(--color-starlight-mute)', maxWidth: '36ch', lineHeight: 1.5 }}>
-                <strong style={{ color: 'var(--color-starlight)', fontWeight: 600 }}>507 destinations</strong> from
-                TP Hồ Chí Minh, Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc.
+        {/* The booking box beside the gallery, both above the fold: the
+            thing people came to do sits next to the thing that sells it. */}
+        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,6fr)] lg:items-start">
+          <div id="book" className="kx-booking" style={{ scrollMarginTop: 90 }}>
+            <div className="mb-1 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-5 pt-5 @container sm:px-6">
+              <h2 className="kx-headline" style={{ fontSize: 'clamp(1.5rem, 2.4vw, 2.1rem)' }}>
+                Where to next?
+              </h2>
+              <p style={{ fontSize: 'var(--text-small)', color: 'var(--color-starlight-mute)' }}>
+                507 destinations, five hubs, one booking.
               </p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <a href="#book" className="kx-cta-night">Find a flight <span aria-hidden>↓</span></a>
-                <Link to="/network" className="kx-cta-ghost">The route map</Link>
-              </div>
-              <div className="mt-9">
-                <NextDeparture />
-              </div>
             </div>
-
-            <HeroGallery className="lg:-mr-4" />
+            <SearchPanel onSearch={go} initialOrigin={fromParam} initialDestination={toParam} />
           </div>
+
+          <HeroGallery />
         </div>
 
-        <dl className="mx-auto mt-14 grid max-w-[1400px] grid-cols-2 gap-y-6 px-5 sm:grid-cols-4 md:px-10">
-          {[
-            ['803', 'routes'], ['507', 'destinations'], ['847', 'aircraft'], ['5', 'hubs'],
-          ].map(([n, l]) => (
-            <div key={l} className="flex flex-col-reverse">
-              <dt className="kx-eyebrow mt-1" style={{ color: 'var(--color-starlight-mute)' }}>{l}</dt>
-              <dd className="tnum kx-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 3rem)' }}>{n}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className="mt-14">
-          <Marquee />
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+          <NextDeparture />
+          <p style={{ color: 'var(--color-starlight-mute)', maxWidth: '44ch' }}>
+            From TP Hồ Chí Minh, Hà Nội, Đà Nẵng, Nha Trang and Phú Quốc to every continent we can reach.
+          </p>
+          <Link to="/network" className="kx-cta-ghost lg:ml-auto">The route map</Link>
         </div>
+      </div>
 
-        {/* the night carries on behind the top of the day card */}
-        <div aria-hidden style={{ height: 150 }} />
-      </section>
+      <dl className="mx-auto mt-14 grid max-w-[1400px] grid-cols-2 gap-y-6 px-5 sm:grid-cols-4 md:px-10">
+        {[
+          ['803', 'routes'], ['507', 'destinations'], ['847', 'aircraft'], ['5', 'hubs'],
+        ].map(([n, l]) => (
+          <div key={l} className="flex flex-col-reverse">
+            <dt className="kx-eyebrow mt-1" style={{ color: 'var(--color-starlight-mute)' }}>{l}</dt>
+            <dd className="tnum kx-headline" style={{ fontSize: 'clamp(1.8rem, 3.4vw, 3rem)' }}>{n}</dd>
+          </div>
+        ))}
+      </dl>
 
-      <section id="book" className="relative px-4 md:px-8" style={{ marginTop: -130, scrollMarginTop: 90 }}>
-        <div className="kx-dayfall kx-daylight mx-auto max-w-5xl px-5 pb-7 pt-8 md:px-9">
-          <h2 className="kx-headline mb-5" style={{ fontSize: 'clamp(1.5rem, 2.6vw, 2.2rem)', color: 'var(--color-ink)' }}>
-            Where to?
-          </h2>
-          <SearchPanel onSearch={go} initialOrigin={fromParam} initialDestination={toParam} />
-        </div>
-      </section>
-    </>
+      <div className="mt-14 pb-16">
+        <Marquee />
+      </div>
+    </section>
   )
 }
 

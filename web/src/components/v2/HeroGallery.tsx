@@ -168,7 +168,7 @@ function FlightSlide({ alt }: { alt: string }) {
       </span>
       <div className="kx-flight-craft" aria-hidden>
         <span className="kx-flight-trail" />
-        <img className="kx-flight-plane" src={assetUrl('/v2/livery-a321xlr.webp')} alt="" width={1068} height={292} fetchPriority="high" />
+        <img className="kx-flight-plane" src={assetUrl('/v2/livery-a321xlr-cut.webp')} alt="" width={1036} height={271} fetchPriority="high" />
       </div>
     </div>
   )

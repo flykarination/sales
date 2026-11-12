@@ -123,7 +123,9 @@ export function SearchPanel({
     <form
       onSubmit={submit}
       aria-label="Search flights"
-      className="w-full"
+      // A container: the panel lays out by its own width, not the window's,
+      // so it works full-width or beside the hero gallery alike.
+      className="@container w-full"
       style={{
         background: 'var(--color-paper)',
         border: '1px solid var(--color-paper-edge)',
@@ -133,7 +135,7 @@ export function SearchPanel({
       }}
     >
       {/* trip type */}
-      <div className="flex flex-wrap gap-1 px-4 pt-4 sm:px-6" role="radiogroup" aria-label="Trip type">
+      <div className="flex flex-wrap gap-1 px-4 pt-4 @xl:px-6" role="radiogroup" aria-label="Trip type">
         {([['Return', 'return'], ['One way', 'oneway'], ['Multi-city', 'multi']] as Array<[string, TripType]>)
           .map(([label, value]) => (
             <button
@@ -158,22 +160,22 @@ export function SearchPanel({
           ))}
       </div>
 
-      <div className="grid gap-px p-4 sm:p-6 md:grid-cols-[1fr_1fr_auto]">
-        <div className="grid gap-4 sm:grid-cols-2 md:col-span-2">
+      <div className="grid gap-px p-4 @xl:p-6 @3xl:grid-cols-[1fr_1fr_auto]">
+        <div className="grid gap-4 @xl:grid-cols-2 @3xl:col-span-2">
           {tripType === 'multi' ? (
-            <div className="sm:col-span-2">
+            <div className="@xl:col-span-2">
               <ol>
                 {multi.map((leg, i) => (
                   <li
                     key={i}
-                    className="grid gap-4 sm:grid-cols-[1fr_1fr_auto]"
+                    className="grid gap-4 @xl:grid-cols-[1fr_1fr_auto]"
                     style={{
                       borderBottom: i < multi.length - 1 ? 'var(--rule)' : 'none',
                       paddingBottom: i < multi.length - 1 ? 16 : 0,
                       marginBottom: i < multi.length - 1 ? 16 : 0,
                     }}
                   >
-                    <div className="relative grid gap-4 sm:col-span-2 sm:grid-cols-2 sm:gap-x-12">
+                    <div className="relative grid gap-4 @xl:col-span-2 @xl:grid-cols-2 @xl:gap-x-12">
                       <AirportField
                         label={`Flight ${i + 1} — from`}
                         value={leg.from}
@@ -244,11 +246,11 @@ export function SearchPanel({
             <>
               {/* From and To share a row so the swap control can sit between
                   them, which is the only place it means anything. */}
-              <div className="relative sm:col-span-2">
+              <div className="relative @xl:col-span-2">
                 {/* a wider gutter than the rest of the form: the swap button is
                     40px and sits centred on the seam, so a 16px gap would put
                     it over the start of the To field */}
-                <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-12">
+                <div className="grid gap-4 @xl:grid-cols-2 @xl:gap-x-12">
                   <AirportField
                     label="From" value={origin} onChange={setOrigin}
                     airports={airports} exclude={destination}
@@ -266,14 +268,14 @@ export function SearchPanel({
               {tripType === 'return' ? (
                 <DatePicker label="Return" value={ret} min={depart} onChange={setRet} />
               ) : (
-                <div className="hidden sm:block" aria-hidden />
+                <div className="hidden @xl:block" aria-hidden />
               )}
             </>
           )}
         </div>
 
-        <div className="flex flex-col gap-4 md:pl-6">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-1">
+        <div className="flex flex-col gap-4 @3xl:pl-6">
+          <div className="grid grid-cols-2 gap-4 @3xl:grid-cols-1">
             <PassengerPicker value={party} onChange={setParty} />
             <Field label="Cabin">
               {/* The swatch carries the cabin colour reliably; option colours are

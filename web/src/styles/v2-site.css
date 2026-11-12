@@ -391,3 +391,180 @@
     mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 72%, transparent 100%);
   }
 }
+
+@layer components {
+  /* the hero headline, a little smaller than the global mega, so the
+     booking box and the gallery both sit above the fold */
+  .kx-mega-hero { font-size: clamp(2.8rem, 8.2vw, 8.4rem); }
+
+  /* ---- the booking box: glass on the night, ringed by moving light ---- */
+  @property --kx-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+  .kx-booking {
+    position: relative;
+    isolation: isolate;
+    border-radius: 26px;
+    background: color-mix(in oklab, var(--color-night-deep) 70%, transparent);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 40px 100px -40px rgba(0, 0, 0, 0.85);
+  }
+  /* a conic ring of the fluoro's colours, turning slowly round the edge */
+  .kx-booking::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: conic-gradient(from var(--kx-angle),
+      #FABFC4, #FB9F23, #FCE10C, #5CF459, #01DAEA, #4F9DFF, #A060F0, #F080A0, #FABFC4);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+    animation: kx-ring 9s linear infinite;
+    opacity: 0.85;
+  }
+  /* and its glow, softly, behind the box */
+  .kx-booking::after {
+    content: '';
+    position: absolute;
+    inset: 10%;
+    z-index: -2;
+    border-radius: inherit;
+    background: conic-gradient(from var(--kx-angle), #FB9F23, #5CF459, #01DAEA, #A060F0, #F080A0, #FB9F23);
+    filter: blur(60px);
+    opacity: 0.28;
+    animation: kx-ring 9s linear infinite;
+  }
+  @keyframes kx-ring { to { --kx-angle: 360deg; } }
+
+  /* the panel inside drops its own frame: the glass is the frame */
+  .kx-booking form[aria-label='Search flights'] {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  /* trip type: pills */
+  .kx-booking [role='radiogroup'] button { border-radius: 999px !important; }
+  /* the search button: the fluoro's bright half, dark text */
+  .kx-booking button[type='submit']:not(:disabled) {
+    background: linear-gradient(90deg, #FABFC4, #FB9F23 22%, #FCE10C 45%, #5CF459 68%, #01DAEA) !important;
+    color: #010B1E !important;
+    font-weight: 700;
+    border-radius: 999px !important;
+    box-shadow: 0 10px 30px -10px rgba(1, 218, 234, 0.6);
+    transition: transform 160ms var(--ease-paint), box-shadow 200ms ease-out;
+  }
+  .kx-booking button[type='submit']:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 40px -10px rgba(252, 225, 12, 0.6);
+  }
+  .kx-booking button[type='submit'] > span[aria-hidden] { display: none; }
+  .kx-booking button[type='submit']:disabled { border-radius: 999px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kx-booking::before, .kx-booking::after { animation: none; }
+}
+
+@layer components {
+  /* rows with a coloured label fade to that colour on hover (SiteEffects
+     reads the label's colour into --hue) */
+  [data-hued='yes'] {
+    transition: background-color 280ms ease-out, box-shadow 280ms ease-out;
+    border-radius: 10px;
+  }
+  [data-hued='yes']:hover,
+  [data-hued='yes']:focus-visible {
+    background-color: color-mix(in oklab, var(--hue) 26%, transparent) !important;
+    box-shadow: inset 3px 0 0 var(--hue);
+  }
+  html[data-territory='day'] [data-hued='yes']:hover {
+    background-color: color-mix(in oklab, var(--hue) 16%, transparent) !important;
+    transition-duration: 120ms;     /* the funnel stays brisk */
+  }
+}
+
+@layer components {
+  /* ---- boxes: the About page's opening, and anywhere text wants a frame -- */
+  .kx-box {
+    position: relative;
+    display: block;
+    border-radius: 22px;
+    padding: 22px 24px;
+    background: color-mix(in oklab, var(--color-paper-sunk) 78%, transparent);
+    border: 1px solid var(--color-paper-edge);
+    backdrop-filter: blur(10px);
+  }
+  .kx-box-statement {
+    background:
+      radial-gradient(90% 140% at 0% 0%, rgba(1, 218, 234, 0.16), transparent 60%),
+      radial-gradient(80% 120% at 100% 100%, rgba(240, 64, 208, 0.14), transparent 60%),
+      color-mix(in oklab, var(--color-paper-sunk) 78%, transparent);
+  }
+  .kx-box-door { transition: transform 200ms var(--ease-paint), border-color 200ms ease-out; }
+  .kx-box-door:hover { transform: translateY(-3px); border-color: rgba(120, 245, 251, 0.5); }
+
+  /* ---- dramatic expandable sections ---------------------------------- */
+  .kx-expand { border-top: 1px solid var(--color-paper-edge); }
+  .kx-expand:last-of-type { border-bottom: 1px solid var(--color-paper-edge); }
+  .kx-expand-summary {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 28px 4px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .kx-expand-summary::-webkit-details-marker { display: none; }
+  .kx-expand-index { color: var(--color-ink-mute); align-self: flex-start; padding-top: 0.9em; }
+  .kx-expand-title {
+    display: block;
+    font-family: var(--font-head);
+    font-weight: 820;
+    font-stretch: 125%;
+    text-transform: uppercase;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    font-size: clamp(2rem, 6.4vw, 5.6rem);
+    transition: color 220ms ease-out;
+  }
+  /* the title lights with the fluoro when you point at it, or once open */
+  .kx-expand-summary:hover .kx-expand-title,
+  .kx-expand[open] .kx-expand-title {
+    background: url('/v2/fluoro.webp') 30% center / 240% 100% no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .kx-expand-teaser { display: block; margin-top: 10px; color: var(--color-ink-mute); max-width: 60ch; }
+  .kx-expand-plus {
+    position: relative;
+    flex: none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid var(--color-paper-edge);
+    transition: transform 400ms var(--ease-paint), background 200ms ease-out;
+  }
+  .kx-expand-plus::before, .kx-expand-plus::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-ink);
+    transform: translate(-50%, -50%);
+  }
+  .kx-expand-plus::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .kx-expand-summary:hover .kx-expand-plus { background: rgba(244, 247, 255, 0.08); }
+  .kx-expand[open] .kx-expand-plus { transform: rotate(135deg); }
+  .kx-expand-body { padding: 4px 4px 40px; }
+  .kx-expand[open] .kx-expand-body { animation: kx-expand-in 520ms var(--ease-paint) both; }
+  @keyframes kx-expand-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .kx-expand-summary:focus-visible { outline: 2px solid var(--color-aqua); outline-offset: 4px; border-radius: 12px; }
+}

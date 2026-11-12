@@ -235,7 +235,7 @@
     left: 4%;
     top: 50%;
     width: 58%;
-    aspect-ratio: 1068 / 292;
+    aspect-ratio: 1036 / 271;
     translate: 0 -50%;
     animation: kx-cruise 16s var(--ease-glide) infinite alternate;
   }
@@ -243,17 +243,18 @@
     from { transform: translate3d(3%, 1.5%, 0) rotate(0.4deg); }
     to   { transform: translate3d(-3%, -1.5%, 0) rotate(-0.4deg); }
   }
-  /* the plane's own backdrop is this navy, so "lighten" dissolves its
-     rectangle and lets the stars show through around the aircraft */
-  .kx-flight-plane { position: absolute; inset: 0; width: 100%; height: 100%; mix-blend-mode: lighten; }
+  /* the aircraft is cut out of its backdrop (web/scripts/cut_plane.py), so it
+     sits on the sky with nothing around it -- no box, no blending trick */
+  .kx-flight-plane { position: absolute; inset: 0; width: 100%; height: 100%;
+    filter: drop-shadow(0 6px 18px rgba(1, 11, 30, 0.6)); }
   /* The jet: the fluoro squeezed into a thin, tapering streak from the tail.
      Two masks intersect -- one fades it out along its length, the other
      pinches it top and bottom -- so the white-hot core reads as a line of
      light rather than the block the raw image would make. */
   .kx-flight-trail {
     position: absolute;
-    left: 93%;
-    top: 46%;
+    left: 95%;
+    top: 43%;
     width: 80%;           /* the whole spectrum fits between tail and frame */
     height: 34%;
     background: url('/v2/fluoro.webp') left center / 100% 260% no-repeat;
