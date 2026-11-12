@@ -223,11 +223,19 @@ function SinglePost({ slug }: { slug: string }) {
  *
  * A post writes [your account](/account), which is what an author would
  * naturally type. On GitHub Pages the app is served from /sales/, so that
- * bare path would leave the app entirely and 404. Anything absolute — an
- * external link, a mailto — is left alone.
+ * bare path would leave the app entirely and 404 -- and the same goes for a
+ * photo's src and srcset. Anything absolute — an external link, a mailto — is
+ * left alone.
  */
 function withRoutedLinks(html: string): string {
-  return html.replace(/href="\/(?!\/)/g, `href="${assetUrl('/')}`)
+  const base = assetUrl('/')
+  // a bare "/path" becomes "/sales/path"; "//host" and "https://…" are left alone
+  const rooted = (u: string) => (u.startsWith('/') && !u.startsWith('//') ? base + u.slice(1) : u)
+  const links = html.replace(/href="\/(?!\/)/g, `href="${base}`)
+  // a photo's src, and each entry of its srcset ("/a.webp 1280w, /b.webp 2000w")
+  const photos = links.replace(/src="([^"]*)"/g, (_m: string, u: string) => `src="${rooted(u)}"`)
+  return photos.replace(/srcset="([^"]*)"/g, (_m: string, v: string) =>
+    `srcset="${v.split(',').map((c) => rooted(c.trim())).join(', ')}"`)
 }
 
 /** Keep in-app links inside the router instead of reloading the document. */

@@ -55,7 +55,11 @@ function Booking() {
       <NightSky />
 
       <div className="mx-auto max-w-[1400px] px-5 pt-8 md:px-10 md:pt-12">
-        <DotMatrix size="clamp(1rem, 1.7vw, 1.35rem)">30 years of colour · <span style={{ whiteSpace: 'nowrap' }}>1996 – 2026</span></DotMatrix>
+        {/* the way into the anniversary post */}
+        <Link to="/updates/thirty-years-of-colour" className="kx-dot-link" aria-label="30 years of colour, 1996 to 2026: read the story">
+          <DotMatrix size="clamp(1rem, 1.7vw, 1.35rem)">30 years of colour · <span style={{ whiteSpace: 'nowrap' }}>1996 – 2026</span></DotMatrix>
+          <span aria-hidden className="kx-dot-link-arrow">→</span>
+        </Link>
 
         {/* v2: the destinations are the headline. The visible city
             changes; the accessible name is the sentence it stands for. */}
